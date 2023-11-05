@@ -4,6 +4,7 @@ import '/flutter_flow/flutter_flow_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
+
 import 'onboarding_model.dart';
 export 'onboarding_model.dart';
 
@@ -56,29 +57,29 @@ class _OnboardingWidgetState extends State<OnboardingWidget> {
         key: scaffoldKey,
         backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
         body: Container(
-          width: MediaQuery.sizeOf(context).width * 1.0,
-          height: MediaQuery.sizeOf(context).height * 1.0,
+          width: MediaQuery.sizeOf(context).width,
+          height: MediaQuery.sizeOf(context).height * 1,
           decoration: BoxDecoration(
             color: FlutterFlowTheme.of(context).primaryBackground,
             image: DecorationImage(
               fit: BoxFit.cover,
-              image: Image.network(
-                'https://images.unsplash.com/photo-1521618755572-156ae0cdd74d?auto=format&fit=crop&q=80&w=2076&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+              image: Image.asset(
+                'assets/images/SolarPanels.jpg',
               ).image,
             ),
           ),
           child: Container(
-            width: 100.0,
-            height: 100.0,
+            width: 100,
+            height: 100,
             decoration: BoxDecoration(
-              color: Color(0xA1262D34),
+              color: Color(0xD7262D34),
             ),
             child: Column(
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(0.0, 40.0, 0.0, 40.0),
+                  padding: EdgeInsetsDirectional.fromSTEB(0, 40, 0, 40),
                   child: Column(
                     mainAxisSize: MainAxisSize.max,
                     children: [
@@ -90,7 +91,7 @@ class _OnboardingWidgetState extends State<OnboardingWidget> {
                             .override(
                               fontFamily: 'Montserrat',
                               color: FlutterFlowTheme.of(context).primaryText,
-                              fontSize: 36.0,
+                              fontSize: 36,
                               fontWeight: FontWeight.bold,
                             ),
                       ),
@@ -109,8 +110,7 @@ class _OnboardingWidgetState extends State<OnboardingWidget> {
                           ),
                     ),
                     Padding(
-                      padding:
-                          EdgeInsetsDirectional.fromSTEB(24.0, 8.0, 24.0, 0.0),
+                      padding: EdgeInsetsDirectional.fromSTEB(24, 8, 24, 0),
                       child: Text(
                         'Soluções de Monitoramento e Gestão de Ativos',
                         textAlign: TextAlign.center,
@@ -121,32 +121,39 @@ class _OnboardingWidgetState extends State<OnboardingWidget> {
                       ),
                     ),
                     Padding(
-                      padding:
-                          EdgeInsetsDirectional.fromSTEB(0.0, 44.0, 0.0, 0.0),
+                      padding: EdgeInsetsDirectional.fromSTEB(0, 44, 0, 0),
                       child: FFButtonWidget(
                         onPressed: () async {
-                          context.pushNamed('Entry');
+                          context.goNamed(
+                            'Entry',
+                            extra: <String, dynamic>{
+                              kTransitionInfoKey: TransitionInfo(
+                                hasTransition: true,
+                                transitionType: PageTransitionType.fade,
+                                duration: Duration(milliseconds: 500),
+                              ),
+                            },
+                          );
                         },
                         text: 'Entrar',
                         options: FFButtonOptions(
-                          width: 200.0,
-                          height: 50.0,
-                          padding: EdgeInsetsDirectional.fromSTEB(
-                              0.0, 0.0, 0.0, 0.0),
-                          iconPadding: EdgeInsetsDirectional.fromSTEB(
-                              0.0, 0.0, 0.0, 0.0),
+                          width: 200,
+                          height: 50,
+                          padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
+                          iconPadding:
+                              EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
                           color: FlutterFlowTheme.of(context).primary,
                           textStyle:
                               FlutterFlowTheme.of(context).titleSmall.override(
                                     fontFamily: 'DM Sans',
                                     color: Colors.white,
                                   ),
-                          elevation: 2.0,
+                          elevation: 2,
                           borderSide: BorderSide(
                             color: Colors.transparent,
-                            width: 1.0,
+                            width: 1,
                           ),
-                          borderRadius: BorderRadius.circular(40.0),
+                          borderRadius: BorderRadius.circular(40),
                         ),
                       ),
                     ),

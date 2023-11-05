@@ -1,6 +1,8 @@
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+
 import 'receive_data_mono_model.dart';
 export 'receive_data_mono_model.dart';
 
@@ -57,19 +59,19 @@ class _ReceiveDataMonoWidgetState extends State<ReceiveDataMonoWidget> {
                       shrinkWrap: true,
                       scrollDirection: Axis.vertical,
                       itemCount: listdata.length,
-                      separatorBuilder: (_, __) => SizedBox(height: 3.0),
+                      separatorBuilder: (_, __) => SizedBox(height: 3),
                       itemBuilder: (context, listdataIndex) {
                         final listdataItem = listdata[listdataIndex];
                         return Row(
                           mainAxisSize: MainAxisSize.max,
                           children: [
                             Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 0.0, 5.0, 0.0),
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(0, 0, 5, 0),
                               child: Icon(
                                 Icons.arrow_right,
                                 color: FlutterFlowTheme.of(context).primaryText,
-                                size: 20.0,
+                                size: 20,
                               ),
                             ),
                             Text(
@@ -77,7 +79,10 @@ class _ReceiveDataMonoWidgetState extends State<ReceiveDataMonoWidget> {
                               style: FlutterFlowTheme.of(context)
                                   .bodyMedium
                                   .override(
-                                    fontFamily: 'DM Mono',
+                                    fontFamily: 'Roboto Mono',
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.normal,
+                                    letterSpacing: 0.5,
                                   ),
                             ),
                           ],

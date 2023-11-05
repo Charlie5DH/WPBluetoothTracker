@@ -77,6 +77,25 @@ class _DeviceWidgetState extends State<DeviceWidget> {
               rssi: widget.deviceRssi,
             ),
           );
+          if (_model.updatedRssi == 100) {
+            await showDialog(
+              context: context,
+              builder: (alertDialogContext) {
+                return AlertDialog(
+                  title: Text('Disconnected'),
+                  content: Text(
+                      'The device is diconnected, scan again and reconnect to the device'),
+                  actions: [
+                    TextButton(
+                      onPressed: () => Navigator.pop(alertDialogContext),
+                      child: Text('Ok'),
+                    ),
+                  ],
+                );
+              },
+            );
+            context.safePop();
+          }
           setState(() {
             _model.currentRssi = _model.updatedRssi;
           });
@@ -757,6 +776,7 @@ class _DeviceWidgetState extends State<DeviceWidget> {
                                   child: ListView.builder(
                                     padding: EdgeInsets.zero,
                                     shrinkWrap: true,
+                                    physics: ClampingScrollPhysics(),
                                     scrollDirection: Axis.vertical,
                                     itemCount: servicesList.length,
                                     itemBuilder: (context, servicesListIndex) {

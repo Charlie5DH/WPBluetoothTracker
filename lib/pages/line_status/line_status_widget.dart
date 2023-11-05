@@ -8,6 +8,7 @@ import '/widgets/strength_indicator/strength_indicator_widget.dart';
 import '/custom_code/actions/index.dart' as actions;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
 import 'line_status_model.dart';
 export 'line_status_model.dart';
 
@@ -72,13 +73,13 @@ class _LineStatusWidgetState extends State<LineStatusWidget> {
           automaticallyImplyLeading: false,
           leading: FlutterFlowIconButton(
             borderColor: Colors.transparent,
-            borderRadius: 30.0,
-            borderWidth: 1.0,
-            buttonSize: 60.0,
+            borderRadius: 30,
+            borderWidth: 1,
+            buttonSize: 60,
             icon: Icon(
               Icons.arrow_back_rounded,
               color: FlutterFlowTheme.of(context).primaryText,
-              size: 30.0,
+              size: 30,
             ),
             onPressed: () async {
               context.pop();
@@ -95,14 +96,13 @@ class _LineStatusWidgetState extends State<LineStatusWidget> {
                     mainAxisSize: MainAxisSize.max,
                     children: [
                       Padding(
-                        padding:
-                            EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 10.0, 0.0),
+                        padding: EdgeInsetsDirectional.fromSTEB(0, 0, 10, 0),
                         child: Text(
                           widget.nomeDispositivo!,
                           style:
                               FlutterFlowTheme.of(context).titleLarge.override(
                                     fontFamily: 'DM Sans',
-                                    fontSize: 16.0,
+                                    fontSize: 16,
                                     fontWeight: FontWeight.w500,
                                   ),
                         ),
@@ -130,7 +130,7 @@ class _LineStatusWidgetState extends State<LineStatusWidget> {
                     ],
                   ),
                   Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(0.0, 5.0, 0.0, 0.0),
+                    padding: EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
                     child: Text(
                       widget.idDispositivo!,
                       style: FlutterFlowTheme.of(context).labelSmall,
@@ -142,12 +142,12 @@ class _LineStatusWidgetState extends State<LineStatusWidget> {
           ),
           actions: [],
           centerTitle: true,
-          elevation: 0.0,
+          elevation: 0,
         ),
         body: SafeArea(
           top: true,
           child: Padding(
-            padding: EdgeInsetsDirectional.fromSTEB(16.0, 16.0, 16.0, 16.0),
+            padding: EdgeInsetsDirectional.fromSTEB(16, 16, 16, 16),
             child: SingleChildScrollView(
               child: Column(
                 mainAxisSize: MainAxisSize.max,
@@ -162,8 +162,7 @@ class _LineStatusWidgetState extends State<LineStatusWidget> {
                     ],
                   ),
                   Padding(
-                    padding:
-                        EdgeInsetsDirectional.fromSTEB(0.0, 10.0, 0.0, 6.0),
+                    padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 6),
                     child: Row(
                       mainAxisSize: MainAxisSize.max,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -186,28 +185,28 @@ class _LineStatusWidgetState extends State<LineStatusWidget> {
                           text: 'Clear',
                           icon: Icon(
                             Icons.clear,
-                            size: 16.0,
+                            size: 16,
                           ),
                           options: FFButtonOptions(
-                            height: 32.0,
-                            padding: EdgeInsetsDirectional.fromSTEB(
-                                12.0, 5.0, 12.0, 5.0),
-                            iconPadding: EdgeInsetsDirectional.fromSTEB(
-                                0.0, 0.0, 0.0, 0.0),
+                            height: 32,
+                            padding:
+                                EdgeInsetsDirectional.fromSTEB(12, 5, 12, 5),
+                            iconPadding:
+                                EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
                             color: FlutterFlowTheme.of(context).alternate,
                             textStyle: FlutterFlowTheme.of(context)
                                 .titleSmall
                                 .override(
                                   fontFamily: 'DM Sans',
                                   color: Colors.white,
-                                  fontSize: 14.0,
+                                  fontSize: 14,
                                 ),
-                            elevation: 3.0,
+                            elevation: 3,
                             borderSide: BorderSide(
                               color: Color(0xFF353F49),
-                              width: 1.0,
+                              width: 1,
                             ),
-                            borderRadius: BorderRadius.circular(20.0),
+                            borderRadius: BorderRadius.circular(20),
                           ),
                         ),
                       ],
@@ -218,8 +217,7 @@ class _LineStatusWidgetState extends State<LineStatusWidget> {
                     color: Color(0xFF353F49),
                   ),
                   Padding(
-                    padding:
-                        EdgeInsetsDirectional.fromSTEB(5.0, 10.0, 0.0, 6.0),
+                    padding: EdgeInsetsDirectional.fromSTEB(5, 10, 0, 6),
                     child: Row(
                       mainAxisSize: MainAxisSize.max,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -231,7 +229,7 @@ class _LineStatusWidgetState extends State<LineStatusWidget> {
                               .override(
                                 fontFamily: 'DM Sans',
                                 color: FlutterFlowTheme.of(context).primaryText,
-                                fontSize: 16.0,
+                                fontSize: 16,
                                 fontWeight: FontWeight.w500,
                               ),
                         ),
@@ -239,12 +237,12 @@ class _LineStatusWidgetState extends State<LineStatusWidget> {
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 2.0),
+                    padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 2),
                     child: Material(
                       color: Colors.transparent,
-                      elevation: 0.0,
+                      elevation: 0,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(6.0),
+                        borderRadius: BorderRadius.circular(6),
                       ),
                       child: Container(
                         width: double.infinity,
@@ -252,12 +250,12 @@ class _LineStatusWidgetState extends State<LineStatusWidget> {
                           color: FlutterFlowTheme.of(context).alternate,
                           boxShadow: [
                             BoxShadow(
-                              blurRadius: 4.0,
+                              blurRadius: 4,
                               color: Color(0x33000000),
-                              offset: Offset(0.0, 2.0),
+                              offset: Offset(0, 2),
                             )
                           ],
-                          borderRadius: BorderRadius.circular(6.0),
+                          borderRadius: BorderRadius.circular(6),
                           border: Border.all(
                             color: Color(0xFF353F49),
                             width: 1.5,
@@ -270,7 +268,7 @@ class _LineStatusWidgetState extends State<LineStatusWidget> {
                             if (_model.measures.length == 0)
                               Padding(
                                 padding: EdgeInsetsDirectional.fromSTEB(
-                                    10.0, 10.0, 10.0, 10.0),
+                                    10, 10, 10, 10),
                                 child: Row(
                                   mainAxisSize: MainAxisSize.max,
                                   mainAxisAlignment: MainAxisAlignment.center,
@@ -284,7 +282,7 @@ class _LineStatusWidgetState extends State<LineStatusWidget> {
                                               .titleLarge
                                               .override(
                                                 fontFamily: 'DM Sans',
-                                                fontSize: 20.0,
+                                                fontSize: 20,
                                               ),
                                         ),
                                         Text(
@@ -301,7 +299,7 @@ class _LineStatusWidgetState extends State<LineStatusWidget> {
                             if (_model.measures.length > 0)
                               Padding(
                                 padding: EdgeInsetsDirectional.fromSTEB(
-                                    5.0, 10.0, 0.0, 10.0),
+                                    5, 10, 0, 10),
                                 child: wrapWithModel(
                                   model: _model.receiveDataMonoModel,
                                   updateCallback: () => setState(() {}),
@@ -318,10 +316,14 @@ class _LineStatusWidgetState extends State<LineStatusWidget> {
                   Align(
                     alignment: AlignmentDirectional(0.00, 1.00),
                     child: Padding(
-                      padding:
-                          EdgeInsetsDirectional.fromSTEB(0.0, 20.0, 0.0, 20.0),
+                      padding: EdgeInsetsDirectional.fromSTEB(0, 20, 0, 20),
                       child: FFButtonWidget(
                         onPressed: () async {
+                          if (_model.measures.length != 0) {
+                            setState(() {
+                              _model.measures = [];
+                            });
+                          }
                           _model.lineStatusRead = await actions.getLineStatus(
                             BTDevicesStruct(
                               name: widget.nomeDispositivo,
@@ -337,8 +339,6 @@ class _LineStatusWidgetState extends State<LineStatusWidget> {
                             _model.currentMeasure = _model.lineStatusRead!;
                           });
                           while (_model.currentMeasure != 'END') {
-                            await Future.delayed(
-                                const Duration(milliseconds: 300));
                             _model.lineStatusReadOnStream =
                                 await actions.getLineStatus(
                               BTDevicesStruct(
@@ -364,26 +364,30 @@ class _LineStatusWidgetState extends State<LineStatusWidget> {
 
                           setState(() {});
                         },
-                        text: 'Solicitar',
+                        text: valueOrDefault<String>(
+                          _model.measures.length == 0
+                              ? 'Solicitar'
+                              : 'Atualizar',
+                          'Solicitar',
+                        ),
                         options: FFButtonOptions(
                           width: MediaQuery.sizeOf(context).width * 0.8,
-                          height: 42.0,
-                          padding: EdgeInsetsDirectional.fromSTEB(
-                              24.0, 0.0, 24.0, 0.0),
-                          iconPadding: EdgeInsetsDirectional.fromSTEB(
-                              0.0, 0.0, 0.0, 0.0),
+                          height: 42,
+                          padding: EdgeInsetsDirectional.fromSTEB(24, 0, 24, 0),
+                          iconPadding:
+                              EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
                           color: FlutterFlowTheme.of(context).primary,
                           textStyle:
                               FlutterFlowTheme.of(context).titleSmall.override(
                                     fontFamily: 'DM Sans',
                                     color: Colors.white,
                                   ),
-                          elevation: 3.0,
+                          elevation: 3,
                           borderSide: BorderSide(
                             color: Colors.transparent,
-                            width: 1.0,
+                            width: 1,
                           ),
-                          borderRadius: BorderRadius.circular(20.0),
+                          borderRadius: BorderRadius.circular(20),
                         ),
                       ),
                     ),
