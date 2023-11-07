@@ -62,6 +62,13 @@ class _GravarLocalizationWidgetState extends State<GravarLocalizationWidget> {
       setState(() {
         _model.currentLocalization = _model.loadedLocalization!;
       });
+      DateTime now = DateTime.now().toUtc();
+      String timestamp = now.toString();
+      // convert to the format YYYY-MM-DD, HH:mm:ss
+      String firstPart = timestamp.substring(0, 10);
+      String secondPart = timestamp.substring(11, 19);
+      timestamp = firstPart + ", " + secondPart;
+      print(timestamp);
     });
 
     getCurrentUserLocation(defaultLocation: LatLng(0.0, 0.0), cached: true)
@@ -289,7 +296,7 @@ class _GravarLocalizationWidgetState extends State<GravarLocalizationWidget> {
                   Padding(
                     padding: EdgeInsetsDirectional.fromSTEB(0.0, 6.0, 0.0, 6.0),
                     child: Text(
-                      'Abaixo, você pode enviar sua localização atual para o dispositivo Bluetooth ou uma localização personalizada.',
+                      'Grave sua localização e o timemstamp atual (UTC), no botão "My Localization" ou uma localização diferente, no botão "Custom localization".',
                       style: FlutterFlowTheme.of(context).labelMedium.override(
                             fontFamily: 'DM Sans',
                             fontSize: 14.0,
@@ -407,32 +414,16 @@ class _GravarLocalizationWidgetState extends State<GravarLocalizationWidget> {
                                     0.0, 6.0, 0.0, 6.0),
                                 child: Row(
                                   mainAxisSize: MainAxisSize.max,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
-                                      'Send the current localization to the device',
-                                      textAlign: TextAlign.start,
+                                      currentUserLocationValue!.toString(),
                                       style: FlutterFlowTheme.of(context)
-                                          .labelMedium
-                                          .override(
-                                            fontFamily: 'DM Sans',
-                                            fontSize: 12.0,
-                                            lineHeight: 1.4,
-                                          ),
+                                          .labelMedium,
                                     ),
                                   ],
                                 ),
-                              ),
-                              Row(
-                                mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    currentUserLocationValue!.toString(),
-                                    style: FlutterFlowTheme.of(context)
-                                        .labelMedium,
-                                  ),
-                                ],
                               ),
                             ],
                           ),
@@ -719,7 +710,7 @@ class _GravarLocalizationWidgetState extends State<GravarLocalizationWidget> {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               content: Text(
-                                'Localization sent to device',
+                                'Localization and Timestamp sent to tracker',
                                 style: TextStyle(
                                   color:
                                       FlutterFlowTheme.of(context).primaryText,

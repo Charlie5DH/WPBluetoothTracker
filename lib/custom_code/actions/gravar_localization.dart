@@ -31,6 +31,8 @@ Future gravarLocalization(
     serviceUUID = "bae55b96-7d19-458d-970c-50613d801bc9";
   }
 
+  String timestampServiceUUID = "a617811d-d2a0-4155-923e-de09de01849c";
+
   if (fullLocalization == true) {
     // the localization string has the format: LatLng(lat: latitude, lng: longitude)
     // so we need to take the lat and lng from the string, removing the rest
@@ -67,13 +69,31 @@ Future gravarLocalization(
       (element) => element.uuid.toString() == serviceUUID,
       orElse: () => throw Exception("Service not found"));
 
+  // returns the timestamp service
+  BluetoothService timestampService = services.firstWhere(
+      (element) => element.uuid.toString() == timestampServiceUUID,
+      orElse: () => throw Exception("Service not found"));
+
   // returns the first characteristic of the service, which is the latitude
   BluetoothCharacteristic characteristicLat = service.characteristics.first;
   // returns the second characteristic of the service, which is the longitude
   BluetoothCharacteristic characteristicLng = service.characteristics.last;
+  // returns the first characteristic of the timestamp service, which is the timestamp
+  BluetoothCharacteristic characteristicTimestamp =
+      timestampService.characteristics.first;
 
   // writes the latitude to the latitude characteristic
   await characteristicLat.write(latitude.codeUnits);
   // writes the longitude to the longitude characteristic
   await characteristicLng.write(longitude.codeUnits);
+
+  // now write the current timestamp of the phone to the timestamp characteristic, in UTC format
+  DateTime now = DateTime.now().toUtc();
+  String timestamp = now.toString();
+  // convert to the format YYYY-MM-DD, HH:mm:ss
+  String firstPart = timestamp.substring(0, 10);
+  String secondPart = timestamp.substring(11, 19);
+  timestamp = firstPart + ", " + secondPart;
+
+  await characteristicTimestamp.write(timestamp.codeUnits);
 }

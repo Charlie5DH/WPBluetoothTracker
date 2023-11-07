@@ -408,168 +408,44 @@ class _DeviceWidgetState extends State<DeviceWidget> {
                         ],
                       ),
                     ),
-                  Divider(
-                    thickness: 1.0,
-                    color: Color(0xFF353F49),
-                  ),
-                  Padding(
-                    padding:
-                        EdgeInsetsDirectional.fromSTEB(0.0, 5.0, 0.0, 10.0),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(
-                          child: Text(
-                            'Functions:',
-                            style: FlutterFlowTheme.of(context).bodyMedium,
-                          ),
-                        ),
-                      ],
+                  if (functions.isSTS(widget.deviceName)! ||
+                      functions.isSTC(widget.deviceName)!)
+                    Divider(
+                      thickness: 1.0,
+                      color: Color(0xFF353F49),
                     ),
-                  ),
-                  Column(
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      Row(
+                  if (functions.isSTS(widget.deviceName)! ||
+                      functions.isSTC(widget.deviceName)!)
+                    Padding(
+                      padding:
+                          EdgeInsetsDirectional.fromSTEB(0.0, 5.0, 0.0, 10.0),
+                      child: Row(
                         mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Expanded(
-                            child: FFButtonWidget(
-                              onPressed: () async {
-                                context.pushNamed(
-                                  'LineStatus',
-                                  queryParameters: {
-                                    'nomeDispositivo': serializeParam(
-                                      widget.deviceName,
-                                      ParamType.String,
-                                    ),
-                                    'idDispositivo': serializeParam(
-                                      widget.deviceId,
-                                      ParamType.String,
-                                    ),
-                                    'rssi': serializeParam(
-                                      widget.deviceRssi,
-                                      ParamType.int,
-                                    ),
-                                    'type': serializeParam(
-                                      widget.deviceType,
-                                      ParamType.String,
-                                    ),
-                                    'serviceUUID': serializeParam(
-                                      '6d98920a-905f-4c29-8322-b274154811ea',
-                                      ParamType.String,
-                                    ),
-                                  }.withoutNulls,
-                                  extra: <String, dynamic>{
-                                    kTransitionInfoKey: TransitionInfo(
-                                      hasTransition: true,
-                                      transitionType: PageTransitionType.fade,
-                                      duration: Duration(milliseconds: 200),
-                                    ),
-                                  },
-                                );
-                              },
-                              text: 'Line Status',
-                              options: FFButtonOptions(
-                                height: 60.0,
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    14.0, 0.0, 14.0, 0.0),
-                                iconPadding: EdgeInsetsDirectional.fromSTEB(
-                                    0.0, 0.0, 0.0, 0.0),
-                                color: FlutterFlowTheme.of(context).primary,
-                                textStyle: FlutterFlowTheme.of(context)
-                                    .titleSmall
-                                    .override(
-                                      fontFamily: 'DM Sans',
-                                      color: Colors.white,
-                                    ),
-                                elevation: 3.0,
-                                borderSide: BorderSide(
-                                  color: Colors.transparent,
-                                  width: 1.0,
-                                ),
-                                borderRadius: BorderRadius.circular(6.0),
-                              ),
+                            child: Text(
+                              'Functions:',
+                              style: FlutterFlowTheme.of(context).bodyMedium,
                             ),
                           ),
-                          Expanded(
-                            flex: 1,
-                            child: FFButtonWidget(
-                              onPressed: () async {
-                                context.pushNamed(
-                                  'Timestamp',
-                                  queryParameters: {
-                                    'nomeDispositivo': serializeParam(
-                                      widget.deviceName,
-                                      ParamType.String,
-                                    ),
-                                    'idDispositivo': serializeParam(
-                                      widget.deviceId,
-                                      ParamType.String,
-                                    ),
-                                    'rssi': serializeParam(
-                                      widget.deviceRssi,
-                                      ParamType.int,
-                                    ),
-                                    'type': serializeParam(
-                                      widget.deviceType,
-                                      ParamType.String,
-                                    ),
-                                    'serviceUUID': serializeParam(
-                                      'a617811d-d2a0-4155-923e-de09de01849c',
-                                      ParamType.String,
-                                    ),
-                                  }.withoutNulls,
-                                  extra: <String, dynamic>{
-                                    kTransitionInfoKey: TransitionInfo(
-                                      hasTransition: true,
-                                      transitionType: PageTransitionType.fade,
-                                      duration: Duration(milliseconds: 200),
-                                    ),
-                                  },
-                                );
-                              },
-                              text: 'Timestamp',
-                              options: FFButtonOptions(
-                                width: MediaQuery.sizeOf(context).width * 0.4,
-                                height: 60.0,
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    14.0, 0.0, 14.0, 0.0),
-                                iconPadding: EdgeInsetsDirectional.fromSTEB(
-                                    0.0, 0.0, 0.0, 0.0),
-                                color: FlutterFlowTheme.of(context).primary,
-                                textStyle: FlutterFlowTheme.of(context)
-                                    .titleSmall
-                                    .override(
-                                      fontFamily: 'DM Sans',
-                                      color: Colors.white,
-                                    ),
-                                elevation: 3.0,
-                                borderSide: BorderSide(
-                                  color: Colors.transparent,
-                                  width: 1.0,
-                                ),
-                                borderRadius: BorderRadius.circular(6.0),
-                              ),
-                            ),
-                          ),
-                        ].divide(SizedBox(width: 8.0)),
+                        ],
                       ),
-                      Padding(
-                        padding:
-                            EdgeInsetsDirectional.fromSTEB(0.0, 8.0, 0.0, 0.0),
-                        child: Row(
+                    ),
+                  if (functions.isSTS(widget.deviceName)! ||
+                      functions.isSTC(widget.deviceName)!)
+                    Column(
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        Row(
                           mainAxisSize: MainAxisSize.max,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Expanded(
-                              flex: 1,
                               child: FFButtonWidget(
                                 onPressed: () async {
                                   context.pushNamed(
-                                    'GravarLocalization',
+                                    'LineStatus',
                                     queryParameters: {
                                       'nomeDispositivo': serializeParam(
                                         widget.deviceName,
@@ -579,20 +455,16 @@ class _DeviceWidgetState extends State<DeviceWidget> {
                                         widget.deviceId,
                                         ParamType.String,
                                       ),
-                                      'rssiDispositivo': serializeParam(
+                                      'rssi': serializeParam(
                                         widget.deviceRssi,
                                         ParamType.int,
                                       ),
-                                      'tipoDoDispositivo': serializeParam(
+                                      'type': serializeParam(
                                         widget.deviceType,
                                         ParamType.String,
                                       ),
-                                      'conectable': serializeParam(
-                                        widget.deviceConnectable,
-                                        ParamType.bool,
-                                      ),
                                       'serviceUUID': serializeParam(
-                                        'bae55b96-7d19-458d-970c-50613d801bc9',
+                                        '6d98920a-905f-4c29-8322-b274154811ea',
                                         ParamType.String,
                                       ),
                                     }.withoutNulls,
@@ -605,11 +477,7 @@ class _DeviceWidgetState extends State<DeviceWidget> {
                                     },
                                   );
                                 },
-                                text: 'Localização',
-                                icon: Icon(
-                                  Icons.edit_location_alt_rounded,
-                                  size: 24.0,
-                                ),
+                                text: 'Line Status',
                                 options: FFButtonOptions(
                                   height: 60.0,
                                   padding: EdgeInsetsDirectional.fromSTEB(
@@ -637,7 +505,7 @@ class _DeviceWidgetState extends State<DeviceWidget> {
                               child: FFButtonWidget(
                                 onPressed: () async {
                                   context.pushNamed(
-                                    'Motor',
+                                    'Timestamp',
                                     queryParameters: {
                                       'nomeDispositivo': serializeParam(
                                         widget.deviceName,
@@ -651,8 +519,12 @@ class _DeviceWidgetState extends State<DeviceWidget> {
                                         widget.deviceRssi,
                                         ParamType.int,
                                       ),
-                                      'characteristicUUID': serializeParam(
-                                        'b5b10c03-7f57-43bb-8451-5af4767a4459',
+                                      'type': serializeParam(
+                                        widget.deviceType,
+                                        ParamType.String,
+                                      ),
+                                      'serviceUUID': serializeParam(
+                                        'a617811d-d2a0-4155-923e-de09de01849c',
                                         ParamType.String,
                                       ),
                                     }.withoutNulls,
@@ -665,15 +537,12 @@ class _DeviceWidgetState extends State<DeviceWidget> {
                                     },
                                   );
                                 },
-                                text: 'Controlar motor',
-                                icon: Icon(
-                                  Icons.settings_suggest,
-                                  size: 24.0,
-                                ),
+                                text: 'Timestamp',
                                 options: FFButtonOptions(
+                                  width: MediaQuery.sizeOf(context).width * 0.4,
                                   height: 60.0,
                                   padding: EdgeInsetsDirectional.fromSTEB(
-                                      18.0, 0.0, 18.0, 0.0),
+                                      14.0, 0.0, 14.0, 0.0),
                                   iconPadding: EdgeInsetsDirectional.fromSTEB(
                                       0.0, 0.0, 0.0, 0.0),
                                   color: FlutterFlowTheme.of(context).primary,
@@ -694,9 +563,152 @@ class _DeviceWidgetState extends State<DeviceWidget> {
                             ),
                           ].divide(SizedBox(width: 8.0)),
                         ),
-                      ),
-                    ],
-                  ),
+                        Padding(
+                          padding: EdgeInsetsDirectional.fromSTEB(
+                              0.0, 8.0, 0.0, 0.0),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Expanded(
+                                flex: 1,
+                                child: FFButtonWidget(
+                                  onPressed: () async {
+                                    context.pushNamed(
+                                      'GravarLocalization',
+                                      queryParameters: {
+                                        'nomeDispositivo': serializeParam(
+                                          widget.deviceName,
+                                          ParamType.String,
+                                        ),
+                                        'idDispositivo': serializeParam(
+                                          widget.deviceId,
+                                          ParamType.String,
+                                        ),
+                                        'rssiDispositivo': serializeParam(
+                                          widget.deviceRssi,
+                                          ParamType.int,
+                                        ),
+                                        'tipoDoDispositivo': serializeParam(
+                                          widget.deviceType,
+                                          ParamType.String,
+                                        ),
+                                        'conectable': serializeParam(
+                                          widget.deviceConnectable,
+                                          ParamType.bool,
+                                        ),
+                                        'serviceUUID': serializeParam(
+                                          'bae55b96-7d19-458d-970c-50613d801bc9',
+                                          ParamType.String,
+                                        ),
+                                      }.withoutNulls,
+                                      extra: <String, dynamic>{
+                                        kTransitionInfoKey: TransitionInfo(
+                                          hasTransition: true,
+                                          transitionType:
+                                              PageTransitionType.fade,
+                                          duration: Duration(milliseconds: 200),
+                                        ),
+                                      },
+                                    );
+                                  },
+                                  text: 'Localização',
+                                  icon: Icon(
+                                    Icons.edit_location_alt_rounded,
+                                    size: 24.0,
+                                  ),
+                                  options: FFButtonOptions(
+                                    height: 60.0,
+                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                        14.0, 0.0, 14.0, 0.0),
+                                    iconPadding: EdgeInsetsDirectional.fromSTEB(
+                                        0.0, 0.0, 0.0, 0.0),
+                                    color: FlutterFlowTheme.of(context).primary,
+                                    textStyle: FlutterFlowTheme.of(context)
+                                        .titleSmall
+                                        .override(
+                                          fontFamily: 'DM Sans',
+                                          color: Colors.white,
+                                        ),
+                                    elevation: 3.0,
+                                    borderSide: BorderSide(
+                                      color: Colors.transparent,
+                                      width: 1.0,
+                                    ),
+                                    borderRadius: BorderRadius.circular(6.0),
+                                  ),
+                                ),
+                              ),
+                              if (functions.isSTC(widget.deviceName) ?? true)
+                                Expanded(
+                                  flex: 1,
+                                  child: FFButtonWidget(
+                                    onPressed: () async {
+                                      context.pushNamed(
+                                        'Motor',
+                                        queryParameters: {
+                                          'nomeDispositivo': serializeParam(
+                                            widget.deviceName,
+                                            ParamType.String,
+                                          ),
+                                          'idDispositivo': serializeParam(
+                                            widget.deviceId,
+                                            ParamType.String,
+                                          ),
+                                          'rssi': serializeParam(
+                                            widget.deviceRssi,
+                                            ParamType.int,
+                                          ),
+                                          'characteristicUUID': serializeParam(
+                                            'b5b10c03-7f57-43bb-8451-5af4767a4459',
+                                            ParamType.String,
+                                          ),
+                                        }.withoutNulls,
+                                        extra: <String, dynamic>{
+                                          kTransitionInfoKey: TransitionInfo(
+                                            hasTransition: true,
+                                            transitionType:
+                                                PageTransitionType.fade,
+                                            duration:
+                                                Duration(milliseconds: 200),
+                                          ),
+                                        },
+                                      );
+                                    },
+                                    text: 'Controlar motor',
+                                    icon: Icon(
+                                      Icons.settings_suggest,
+                                      size: 24.0,
+                                    ),
+                                    options: FFButtonOptions(
+                                      height: 60.0,
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          18.0, 0.0, 18.0, 0.0),
+                                      iconPadding:
+                                          EdgeInsetsDirectional.fromSTEB(
+                                              0.0, 0.0, 0.0, 0.0),
+                                      color:
+                                          FlutterFlowTheme.of(context).primary,
+                                      textStyle: FlutterFlowTheme.of(context)
+                                          .titleSmall
+                                          .override(
+                                            fontFamily: 'DM Sans',
+                                            color: Colors.white,
+                                          ),
+                                      elevation: 3.0,
+                                      borderSide: BorderSide(
+                                        color: Colors.transparent,
+                                        width: 1.0,
+                                      ),
+                                      borderRadius: BorderRadius.circular(6.0),
+                                    ),
+                                  ),
+                                ),
+                            ].divide(SizedBox(width: 8.0)),
+                          ),
+                        ),
+                      ],
+                    ),
                   if (functions.isSTC(widget.deviceName)! ||
                       functions.isSTS(widget.deviceName)!)
                     Divider(

@@ -182,106 +182,106 @@ class ThemeTypography extends Typography {
   final FlutterFlowTheme theme;
 
   String get displayLargeFamily => 'DM Sans';
-  TextStyle get displayLarge => GoogleFonts.getFont(
-        'DM Sans',
+  TextStyle get displayLarge => TextStyle(
+        fontFamily: 'DM Sans',
         color: theme.primaryText,
         fontWeight: FontWeight.normal,
         fontSize: 64.0,
       );
   String get displayMediumFamily => 'DM Sans';
-  TextStyle get displayMedium => GoogleFonts.getFont(
-        'DM Sans',
+  TextStyle get displayMedium => TextStyle(
+        fontFamily: 'DM Sans',
         color: theme.primaryText,
         fontWeight: FontWeight.normal,
         fontSize: 44.0,
       );
   String get displaySmallFamily => 'DM Sans';
-  TextStyle get displaySmall => GoogleFonts.getFont(
-        'DM Sans',
+  TextStyle get displaySmall => TextStyle(
+        fontFamily: 'DM Sans',
         color: theme.primaryText,
         fontWeight: FontWeight.w600,
         fontSize: 36.0,
       );
   String get headlineLargeFamily => 'DM Sans';
-  TextStyle get headlineLarge => GoogleFonts.getFont(
-        'DM Sans',
+  TextStyle get headlineLarge => TextStyle(
+        fontFamily: 'DM Sans',
         color: theme.primaryText,
         fontWeight: FontWeight.w600,
         fontSize: 32.0,
       );
   String get headlineMediumFamily => 'DM Sans';
-  TextStyle get headlineMedium => GoogleFonts.getFont(
-        'DM Sans',
+  TextStyle get headlineMedium => TextStyle(
+        fontFamily: 'DM Sans',
         color: theme.primaryText,
         fontWeight: FontWeight.normal,
         fontSize: 24.0,
       );
   String get headlineSmallFamily => 'DM Sans';
-  TextStyle get headlineSmall => GoogleFonts.getFont(
-        'DM Sans',
+  TextStyle get headlineSmall => TextStyle(
+        fontFamily: 'DM Sans',
         color: theme.primaryText,
         fontWeight: FontWeight.w500,
         fontSize: 24.0,
       );
   String get titleLargeFamily => 'DM Sans';
-  TextStyle get titleLarge => GoogleFonts.getFont(
-        'DM Sans',
+  TextStyle get titleLarge => TextStyle(
+        fontFamily: 'DM Sans',
         color: theme.primaryText,
         fontWeight: FontWeight.w500,
         fontSize: 22.0,
       );
   String get titleMediumFamily => 'DM Sans';
-  TextStyle get titleMedium => GoogleFonts.getFont(
-        'DM Sans',
+  TextStyle get titleMedium => TextStyle(
+        fontFamily: 'DM Sans',
         color: theme.info,
         fontWeight: FontWeight.normal,
         fontSize: 18.0,
       );
   String get titleSmallFamily => 'DM Sans';
-  TextStyle get titleSmall => GoogleFonts.getFont(
-        'DM Sans',
+  TextStyle get titleSmall => TextStyle(
+        fontFamily: 'DM Sans',
         color: theme.info,
         fontWeight: FontWeight.w500,
         fontSize: 16.0,
       );
   String get labelLargeFamily => 'DM Sans';
-  TextStyle get labelLarge => GoogleFonts.getFont(
-        'DM Sans',
+  TextStyle get labelLarge => TextStyle(
+        fontFamily: 'DM Sans',
         color: theme.secondaryText,
         fontWeight: FontWeight.normal,
         fontSize: 16.0,
       );
   String get labelMediumFamily => 'DM Sans';
-  TextStyle get labelMedium => GoogleFonts.getFont(
-        'DM Sans',
+  TextStyle get labelMedium => TextStyle(
+        fontFamily: 'DM Sans',
         color: theme.secondaryText,
         fontWeight: FontWeight.normal,
         fontSize: 14.0,
       );
   String get labelSmallFamily => 'DM Sans';
-  TextStyle get labelSmall => GoogleFonts.getFont(
-        'DM Sans',
+  TextStyle get labelSmall => TextStyle(
+        fontFamily: 'DM Sans',
         color: theme.secondaryText,
         fontWeight: FontWeight.normal,
         fontSize: 12.0,
       );
   String get bodyLargeFamily => 'DM Sans';
-  TextStyle get bodyLarge => GoogleFonts.getFont(
-        'DM Sans',
+  TextStyle get bodyLarge => TextStyle(
+        fontFamily: 'DM Sans',
         color: theme.primaryText,
         fontWeight: FontWeight.normal,
         fontSize: 16.0,
       );
   String get bodyMediumFamily => 'DM Sans';
-  TextStyle get bodyMedium => GoogleFonts.getFont(
-        'DM Sans',
+  TextStyle get bodyMedium => TextStyle(
+        fontFamily: 'DM Sans',
         color: theme.primaryText,
         fontWeight: FontWeight.normal,
         fontSize: 14.0,
       );
   String get bodySmallFamily => 'DM Sans';
-  TextStyle get bodySmall => GoogleFonts.getFont(
-        'DM Sans',
+  TextStyle get bodySmall => TextStyle(
+        fontFamily: 'DM Sans',
         color: theme.primaryText,
         fontWeight: FontWeight.normal,
         fontSize: 12.0,
@@ -322,7 +322,7 @@ extension TextStyleHelper on TextStyle {
     FontWeight? fontWeight,
     double? letterSpacing,
     FontStyle? fontStyle,
-    bool useGoogleFonts = true,
+    bool useGoogleFonts = false, // changed to false
     TextDecoration? decoration,
     double? lineHeight,
   }) =>

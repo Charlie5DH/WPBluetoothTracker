@@ -102,6 +102,16 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+  fonts:
+    - family: consolas
+      fonts:
+        - asset: assets/fonts/CONSOLA.ttf
+    - family: robotoMono
+      fonts:
+        - asset: assets/fonts/RobotoMono-VariableFont_wght.ttf
+    - family: DM Sans
+      fonts:
+        - asset: assets/fonts/DMSans-Regular.ttf
 
   # To add assets to your application, add an assets section, like this:
   assets:

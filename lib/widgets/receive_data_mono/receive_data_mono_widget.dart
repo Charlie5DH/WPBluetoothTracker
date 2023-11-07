@@ -74,17 +74,9 @@ class _ReceiveDataMonoWidgetState extends State<ReceiveDataMonoWidget> {
                                 size: 20,
                               ),
                             ),
-                            Text(
-                              listdataItem,
-                              style: FlutterFlowTheme.of(context)
-                                  .bodyMedium
-                                  .override(
-                                    fontFamily: 'Roboto Mono',
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.normal,
-                                    letterSpacing: 0.5,
-                                  ),
-                            ),
+                            Text(listdataItem,
+                                style: TextStyle(
+                                    fontFamily: 'robotoMono', fontSize: 14)),
                           ],
                         );
                       },

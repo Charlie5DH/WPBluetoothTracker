@@ -1,4 +1,3 @@
-
 import '/backend/backend.dart';
 import '/backend/schema/structs/index.dart';
 
@@ -116,7 +115,8 @@ bool? isSTS(String? deviceName) {
 bool? isSTC(String? deviceName) {
   // returns true if the device name starts with STS,
   // else returns false
-  if (deviceName?.startsWith("STC") == true) {
+  if (deviceName?.startsWith("STC") == true ||
+      deviceName?.startsWith("stc") == true) {
     return true;
   } else {
     return false;
