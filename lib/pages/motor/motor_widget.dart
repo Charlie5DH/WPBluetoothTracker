@@ -4,6 +4,7 @@ import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import '/flutter_flow/instant_timer.dart';
+import '/flutter_flow/custom_functions.dart' as functions;
 import '/widgets/strength_indicator/strength_indicator_widget.dart';
 import '/custom_code/actions/index.dart' as actions;
 import 'package:flutter/material.dart';
@@ -43,7 +44,7 @@ class _MotorWidgetState extends State<MotorWidget> {
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
       _model.instantTimer = InstantTimer.periodic(
-        duration: Duration(milliseconds: 5000),
+        duration: Duration(milliseconds: 1000),
         callback: (timer) async {
           _model.readAngle = await actions.readMotorAngle(
             BTDevicesStruct(
@@ -129,7 +130,7 @@ class _MotorWidgetState extends State<MotorWidget> {
                           style:
                               FlutterFlowTheme.of(context).titleLarge.override(
                                     fontFamily: 'DM Sans',
-                                    fontSize: 16.0,
+                                    fontSize: 14.0,
                                     fontWeight: FontWeight.w500,
                                   ),
                         ),
@@ -188,7 +189,7 @@ class _MotorWidgetState extends State<MotorWidget> {
                   style: FlutterFlowTheme.of(context).bodyLarge,
                 ),
                 Text(
-                  'Pressione o botão para atualizar',
+                  'Pressione o quadrado para atualizar',
                   style: FlutterFlowTheme.of(context).labelMedium,
                 ),
                 Padding(
@@ -222,7 +223,7 @@ class _MotorWidgetState extends State<MotorWidget> {
                         borderRadius: BorderRadius.circular(6.0),
                       ),
                       child: Container(
-                        width: MediaQuery.sizeOf(context).width * 0.5,
+                        width: MediaQuery.sizeOf(context).width * 0.75,
                         height: 80.0,
                         decoration: BoxDecoration(
                           color: FlutterFlowTheme.of(context).alternate,
@@ -261,16 +262,19 @@ class _MotorWidgetState extends State<MotorWidget> {
                                         ),
                                   ),
                                 ),
-                                Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      5.0, 0.0, 0.0, 14.0),
-                                  child: Icon(
-                                    Icons.circle_outlined,
-                                    color: FlutterFlowTheme.of(context)
-                                        .primaryText,
-                                    size: 12.0,
-                                  ),
-                                ),
+                                // if (_model.currentAngle != 'EMERGÊNCIA' &&
+                                //     _model.currentAngle != 'ERRO' &&
+                                //     _model.currentAngle != '')
+                                //   Padding(
+                                //     padding: EdgeInsetsDirectional.fromSTEB(
+                                //         5.0, 0.0, 0.0, 14.0),
+                                //     child: Icon(
+                                //       Icons.circle_outlined,
+                                //       color: FlutterFlowTheme.of(context)
+                                //           .primaryText,
+                                //       size: 12.0,
+                                //     ),
+                                //   ),
                               ],
                             ),
                           ],
@@ -314,24 +318,25 @@ class _MotorWidgetState extends State<MotorWidget> {
                           FFButtonWidget(
                             onPressed: () async {
                               setState(() {
-                                _model.selectedAngle = 'East';
-                                _model.writeAngleValue = 101;
+                                _model.selectedAngle = 'West';
+                                _model.writeAngleValue = 102;
                               });
                             },
-                            text: 'East',
+                            text: 'West',
                             options: FFButtonOptions(
-                              height: 32.0,
+                              height: 36.0,
                               padding: EdgeInsetsDirectional.fromSTEB(
-                                  20.0, 10.0, 20.0, 10.0),
+                                  20.0, 6.0, 20.0, 6.0),
                               iconPadding: EdgeInsetsDirectional.fromSTEB(
                                   0.0, 0.0, 0.0, 0.0),
-                              color: _model.selectedAngle == 'East'
+                              color: _model.selectedAngle == 'West'
                                   ? FlutterFlowTheme.of(context).success
                                   : FlutterFlowTheme.of(context).alternate,
                               textStyle: FlutterFlowTheme.of(context)
-                                  .bodyLarge
+                                  .bodyMedium
                                   .override(
                                     fontFamily: 'DM Sans',
+                                    fontSize: 14.0,
                                     fontWeight: FontWeight.w500,
                                   ),
                               elevation: 5.0,
@@ -351,9 +356,9 @@ class _MotorWidgetState extends State<MotorWidget> {
                             },
                             text: 'Zero',
                             options: FFButtonOptions(
-                              height: 32.0,
+                              height: 36.0,
                               padding: EdgeInsetsDirectional.fromSTEB(
-                                  20.0, 10.0, 20.0, 10.0),
+                                  20.0, 6.0, 20.0, 6.0),
                               iconPadding: EdgeInsetsDirectional.fromSTEB(
                                   0.0, 0.0, 0.0, 0.0),
                               color: _model.selectedAngle == 'Zero'
@@ -363,7 +368,7 @@ class _MotorWidgetState extends State<MotorWidget> {
                                   .bodyMedium
                                   .override(
                                     fontFamily: 'DM Sans',
-                                    fontSize: 16.0,
+                                    fontSize: 14.0,
                                     fontWeight: FontWeight.w500,
                                   ),
                               elevation: 5.0,
@@ -377,25 +382,24 @@ class _MotorWidgetState extends State<MotorWidget> {
                           FFButtonWidget(
                             onPressed: () async {
                               setState(() {
-                                _model.selectedAngle = 'West';
-                                _model.writeAngleValue = 102;
+                                _model.selectedAngle = 'East';
+                                _model.writeAngleValue = 101;
                               });
                             },
-                            text: 'West',
+                            text: 'East',
                             options: FFButtonOptions(
-                              height: 32.0,
+                              height: 36.0,
                               padding: EdgeInsetsDirectional.fromSTEB(
-                                  20.0, 10.0, 20.0, 10.0),
+                                  20.0, 6.0, 20.0, 6.0),
                               iconPadding: EdgeInsetsDirectional.fromSTEB(
                                   0.0, 0.0, 0.0, 0.0),
-                              color: _model.selectedAngle == 'West'
+                              color: _model.selectedAngle == 'East'
                                   ? FlutterFlowTheme.of(context).success
                                   : FlutterFlowTheme.of(context).alternate,
                               textStyle: FlutterFlowTheme.of(context)
-                                  .bodyMedium
+                                  .bodyLarge
                                   .override(
                                     fontFamily: 'DM Sans',
-                                    fontSize: 16.0,
                                     fontWeight: FontWeight.w500,
                                   ),
                               elevation: 5.0,
@@ -415,25 +419,25 @@ class _MotorWidgetState extends State<MotorWidget> {
                           FFButtonWidget(
                             onPressed: () async {
                               setState(() {
-                                _model.selectedAngle = 'Clean east';
-                                _model.writeAngleValue = 103;
+                                _model.selectedAngle = 'Clean west';
+                                _model.writeAngleValue = 104;
                               });
                             },
-                            text: 'Clean east',
+                            text: 'Clean west',
                             options: FFButtonOptions(
-                              height: 32.0,
+                              height: 36.0,
                               padding: EdgeInsetsDirectional.fromSTEB(
-                                  20.0, 10.0, 20.0, 10.0),
+                                  20.0, 6.0, 20.0, 6.0),
                               iconPadding: EdgeInsetsDirectional.fromSTEB(
                                   0.0, 0.0, 0.0, 0.0),
-                              color: _model.selectedAngle == 'Clean east'
+                              color: _model.selectedAngle == 'Clean west'
                                   ? FlutterFlowTheme.of(context).success
                                   : FlutterFlowTheme.of(context).alternate,
                               textStyle: FlutterFlowTheme.of(context)
                                   .bodyMedium
                                   .override(
                                     fontFamily: 'DM Sans',
-                                    fontSize: 16.0,
+                                    fontSize: 14.0,
                                     fontWeight: FontWeight.w500,
                                   ),
                               elevation: 5.0,
@@ -447,25 +451,25 @@ class _MotorWidgetState extends State<MotorWidget> {
                           FFButtonWidget(
                             onPressed: () async {
                               setState(() {
-                                _model.selectedAngle = 'Clean west';
-                                _model.writeAngleValue = 104;
+                                _model.selectedAngle = 'Clean east';
+                                _model.writeAngleValue = 103;
                               });
                             },
-                            text: 'Clean west',
+                            text: 'Clean east',
                             options: FFButtonOptions(
-                              height: 32.0,
+                              height: 36.0,
                               padding: EdgeInsetsDirectional.fromSTEB(
-                                  20.0, 10.0, 20.0, 10.0),
+                                  20.0, 6.0, 20.0, 6.0),
                               iconPadding: EdgeInsetsDirectional.fromSTEB(
                                   0.0, 0.0, 0.0, 0.0),
-                              color: _model.selectedAngle == 'Clean west'
+                              color: _model.selectedAngle == 'Clean east'
                                   ? FlutterFlowTheme.of(context).success
                                   : FlutterFlowTheme.of(context).alternate,
                               textStyle: FlutterFlowTheme.of(context)
                                   .bodyMedium
                                   .override(
                                     fontFamily: 'DM Sans',
-                                    fontSize: 16.0,
+                                    fontSize: 14.0,
                                     fontWeight: FontWeight.w500,
                                   ),
                               elevation: 5.0,
@@ -491,9 +495,9 @@ class _MotorWidgetState extends State<MotorWidget> {
                             },
                             text: 'Rest',
                             options: FFButtonOptions(
-                              height: 32.0,
+                              height: 36.0,
                               padding: EdgeInsetsDirectional.fromSTEB(
-                                  20.0, 10.0, 20.0, 10.0),
+                                  20.0, 6.0, 20.0, 6.0),
                               iconPadding: EdgeInsetsDirectional.fromSTEB(
                                   0.0, 0.0, 0.0, 0.0),
                               color: _model.selectedAngle == 'Rest'
@@ -503,7 +507,7 @@ class _MotorWidgetState extends State<MotorWidget> {
                                   .bodyMedium
                                   .override(
                                     fontFamily: 'DM Sans',
-                                    fontSize: 16.0,
+                                    fontSize: 14.0,
                                     fontWeight: FontWeight.w500,
                                   ),
                               elevation: 5.0,
@@ -523,9 +527,9 @@ class _MotorWidgetState extends State<MotorWidget> {
                             },
                             text: 'Storm',
                             options: FFButtonOptions(
-                              height: 32.0,
+                              height: 36.0,
                               padding: EdgeInsetsDirectional.fromSTEB(
-                                  20.0, 10.0, 20.0, 10.0),
+                                  20.0, 6.0, 20.0, 6.0),
                               iconPadding: EdgeInsetsDirectional.fromSTEB(
                                   0.0, 0.0, 0.0, 0.0),
                               color: _model.selectedAngle == 'Storm'
@@ -535,7 +539,7 @@ class _MotorWidgetState extends State<MotorWidget> {
                                   .bodyMedium
                                   .override(
                                     fontFamily: 'DM Sans',
-                                    fontSize: 16.0,
+                                    fontSize: 14.0,
                                     fontWeight: FontWeight.w500,
                                   ),
                               elevation: 5.0,
@@ -560,9 +564,9 @@ class _MotorWidgetState extends State<MotorWidget> {
                             },
                             text: 'Custom',
                             options: FFButtonOptions(
-                              height: 32.0,
+                              height: 36.0,
                               padding: EdgeInsetsDirectional.fromSTEB(
-                                  20.0, 10.0, 20.0, 10.0),
+                                  20.0, 6.0, 20.0, 6.0),
                               iconPadding: EdgeInsetsDirectional.fromSTEB(
                                   0.0, 0.0, 0.0, 0.0),
                               color: _model.selectedAngle == 'Custom'
@@ -572,7 +576,7 @@ class _MotorWidgetState extends State<MotorWidget> {
                                   .bodyMedium
                                   .override(
                                     fontFamily: 'DM Sans',
-                                    fontSize: 16.0,
+                                    fontSize: 14.0,
                                     fontWeight: FontWeight.w500,
                                   ),
                               elevation: 5.0,
@@ -692,121 +696,140 @@ class _MotorWidgetState extends State<MotorWidget> {
                       padding:
                           EdgeInsetsDirectional.fromSTEB(0.0, 20.0, 0.0, 20.0),
                       child: FFButtonWidget(
-                        onPressed: () async {
-                          var _shouldSetState = false;
-                          if (_model.selectedAngle == 'Custom') {
-                            if ((_model.sliderValue! >= -55.0) &&
-                                (_model.sliderValue! <= 55.0)) {
-                              await actions.writeMotorAngle(
-                                BTDevicesStruct(
-                                  name: widget.nomeDispositivo,
-                                  id: widget.idDispositivo,
-                                  rssi: widget.rssi,
-                                  type: 'STC',
-                                  connectable: true,
-                                ),
-                                valueOrDefault<String>(
-                                  _model.sliderValue?.toString(),
-                                  '0',
-                                ),
-                                widget.characteristicUUID,
-                              );
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(
-                                    'Data sent to STC',
-                                    style: FlutterFlowTheme.of(context)
-                                        .titleMedium
-                                        .override(
-                                          fontFamily: 'DM Sans',
-                                          color: FlutterFlowTheme.of(context)
-                                              .primaryText,
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                  ),
-                                  duration: Duration(milliseconds: 3000),
-                                  backgroundColor:
-                                      FlutterFlowTheme.of(context).secondary,
-                                ),
-                              );
-                            } else {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(
-                                    'Angle must be between -55 and 55. Fail!!!',
-                                    style: FlutterFlowTheme.of(context)
-                                        .titleMedium
-                                        .override(
-                                          fontFamily: 'DM Sans',
-                                          color: FlutterFlowTheme.of(context)
-                                              .primaryText,
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                  ),
-                                  duration: Duration(milliseconds: 4000),
-                                  backgroundColor:
-                                      FlutterFlowTheme.of(context).error,
-                                ),
-                              );
-                              if (_shouldSetState) setState(() {});
-                              return;
-                            }
-                          } else {
-                            await actions.writeMotorAngle(
-                              BTDevicesStruct(
-                                name: widget.nomeDispositivo,
-                                id: widget.idDispositivo,
-                                rssi: widget.rssi,
-                                type: 'STC',
-                                connectable: true,
-                              ),
-                              valueOrDefault<String>(
-                                _model.writeAngleValue?.toString(),
-                                '0',
-                              ),
-                              widget.characteristicUUID,
-                            );
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text(
-                                  'Data sent to STC',
-                                  style: FlutterFlowTheme.of(context)
-                                      .titleMedium
-                                      .override(
-                                        fontFamily: 'DM Sans',
-                                        color: FlutterFlowTheme.of(context)
-                                            .primaryText,
-                                        fontWeight: FontWeight.w500,
+                        onPressed: _model.currentAngle == 'EMERGÊNCIA' ||
+                                _model.currentAngle == 'Solicitando...' ||
+                                _model.currentAngle == '' ||
+                                !functions.hasDegreeSymbol(_model.currentAngle)
+                            ? null
+                            : () async {
+                                var _shouldSetState = false;
+                                if (_model.selectedAngle == 'Custom') {
+                                  if ((_model.sliderValue! >= -55.0) &&
+                                      (_model.sliderValue! <= 55.0)) {
+                                    await actions.writeMotorAngle(
+                                      BTDevicesStruct(
+                                        name: widget.nomeDispositivo,
+                                        id: widget.idDispositivo,
+                                        rssi: widget.rssi,
+                                        type: 'STC',
+                                        connectable: true,
                                       ),
-                                ),
-                                duration: Duration(milliseconds: 3000),
-                                backgroundColor:
-                                    FlutterFlowTheme.of(context).secondary,
-                              ),
-                            );
-                          }
+                                      valueOrDefault<String>(
+                                        _model.sliderValue?.toString(),
+                                        '0',
+                                      ),
+                                      widget.characteristicUUID,
+                                    );
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text(
+                                          'Data sent to STC',
+                                          style: FlutterFlowTheme.of(context)
+                                              .titleMedium
+                                              .override(
+                                                fontFamily: 'DM Sans',
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .primaryText,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                        ),
+                                        duration: Duration(milliseconds: 3000),
+                                        backgroundColor:
+                                            FlutterFlowTheme.of(context)
+                                                .secondary,
+                                      ),
+                                    );
+                                  } else {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text(
+                                          'Angle must be between -55 and 55. Fail!!!',
+                                          style: FlutterFlowTheme.of(context)
+                                              .titleMedium
+                                              .override(
+                                                fontFamily: 'DM Sans',
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .primaryText,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                        ),
+                                        duration: Duration(milliseconds: 4000),
+                                        backgroundColor:
+                                            FlutterFlowTheme.of(context).error,
+                                      ),
+                                    );
+                                    if (_shouldSetState) setState(() {});
+                                    return;
+                                  }
+                                } else {
+                                  await actions.writeMotorAngle(
+                                    BTDevicesStruct(
+                                      name: widget.nomeDispositivo,
+                                      id: widget.idDispositivo,
+                                      rssi: widget.rssi,
+                                      type: 'STC',
+                                      connectable: true,
+                                    ),
+                                    valueOrDefault<String>(
+                                      _model.writeAngleValue?.toString(),
+                                      '0',
+                                    ),
+                                    widget.characteristicUUID,
+                                  );
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(
+                                        'Data sent to STC',
+                                        style: FlutterFlowTheme.of(context)
+                                            .titleMedium
+                                            .override(
+                                              fontFamily: 'DM Sans',
+                                              color:
+                                                  FlutterFlowTheme.of(context)
+                                                      .primaryText,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                      ),
+                                      duration: Duration(milliseconds: 3000),
+                                      backgroundColor:
+                                          FlutterFlowTheme.of(context)
+                                              .secondary,
+                                    ),
+                                  );
+                                }
 
-                          await Future.delayed(
-                              const Duration(milliseconds: 500));
-                          _model.readAngleUpdatedAfterWrite =
-                              await actions.readMotorAngle(
-                            BTDevicesStruct(
-                              name: widget.nomeDispositivo,
-                              id: widget.idDispositivo,
-                              rssi: widget.rssi,
-                              type: 'STC',
-                              connectable: true,
-                            ),
-                            widget.characteristicUUID,
-                          );
-                          _shouldSetState = true;
-                          setState(() {
-                            _model.currentAngle =
-                                _model.readAngleUpdatedAfterWrite!;
-                          });
-                          if (_shouldSetState) setState(() {});
-                        },
-                        text: 'Acionar',
+                                await Future.delayed(
+                                    const Duration(milliseconds: 500));
+                                _model.readAngleUpdatedAfterWrite =
+                                    await actions.readMotorAngle(
+                                  BTDevicesStruct(
+                                    name: widget.nomeDispositivo,
+                                    id: widget.idDispositivo,
+                                    rssi: widget.rssi,
+                                    type: 'STC',
+                                    connectable: true,
+                                  ),
+                                  widget.characteristicUUID,
+                                );
+                                _shouldSetState = true;
+                                setState(() {
+                                  _model.currentAngle =
+                                      _model.readAngleUpdatedAfterWrite!;
+                                });
+                                if (_shouldSetState) setState(() {});
+                              },
+                        text: valueOrDefault<String>(
+                          _model.currentAngle == 'EMERGÊNCIA' ||
+                                  _model.currentAngle == 'ERRO' ||
+                                  _model.currentAngle == '' ||
+                                  !functions
+                                      .hasDegreeSymbol(_model.currentAngle)
+                              ? 'Não Permitido'
+                              : 'Acionar',
+                          'Acionar',
+                        ),
                         options: FFButtonOptions(
                           width: MediaQuery.sizeOf(context).width * 0.8,
                           height: 42.0,
@@ -821,6 +844,9 @@ class _MotorWidgetState extends State<MotorWidget> {
                                     color: Colors.white,
                                   ),
                           elevation: 3.0,
+                          disabledColor: Color(0xC6505D69),
+                          disabledTextColor:
+                              FlutterFlowTheme.of(context).secondaryText,
                           borderSide: BorderSide(
                             color: Colors.transparent,
                             width: 1.0,

@@ -1,4 +1,6 @@
 // Automatic FlutterFlow imports
+import 'dart:convert';
+
 import '/backend/backend.dart';
 import '/backend/schema/structs/index.dart';
 // Imports other custom actions
@@ -33,9 +35,11 @@ Future<String> readMotorAngle(
   // reads the value from the characteristic
   List<int> value = await characteristic.read();
 
-  String stringValue = String.fromCharCodes(value);
+  // String stringValue = String.fromCharCodes(value);
+  // convert the String to UTF-8
+  String stringValue = utf8.decode(value);
 
-  // remove the last character from the string if is not a number
+  // remove the last character from the string if is not a number or a degree symbol
   if (stringValue.substring(stringValue.length - 1) != "0" &&
       stringValue.substring(stringValue.length - 1) != "1" &&
       stringValue.substring(stringValue.length - 1) != "2" &&
@@ -45,7 +49,8 @@ Future<String> readMotorAngle(
       stringValue.substring(stringValue.length - 1) != "6" &&
       stringValue.substring(stringValue.length - 1) != "7" &&
       stringValue.substring(stringValue.length - 1) != "8" &&
-      stringValue.substring(stringValue.length - 1) != "9") {
+      stringValue.substring(stringValue.length - 1) != "9" &&
+      stringValue.substring(stringValue.length - 1) != "°") {
     stringValue = stringValue.substring(0, stringValue.length - 1);
   }
 

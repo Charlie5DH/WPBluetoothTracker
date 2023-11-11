@@ -1,6 +1,5 @@
 // Automatic FlutterFlow imports
 import '/backend/backend.dart';
-import '/backend/schema/structs/index.dart';
 // Imports other custom actions
 // Imports custom functions
 // Begin custom action code

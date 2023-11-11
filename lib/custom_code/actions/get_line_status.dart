@@ -1,4 +1,6 @@
 // Automatic FlutterFlow imports
+import 'dart:convert';
+
 import '/backend/backend.dart';
 import '/backend/schema/structs/index.dart';
 // Imports other custom actions
@@ -31,9 +33,11 @@ Future<String> getLineStatus(
 
   // reads the value from the characteristic
   List<int> value = await characteristic.read();
+  // decode the value to a string in UTF-8
 
-  String stringValue = String.fromCharCodes(value);
-
+  //String stringValue = String.fromCharCodes(value);
+  // convert the String to UTF-8
+  String stringValue = utf8.decode(value);
   // remove the last character from the string
   stringValue = stringValue.substring(0, stringValue.length - 1);
 
@@ -41,6 +45,5 @@ Future<String> getLineStatus(
     stringValue = stringValue.replaceAll("|", " | ");
   }
 
-  // returns the value as a string
   return stringValue;
 }

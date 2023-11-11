@@ -1,3 +1,4 @@
+import 'package:flutter/scheduler.dart';
 import '/backend/schema/structs/index.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
@@ -8,6 +9,8 @@ import '/widgets/strength_indicator/strength_indicator_widget.dart';
 import '/custom_code/actions/index.dart' as actions;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_animate/flutter_animate.dart';
+import '/flutter_flow/flutter_flow_animations.dart';
 
 import 'line_status_model.dart';
 export 'line_status_model.dart';
@@ -37,10 +40,84 @@ class _LineStatusWidgetState extends State<LineStatusWidget> {
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
+  final animationsMap = {
+    'iconOnPageLoadAnimation': AnimationInfo(
+      loop: true,
+      trigger: AnimationTrigger.onPageLoad,
+      effects: [
+        RotateEffect(
+          curve: Curves.easeInOut,
+          delay: 0.ms,
+          duration: 1000.ms,
+          begin: 0,
+          end: 1,
+        ),
+      ],
+    ),
+    'textOnPageLoadAnimation': AnimationInfo(
+      loop: true,
+      reverse: true,
+      trigger: AnimationTrigger.onPageLoad,
+      effects: [
+        FadeEffect(
+          curve: Curves.easeInOut,
+          delay: 0.ms,
+          duration: 1000.ms,
+          begin: 0.5,
+          end: 1,
+        ),
+      ],
+    ),
+  };
+
   @override
   void initState() {
     super.initState();
     _model = createModel(context, () => LineStatusModel());
+
+    // On page load action.
+    SchedulerBinding.instance.addPostFrameCallback((_) async {
+      _model.lineStatusReadStart = await actions.getLineStatus(
+        BTDevicesStruct(
+          name: widget.nomeDispositivo,
+          id: widget.idDispositivo,
+          rssi: widget.rssi,
+          type: widget.type,
+          connectable: true,
+        ),
+        widget.serviceUUID,
+      );
+      setState(() {
+        _model.addToMeasures(_model.lineStatusReadStart);
+        _model.currentMeasure = _model.lineStatusReadStart;
+        _model.isFetchingStatus = true;
+        _model.firstLoad = false;
+      });
+      while (_model.currentMeasure != 'END') {
+        _model.lineStatusReadOnStreamStart = await actions.getLineStatus(
+          BTDevicesStruct(
+            name: widget.nomeDispositivo,
+            id: widget.idDispositivo,
+            rssi: widget.rssi,
+            type: widget.type,
+            connectable: true,
+          ),
+          widget.serviceUUID,
+        );
+        if (_model.lineStatusReadOnStreamStart != 'END') {
+          setState(() {
+            _model.addToMeasures(_model.lineStatusReadOnStreamStart);
+            _model.currentMeasure = _model.lineStatusReadOnStreamStart;
+          });
+        } else {
+          setState(() {
+            _model.isFetchingStatus = false;
+            _model.firstLoad = false;
+          });
+          break;
+        }
+      }
+    });
   }
 
   @override
@@ -148,252 +225,211 @@ class _LineStatusWidgetState extends State<LineStatusWidget> {
           top: true,
           child: Padding(
             padding: EdgeInsetsDirectional.fromSTEB(16, 16, 16, 16),
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  Row(
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      Text(
-                        'Line status service',
-                        style: FlutterFlowTheme.of(context).bodyLarge,
-                      ),
-                    ],
-                  ),
-                  Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 6),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          mainAxisSize: MainAxisSize.max,
-                          children: [
-                            Text(
-                              'Leia as medidas do sensor',
-                              style: FlutterFlowTheme.of(context).labelMedium,
-                            ),
-                          ],
-                        ),
-                        FFButtonWidget(
-                          onPressed: () async {
-                            setState(() {
-                              _model.measures = [];
-                            });
-                          },
-                          text: 'Clear',
-                          icon: Icon(
-                            Icons.clear,
-                            size: 16,
-                          ),
-                          options: FFButtonOptions(
-                            height: 32,
-                            padding:
-                                EdgeInsetsDirectional.fromSTEB(12, 5, 12, 5),
-                            iconPadding:
-                                EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
-                            color: FlutterFlowTheme.of(context).alternate,
-                            textStyle: FlutterFlowTheme.of(context)
-                                .titleSmall
-                                .override(
-                                  fontFamily: 'DM Sans',
-                                  color: Colors.white,
-                                  fontSize: 14,
-                                ),
-                            elevation: 3,
-                            borderSide: BorderSide(
-                              color: Color(0xFF353F49),
-                              width: 1,
-                            ),
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Divider(
-                    thickness: 1.2,
-                    color: Color(0xFF353F49),
-                  ),
-                  Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(5, 10, 0, 6),
-                    child: Row(
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Row(
                       mainAxisSize: MainAxisSize.max,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          'Measures:',
-                          style: FlutterFlowTheme.of(context)
-                              .titleMedium
-                              .override(
-                                fontFamily: 'DM Sans',
-                                color: FlutterFlowTheme.of(context).primaryText,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w500,
+                          'Line status service',
+                          style: FlutterFlowTheme.of(context).bodyLarge,
+                        ),
+                        Row(
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            FFButtonWidget(
+                              onPressed: () async {
+                                if (_model.measures.length != 0) {
+                                  setState(() {
+                                    _model.measures = [];
+                                  });
+                                }
+                                _model.lineStatusRead =
+                                    await actions.getLineStatus(
+                                  BTDevicesStruct(
+                                    name: widget.nomeDispositivo,
+                                    id: widget.idDispositivo,
+                                    rssi: widget.rssi,
+                                    type: widget.type,
+                                    connectable: true,
+                                  ),
+                                  widget.serviceUUID,
+                                );
+                                setState(() {
+                                  _model.addToMeasures(_model.lineStatusRead!);
+                                  _model.currentMeasure =
+                                      _model.lineStatusRead!;
+                                  _model.isFetchingStatus = true;
+                                });
+                                while (_model.currentMeasure != 'END') {
+                                  _model.lineStatusReadOnStream =
+                                      await actions.getLineStatus(
+                                    BTDevicesStruct(
+                                      name: widget.nomeDispositivo,
+                                      id: widget.idDispositivo,
+                                      rssi: widget.rssi,
+                                      type: widget.type,
+                                      connectable: true,
+                                    ),
+                                    widget.serviceUUID,
+                                  );
+                                  if (_model.lineStatusReadOnStream != 'END') {
+                                    setState(() {
+                                      _model.addToMeasures(
+                                          _model.lineStatusReadOnStream!);
+                                      _model.currentMeasure =
+                                          _model.lineStatusReadOnStream!;
+                                    });
+                                  } else {
+                                    setState(() {
+                                      _model.isFetchingStatus = false;
+                                    });
+                                    break;
+                                  }
+                                }
+
+                                setState(() {});
+                              },
+                              text: valueOrDefault<String>(
+                                _model.measures.length == 0
+                                    ? 'Solicitar'
+                                    : 'Atualizar',
+                                'Solicitar',
                               ),
+                              icon: Icon(
+                                Icons.refresh_outlined,
+                                size: 20,
+                              ),
+                              options: FFButtonOptions(
+                                width: 120,
+                                height: 32,
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    16, 0, 16, 0),
+                                iconPadding:
+                                    EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
+                                color: FlutterFlowTheme.of(context).primary,
+                                textStyle: FlutterFlowTheme.of(context)
+                                    .titleSmall
+                                    .override(
+                                      fontFamily: 'DM Sans',
+                                      color: Colors.white,
+                                    ),
+                                elevation: 3,
+                                borderSide: BorderSide(
+                                  color: Colors.transparent,
+                                  width: 1,
+                                ),
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
-                  ),
-                  Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 2),
-                    child: Material(
-                      color: Colors.transparent,
-                      elevation: 0,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(6),
-                      ),
-                      child: Container(
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          color: FlutterFlowTheme.of(context).alternate,
-                          boxShadow: [
-                            BoxShadow(
-                              blurRadius: 4,
-                              color: Color(0x33000000),
-                              offset: Offset(0, 2),
-                            )
-                          ],
+                    Divider(
+                      thickness: 1.2,
+                      color: Color(0xFF353F49),
+                    ),
+                    Padding(
+                      padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 2),
+                      child: Material(
+                        color: Colors.transparent,
+                        elevation: 0,
+                        shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(6),
-                          border: Border.all(
-                            color: Color(0xFF353F49),
-                            width: 1.5,
-                          ),
                         ),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            if (_model.measures.length == 0)
-                              Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    10, 10, 10, 10),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.max,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Column(
+                        child: Container(
+                          width: double.infinity,
+                          constraints: BoxConstraints(
+                            minHeight: 120,
+                            maxHeight: 600,
+                          ),
+                          decoration: BoxDecoration(
+                            color: FlutterFlowTheme.of(context).alternate,
+                            boxShadow: [
+                              BoxShadow(
+                                blurRadius: 4,
+                                color: Color(0x33000000),
+                                offset: Offset(0, 2),
+                              )
+                            ],
+                            borderRadius: BorderRadius.circular(6),
+                            border: Border.all(
+                              color: Color(0xFF353F49),
+                              width: 1.5,
+                            ),
+                          ),
+                          child: SingleChildScrollView(
+                            child: Column(
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                if (_model.measures.length == 0)
+                                  Padding(
+                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                        10, 10, 10, 10),
+                                    child: Row(
                                       mainAxisSize: MainAxisSize.max,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
                                       children: [
-                                        Text(
-                                          'No measures',
-                                          style: FlutterFlowTheme.of(context)
-                                              .titleLarge
-                                              .override(
-                                                fontFamily: 'DM Sans',
-                                                fontSize: 20,
+                                        Column(
+                                          mainAxisSize: MainAxisSize.max,
+                                          children: [
+                                            Text(
+                                              valueOrDefault<String>(
+                                                _model.firstLoad
+                                                    ? 'Solicitando...'
+                                                    : 'Sem Medidas',
+                                                'Sem Medidas',
                                               ),
-                                        ),
-                                        Text(
-                                          'Pressione o botão de solicitação para \nreceber as medidas',
-                                          textAlign: TextAlign.center,
-                                          style: FlutterFlowTheme.of(context)
-                                              .labelMedium,
+                                              style:
+                                                  FlutterFlowTheme.of(context)
+                                                      .titleLarge
+                                                      .override(
+                                                        fontFamily: 'DM Sans',
+                                                        fontSize: 20,
+                                                      ),
+                                            ),
+                                            Text(
+                                              'Pressione o botão de solicitação para \nreceber as medidas',
+                                              textAlign: TextAlign.center,
+                                              style:
+                                                  FlutterFlowTheme.of(context)
+                                                      .labelMedium,
+                                            ),
+                                          ],
                                         ),
                                       ],
                                     ),
-                                  ],
-                                ),
-                              ),
-                            if (_model.measures.length > 0)
-                              Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    5, 10, 0, 10),
-                                child: wrapWithModel(
-                                  model: _model.receiveDataMonoModel,
-                                  updateCallback: () => setState(() {}),
-                                  child: ReceiveDataMonoWidget(
-                                    receivedData: _model.measures,
                                   ),
-                                ),
-                              ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                  Align(
-                    alignment: AlignmentDirectional(0.00, 1.00),
-                    child: Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(0, 20, 0, 20),
-                      child: FFButtonWidget(
-                        onPressed: () async {
-                          if (_model.measures.length != 0) {
-                            setState(() {
-                              _model.measures = [];
-                            });
-                          }
-                          _model.lineStatusRead = await actions.getLineStatus(
-                            BTDevicesStruct(
-                              name: widget.nomeDispositivo,
-                              id: widget.idDispositivo,
-                              rssi: widget.rssi,
-                              type: widget.type,
-                              connectable: true,
+                                if (_model.measures.length > 0)
+                                  Padding(
+                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                        5, 10, 0, 10),
+                                    child: wrapWithModel(
+                                      model: _model.receiveDataMonoModel,
+                                      updateCallback: () => setState(() {}),
+                                      child: ReceiveDataMonoWidget(
+                                        receivedData: _model.measures,
+                                      ),
+                                    ),
+                                  ),
+                              ],
                             ),
-                            widget.serviceUUID,
-                          );
-                          setState(() {
-                            _model.addToMeasures(_model.lineStatusRead!);
-                            _model.currentMeasure = _model.lineStatusRead!;
-                          });
-                          while (_model.currentMeasure != 'END') {
-                            _model.lineStatusReadOnStream =
-                                await actions.getLineStatus(
-                              BTDevicesStruct(
-                                name: widget.nomeDispositivo,
-                                id: widget.idDispositivo,
-                                rssi: widget.rssi,
-                                type: widget.type,
-                                connectable: true,
-                              ),
-                              widget.serviceUUID,
-                            );
-                            if (_model.lineStatusReadOnStream != 'END') {
-                              setState(() {
-                                _model.addToMeasures(
-                                    _model.lineStatusReadOnStream!);
-                                _model.currentMeasure =
-                                    _model.lineStatusReadOnStream!;
-                              });
-                            } else {
-                              break;
-                            }
-                          }
-
-                          setState(() {});
-                        },
-                        text: valueOrDefault<String>(
-                          _model.measures.length == 0
-                              ? 'Solicitar'
-                              : 'Atualizar',
-                          'Solicitar',
-                        ),
-                        options: FFButtonOptions(
-                          width: MediaQuery.sizeOf(context).width * 0.8,
-                          height: 42,
-                          padding: EdgeInsetsDirectional.fromSTEB(24, 0, 24, 0),
-                          iconPadding:
-                              EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
-                          color: FlutterFlowTheme.of(context).primary,
-                          textStyle:
-                              FlutterFlowTheme.of(context).titleSmall.override(
-                                    fontFamily: 'DM Sans',
-                                    color: Colors.white,
-                                  ),
-                          elevation: 3,
-                          borderSide: BorderSide(
-                            color: Colors.transparent,
-                            width: 1,
                           ),
-                          borderRadius: BorderRadius.circular(20),
                         ),
                       ),
                     ),
-                  ),
-                ],
-              ),
+                  ],
+                ),
+              ],
             ),
           ),
         ),

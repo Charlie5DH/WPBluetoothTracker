@@ -34,7 +34,7 @@ class _MyAppState extends State<MyApp> {
   late AppStateNotifier _appStateNotifier;
   late GoRouter _router;
 
-  bool displaySplashImage = true;
+  bool displaySplashImage = false;
 
   @override
   void initState() {
@@ -43,7 +43,7 @@ class _MyAppState extends State<MyApp> {
     _appStateNotifier = AppStateNotifier.instance;
     _router = createRouter(_appStateNotifier);
 
-    Future.delayed(Duration(milliseconds: 1000),
+    Future.delayed(Duration(milliseconds: 0),
         () => setState(() => _appStateNotifier.stopShowingSplashImage()));
   }
 

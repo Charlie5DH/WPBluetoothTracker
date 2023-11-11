@@ -9,4 +9,6 @@ export '/pages/service_characteristics/service_characteristics_widget.dart'
     show ServiceCharacteristicsWidget;
 export '/pages/timestamp/timestamp_widget.dart' show TimestampWidget;
 export '/pages/line_status/line_status_widget.dart' show LineStatusWidget;
+export '/pages/device_information/device_information_widget.dart'
+    show DeviceInformationWidget;
 export '/pages/onboarding/onboarding_widget.dart' show OnboardingWidget;

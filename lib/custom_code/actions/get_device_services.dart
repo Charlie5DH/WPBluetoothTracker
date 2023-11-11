@@ -34,9 +34,14 @@ Future<List<ServiceStruct>?> getDeviceServices(
       serviceName = "Device Information";
     } else if (service.uuid.toString().startsWith("00001800")) {
       serviceName = "Generic Access";
+    } else if (service.uuid.toString() ==
+        "2eb141d5-a002-4b80-bd3e-950d2bb3e7f9") {
+      serviceName = "Device Configuration";
     } else if (service.uuid.toString().startsWith("00001801")) {
       serviceName = "Generic Attribute";
     }
+
+    print(service.uuid.toString());
 
     // print(service.characteristics);
 

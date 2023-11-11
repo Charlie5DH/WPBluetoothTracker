@@ -477,7 +477,7 @@ class _DeviceWidgetState extends State<DeviceWidget> {
                                     },
                                   );
                                 },
-                                text: 'Line Status',
+                                text: 'Status',
                                 options: FFButtonOptions(
                                   height: 60.0,
                                   padding: EdgeInsetsDirectional.fromSTEB(
@@ -505,7 +505,7 @@ class _DeviceWidgetState extends State<DeviceWidget> {
                               child: FFButtonWidget(
                                 onPressed: () async {
                                   context.pushNamed(
-                                    'Timestamp',
+                                    'DeviceInformation',
                                     queryParameters: {
                                       'nomeDispositivo': serializeParam(
                                         widget.deviceName,
@@ -524,7 +524,7 @@ class _DeviceWidgetState extends State<DeviceWidget> {
                                         ParamType.String,
                                       ),
                                       'serviceUUID': serializeParam(
-                                        'a617811d-d2a0-4155-923e-de09de01849c',
+                                        '54f3dec8-eae3-469c-89ed-4f1724858728',
                                         ParamType.String,
                                       ),
                                     }.withoutNulls,
@@ -537,14 +537,14 @@ class _DeviceWidgetState extends State<DeviceWidget> {
                                     },
                                   );
                                 },
-                                text: 'Timestamp',
+                                text: 'Config',
                                 options: FFButtonOptions(
                                   width: MediaQuery.sizeOf(context).width * 0.4,
-                                  height: 60.0,
+                                  height: 60,
                                   padding: EdgeInsetsDirectional.fromSTEB(
-                                      14.0, 0.0, 14.0, 0.0),
+                                      14, 0, 14, 0),
                                   iconPadding: EdgeInsetsDirectional.fromSTEB(
-                                      0.0, 0.0, 0.0, 0.0),
+                                      0, 0, 0, 0),
                                   color: FlutterFlowTheme.of(context).primary,
                                   textStyle: FlutterFlowTheme.of(context)
                                       .titleSmall
@@ -552,12 +552,12 @@ class _DeviceWidgetState extends State<DeviceWidget> {
                                         fontFamily: 'DM Sans',
                                         color: Colors.white,
                                       ),
-                                  elevation: 3.0,
+                                  elevation: 3,
                                   borderSide: BorderSide(
                                     color: Colors.transparent,
-                                    width: 1.0,
+                                    width: 1,
                                   ),
-                                  borderRadius: BorderRadius.circular(6.0),
+                                  borderRadius: BorderRadius.circular(6),
                                 ),
                               ),
                             ),
@@ -612,7 +612,7 @@ class _DeviceWidgetState extends State<DeviceWidget> {
                                       },
                                     );
                                   },
-                                  text: 'Localização',
+                                  text: 'Sync',
                                   icon: Icon(
                                     Icons.edit_location_alt_rounded,
                                     size: 24.0,
@@ -675,7 +675,7 @@ class _DeviceWidgetState extends State<DeviceWidget> {
                                         },
                                       );
                                     },
-                                    text: 'Controlar motor',
+                                    text: 'Motor',
                                     icon: Icon(
                                       Icons.settings_suggest,
                                       size: 24.0,

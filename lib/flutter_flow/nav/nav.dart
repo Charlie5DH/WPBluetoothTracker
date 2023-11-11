@@ -145,6 +145,18 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           ),
         ),
         FFRoute(
+          name: 'DeviceInformation',
+          path: '/deviceInformation',
+          builder: (context, params) => DeviceInformationWidget(
+            nomeDispositivo:
+                params.getParam('nomeDispositivo', ParamType.String),
+            idDispositivo: params.getParam('idDispositivo', ParamType.String),
+            rssi: params.getParam('rssi', ParamType.int),
+            type: params.getParam('type', ParamType.String),
+            serviceUUID: params.getParam('serviceUUID', ParamType.String),
+          ),
+        ),
+        FFRoute(
           name: 'Onboarding',
           path: '/onboarding',
           builder: (context, params) => OnboardingWidget(),

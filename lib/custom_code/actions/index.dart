@@ -22,3 +22,4 @@ export 'write_motor_angle.dart' show writeMotorAngle;
 export 'read_motor_angle.dart' show readMotorAngle;
 export 'fix_device_orientation_up.dart' show fixDeviceOrientationUp;
 export 'find_devices_and_connect.dart' show findDevicesAndConnect;
+export 'get_device_info.dart' show getDeviceInfo;

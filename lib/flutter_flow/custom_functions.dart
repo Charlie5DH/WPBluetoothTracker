@@ -1,3 +1,4 @@
+
 import '/backend/backend.dart';
 import '/backend/schema/structs/index.dart';
 
@@ -117,6 +118,18 @@ bool? isSTC(String? deviceName) {
   // else returns false
   if (deviceName?.startsWith("STC") == true ||
       deviceName?.startsWith("stc") == true) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+bool hasDegreeSymbol(String text) {
+  // returns true if the text contains the degree symbol,
+  // else returns false
+  // first convert the text to utf8
+
+  if (text.contains("°")) {
     return true;
   } else {
     return false;

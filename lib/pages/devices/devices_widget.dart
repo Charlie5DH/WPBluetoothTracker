@@ -4,7 +4,6 @@ import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '/backend/backend.dart';
-import '/backend/schema/structs/index.dart';
 import '/flutter_flow/flutter_flow_animations.dart';
 import '/flutter_flow/flutter_flow_autocomplete_options_list.dart';
 // import '/flutter_flow/flutter_flow_choice_chips.dart';
@@ -105,6 +104,8 @@ class _DevicesWidgetState extends State<DevicesWidget>
       if (_model.isBluetoothEnabled!) {
         _model.isFetchingConnectedDevices = true;
         _model.isFetchingDevices = true;
+        final connectedDevices =
+            FlutterBluePlus.connectedDevices; // autoconnect
 
         _scanResultsSubscription =
             FlutterBluePlus.scanResults.listen((results) {
@@ -118,7 +119,9 @@ class _DevicesWidgetState extends State<DevicesWidget>
               });
             }
 
-            if (r.device.platformName.isNotEmpty) {
+            if (r.device.platformName.isNotEmpty &&
+                (r.device.platformName.startsWith("STS") ||
+                    r.device.platformName.startsWith("STC"))) {
               setState(() {
                 _model.foundDevices.add(BTDevicesStruct(
                   name: r.device.platformName,
@@ -151,8 +154,6 @@ class _DevicesWidgetState extends State<DevicesWidget>
                   ...otherObjects
                 ];
                 if (_model.autoconnect) {
-                  final connectedDevices =
-                      FlutterBluePlus.connectedDevices; // autoconnect
                   if (connectedDevices.contains(r.device) == false &&
                       r.advertisementData.connectable == true &&
                       (r.device.platformName.startsWith("STS") ||
@@ -169,7 +170,7 @@ class _DevicesWidgetState extends State<DevicesWidget>
                 }
               });
 
-              print(r.device.platformName);
+              //print(r.device.platformName);
 
               // connect the device
             }
@@ -260,151 +261,193 @@ class _DevicesWidgetState extends State<DevicesWidget>
                 size: 24.0,
               ),
               showLoadingIndicator: true,
-              onPressed: () async {
-                setState(() {
-                  _model.isFetchingConnectedDevices = true;
-                  _model.isFetchingDevices = true;
-                });
-
-                // await actions.findDevices(
-                //     _model.choiceChipsValue!, setState, _model.foundDevices);
-
-                _model.connDevicesRefresh = await actions.getConnectedDevices(
-                  valueOrDefault<String>(
-                    _model.choiceChipsValue,
-                    'STS-STC',
-                  ),
-                );
-
-                setState(() {
-                  _model.connectedDevices = _model.connDevicesRefresh!
-                      .toList()
-                      .cast<BTDevicesStruct>();
-                });
-
-                //-------------------------------------------------------------
-
-                _scanResultsSubscription =
-                    FlutterBluePlus.scanResults.listen((results) {
-                  for (ScanResult r in results) {
-                    // if the device is already in the list, replace it with the new one
-                    if (_model.foundDevices.any((element) =>
-                        element.id == r.device.remoteId.toString())) {
+              onPressed: _model.isFetchingDevices
+                  ? null
+                  : () async {
+                      var _shouldSetState = false;
+                      if (_model.isFetchingDevices == true) {
+                        unawaited(
+                          () async {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                  'Wait for current scan to end',
+                                  style: FlutterFlowTheme.of(context)
+                                      .titleSmall
+                                      .override(
+                                        fontFamily: 'DM Sans',
+                                        color: FlutterFlowTheme.of(context)
+                                            .primaryText,
+                                      ),
+                                ),
+                                duration: Duration(milliseconds: 4000),
+                                backgroundColor:
+                                    FlutterFlowTheme.of(context).tertiary,
+                              ),
+                            );
+                          }(),
+                        );
+                        if (_shouldSetState) setState(() {});
+                        return;
+                      }
                       setState(() {
-                        _model.foundDevices.removeWhere((element) =>
-                            element.id == r.device.remoteId.toString());
+                        _model.isFetchingConnectedDevices = true;
+                        _model.isFetchingDevices = true;
                       });
-                    }
 
-                    if (r.device.platformName.isNotEmpty) {
+                      // await actions.findDevices(
+                      //     _model.choiceChipsValue!, setState, _model.foundDevices);
+
+                      _model.connDevicesRefresh =
+                          await actions.getConnectedDevices(
+                        valueOrDefault<String>(
+                          _model.choiceChipsValue,
+                          'STS-STC',
+                        ),
+                      );
+
                       setState(() {
-                        _model.foundDevices.add(BTDevicesStruct(
-                          name: r.device.platformName,
-                          id: r.device.remoteId.toString(),
-                          rssi: r.rssi,
-                          type: "BLE",
-                          connectable: r.advertisementData.connectable,
-                        ));
+                        _model.connectedDevices = _model.connDevicesRefresh!
+                            .toList()
+                            .cast<BTDevicesStruct>();
+                      });
 
-                        _model.foundDevices
-                            .sort((a, b) => b.rssi.compareTo(a.rssi));
-                        // sort the STS by rssi, then STC by rssi, then everything else by rssi
-                        startsWithSTS = _model.foundDevices
-                            .where((element) => element.name.startsWith('STS'))
-                            .toList();
-                        startsWithSTC = _model.foundDevices
-                            .where((element) => element.name.startsWith('STC'))
-                            .toList();
-                        otherObjects = _model.foundDevices
-                            .where((element) =>
-                                !element.name.startsWith('STS') &&
-                                !element.name.startsWith('STC'))
-                            .toList();
+                      //-------------------------------------------------------------
 
-                        startsWithSTS.sort((a, b) => b.rssi.compareTo(a.rssi));
-                        startsWithSTC.sort((a, b) => b.rssi.compareTo(a.rssi));
-                        otherObjects.sort((a, b) => b.rssi.compareTo(a.rssi));
-
-                        _model.foundDevices = [
-                          ...startsWithSTS,
-                          ...startsWithSTC,
-                          ...otherObjects
-                        ];
-
-                        if (_model.autoconnect) {
-                          final connectedDevices =
-                              FlutterBluePlus.connectedDevices; // autoconnect
-                          if (connectedDevices.contains(r.device) == false &&
-                              r.advertisementData.connectable == true &&
-                              (r.device.platformName.startsWith("STS") ||
-                                  r.device.platformName.startsWith("STC"))) {
-                            try {
-                              print('connecting to ${r.device.platformName}');
-                              r.device.connect();
-                              print("connected to ${r.device.platformName}");
-                            } catch (e) {
-                              // print(e);
-                              print(
-                                  "failed to connect to ${r.device.platformName}");
-                            }
+                      _scanResultsSubscription =
+                          FlutterBluePlus.scanResults.listen((results) {
+                        for (ScanResult r in results) {
+                          // if the device is already in the list, replace it with the new one
+                          if (_model.foundDevices.any((element) =>
+                              element.id == r.device.remoteId.toString())) {
+                            setState(() {
+                              _model.foundDevices.removeWhere((element) =>
+                                  element.id == r.device.remoteId.toString());
+                            });
                           }
+
+                          if (r.device.platformName.isNotEmpty &&
+                                  r.device.platformName.startsWith("STS") ||
+                              r.device.platformName.startsWith("STC")) {
+                            setState(() {
+                              _model.foundDevices.add(BTDevicesStruct(
+                                name: r.device.platformName,
+                                id: r.device.remoteId.toString(),
+                                rssi: r.rssi,
+                                type: "BLE",
+                                connectable: r.advertisementData.connectable,
+                              ));
+
+                              _model.foundDevices
+                                  .sort((a, b) => b.rssi.compareTo(a.rssi));
+                              // sort the STS by rssi, then STC by rssi, then everything else by rssi
+                              startsWithSTS = _model.foundDevices
+                                  .where((element) =>
+                                      element.name.startsWith('STS'))
+                                  .toList();
+                              startsWithSTC = _model.foundDevices
+                                  .where((element) =>
+                                      element.name.startsWith('STC'))
+                                  .toList();
+                              otherObjects = _model.foundDevices
+                                  .where((element) =>
+                                      !element.name.startsWith('STS') &&
+                                      !element.name.startsWith('STC'))
+                                  .toList();
+
+                              startsWithSTS
+                                  .sort((a, b) => b.rssi.compareTo(a.rssi));
+                              startsWithSTC
+                                  .sort((a, b) => b.rssi.compareTo(a.rssi));
+                              otherObjects
+                                  .sort((a, b) => b.rssi.compareTo(a.rssi));
+
+                              _model.foundDevices = [
+                                ...startsWithSTS,
+                                ...startsWithSTC,
+                                ...otherObjects
+                              ];
+
+                              if (_model.autoconnect) {
+                                final connectedDevices = FlutterBluePlus
+                                    .connectedDevices; // autoconnect
+                                if (connectedDevices.contains(r.device) ==
+                                        false &&
+                                    r.advertisementData.connectable == true &&
+                                    (r.device.platformName.startsWith("STS") ||
+                                        r.device.platformName
+                                            .startsWith("STC"))) {
+                                  try {
+                                    print(
+                                        'connecting to ${r.device.platformName}');
+                                    r.device.connect();
+                                    print(
+                                        "connected to ${r.device.platformName}");
+                                  } catch (e) {
+                                    // print(e);
+                                    print(
+                                        "failed to connect to ${r.device.platformName}");
+                                  }
+                                }
+                              }
+                            });
+
+                            print(r.device.platformName);
+
+                            // connect the device
+                          }
+
+                          // remove devices that are in the list but not in the scan results---------------------
+                          _model.foundDevices.removeWhere((element) =>
+                              !results.any((result) =>
+                                  result.device.remoteId.toString() ==
+                                  element.id));
+                          //-----------------------------------------------------------------------------
                         }
                       });
 
-                      print(r.device.platformName);
+                      print("starting scan");
 
-                      // connect the device
-                    }
+                      try {
+                        // await FlutterBluePlus.startScan(timeout: const Duration(seconds: 15));
+                        await FlutterBluePlus.startScan();
+                      } catch (e) {
+                        print(e);
+                      }
 
-                    // remove devices that are in the list but not in the scan results---------------------
-                    _model.foundDevices.removeWhere((element) => !results.any(
-                        (result) =>
-                            result.device.remoteId.toString() == element.id));
-                    //-----------------------------------------------------------------------------
-                  }
-                });
+                      // Wait for the scan to complete
+                      await Future.delayed(Duration(seconds: 20));
 
-                print("starting scan");
+                      // Cancel the subscription
+                      await _scanResultsSubscription.cancel();
 
-                try {
-                  // await FlutterBluePlus.startScan(timeout: const Duration(seconds: 15));
-                  await FlutterBluePlus.startScan();
-                } catch (e) {
-                  print(e);
-                }
+                      //-------------------------------------------------------------
 
-                // Wait for the scan to complete
-                await Future.delayed(Duration(seconds: 20));
+                      // setState(() {
+                      //   _model.foundDevices =
+                      //       _model.devicesRefresh!.toList().cast<BTDevicesStruct>();
+                      // });
+                      _model.connDevicesRefresh =
+                          await actions.getConnectedDevices(
+                        valueOrDefault<String>(
+                          _model.choiceChipsValue,
+                          'STS-STC',
+                        ),
+                      );
 
-                // Cancel the subscription
-                await _scanResultsSubscription.cancel();
+                      setState(() {
+                        _model.connectedDevices = _model.connDevicesRefresh!
+                            .toList()
+                            .cast<BTDevicesStruct>();
+                      });
 
-                //-------------------------------------------------------------
+                      setState(() {
+                        _model.isFetchingConnectedDevices = false;
+                        _model.isFetchingDevices = false;
+                      });
 
-                // setState(() {
-                //   _model.foundDevices =
-                //       _model.devicesRefresh!.toList().cast<BTDevicesStruct>();
-                // });
-                _model.connDevicesRefresh = await actions.getConnectedDevices(
-                  valueOrDefault<String>(
-                    _model.choiceChipsValue,
-                    'STS-STC',
-                  ),
-                );
-
-                setState(() {
-                  _model.connectedDevices = _model.connDevicesRefresh!
-                      .toList()
-                      .cast<BTDevicesStruct>();
-                });
-
-                setState(() {
-                  _model.isFetchingConnectedDevices = false;
-                  _model.isFetchingDevices = false;
-                });
-
-                setState(() {});
-              },
+                      setState(() {});
+                    },
             ),
           ),
           appBar: AppBar(
@@ -498,7 +541,11 @@ class _DevicesWidgetState extends State<DevicesWidget>
                                     });
                                   }
 
-                                  if (r.device.platformName.isNotEmpty) {
+                                  if (r.device.platformName.isNotEmpty &&
+                                      (r.device.platformName
+                                              .startsWith("STS") ||
+                                          r.device.platformName
+                                              .startsWith("STC"))) {
                                     setState(() {
                                       _model.foundDevices.add(BTDevicesStruct(
                                         name: r.device.platformName,
@@ -1010,7 +1057,7 @@ class _DevicesWidgetState extends State<DevicesWidget>
                                                         .spaceBetween,
                                                 children: [
                                                   Text(
-                                                    'Connected Devices',
+                                                    'Dispositivos Conectados',
                                                     style: FlutterFlowTheme.of(
                                                             context)
                                                         .bodyLarge
@@ -1045,7 +1092,7 @@ class _DevicesWidgetState extends State<DevicesWidget>
                                             Padding(
                                               padding: EdgeInsetsDirectional
                                                   .fromSTEB(
-                                                      0.0, 16.0, 0.0, 0.0),
+                                                      0.0, 10.0, 0.0, 0.0),
                                               child: Builder(
                                                 builder: (context) {
                                                   final displayConnectedDevices =
@@ -1302,20 +1349,28 @@ class _DevicesWidgetState extends State<DevicesWidget>
                                                     MainAxisAlignment
                                                         .spaceBetween,
                                                 children: [
-                                                  Expanded(
-                                                    child: Text(
-                                                      'Found Devices',
-                                                      style: FlutterFlowTheme
-                                                              .of(context)
-                                                          .bodyLarge
-                                                          .override(
-                                                            fontFamily:
-                                                                'DM Sans',
-                                                            fontWeight:
-                                                                FontWeight.w500,
-                                                          ),
+                                                  // if _model.foundDevices.length is equal to 0 or
+                                                  // if all devices in _model.foundDevices are already connected
+                                                  // then show 'No devices found'
+                                                  if (_model.foundDevices
+                                                          .length !=
+                                                      0)
+                                                    Expanded(
+                                                      child: Text(
+                                                        'Dispositivos Encontrados',
+                                                        style:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .bodyLarge
+                                                                .override(
+                                                                  fontFamily:
+                                                                      'DM Sans',
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w500,
+                                                                ),
+                                                      ),
                                                     ),
-                                                  ),
                                                   Row(
                                                     mainAxisSize:
                                                         MainAxisSize.max,
@@ -1419,14 +1474,14 @@ class _DevicesWidgetState extends State<DevicesWidget>
                                                 ],
                                               ),
                                             ),
-                                            Divider(
-                                              thickness: 1.2,
-                                              color: Color(0xFF353F49),
-                                            ),
+                                            if (_model.foundDevices.length != 0)
+                                              Divider(
+                                                thickness: 1.2,
+                                                color: Color(0xFF353F49),
+                                              ),
                                             Padding(
                                               padding: EdgeInsetsDirectional
-                                                  .fromSTEB(
-                                                      0.0, 10.0, 0.0, 0.0),
+                                                  .fromSTEB(0.0, 6.0, 0.0, 0.0),
                                               child: Builder(
                                                 builder: (context) {
                                                   final displayScannedDevices =

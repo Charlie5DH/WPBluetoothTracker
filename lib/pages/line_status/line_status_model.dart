@@ -28,6 +28,10 @@ class LineStatusModel extends FlutterFlowModel<LineStatusWidget> {
   // Stores action output result for [Custom Action - getLineStatus] action in Button widget.
   String? lineStatusReadOnStream;
   // Model for StrengthIndicator component.
+  String lineStatusReadStart = '';
+  String lineStatusReadOnStreamStart = '';
+  bool isFetchingStatus = false;
+  bool firstLoad = true;
   late StrengthIndicatorModel strengthIndicatorModel;
 
   /// Initialization and disposal methods.

@@ -9,7 +9,7 @@ class MotorModel extends FlutterFlowModel<MotorWidget> {
 
   String selectedAngle = 'Zero';
 
-  String currentAngle = '';
+  String currentAngle = 'Solicitando...';
 
   int? writeAngleValue = 0;
 

@@ -1,7 +1,6 @@
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 import 'receive_data_mono_model.dart';
 export 'receive_data_mono_model.dart';
@@ -57,6 +56,7 @@ class _ReceiveDataMonoWidgetState extends State<ReceiveDataMonoWidget> {
                     return ListView.separated(
                       padding: EdgeInsets.zero,
                       shrinkWrap: true,
+                      physics: ScrollPhysics(parent: BouncingScrollPhysics()),
                       scrollDirection: Axis.vertical,
                       itemCount: listdata.length,
                       separatorBuilder: (_, __) => SizedBox(height: 3),
