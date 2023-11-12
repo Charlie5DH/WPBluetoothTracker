@@ -734,7 +734,7 @@ class _DeviceWidgetState extends State<DeviceWidget> {
                       Switch.adaptive(
                         value: _model.switchValue ??= false,
                         onChanged: (newValue) async {
-                          setState(() => _model.switchValue = newValue!);
+                          setState(() => _model.switchValue = newValue);
                         },
                         activeColor: FlutterFlowTheme.of(context).primary,
                         activeTrackColor: FlutterFlowTheme.of(context).accent1,

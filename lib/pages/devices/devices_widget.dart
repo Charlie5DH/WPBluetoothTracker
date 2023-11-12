@@ -1111,7 +1111,7 @@ class _DevicesWidgetState extends State<DevicesWidget>
                                                   }
                                                   return ListView.separated(
                                                     padding: EdgeInsets.zero,
-                                                    shrinkWrap: true,
+                                                    shrinkWrap: false,
                                                     physics:
                                                         ClampingScrollPhysics(),
                                                     scrollDirection:
@@ -1686,7 +1686,7 @@ class _DevicesWidgetState extends State<DevicesWidget>
                                                     },
                                                     child: ListView.separated(
                                                       padding: EdgeInsets.zero,
-                                                      shrinkWrap: true,
+                                                      shrinkWrap: false,
                                                       physics:
                                                           ClampingScrollPhysics(),
                                                       scrollDirection:

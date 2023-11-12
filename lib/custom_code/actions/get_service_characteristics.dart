@@ -60,7 +60,7 @@ Future<ServiceStruct> getServiceCharacteristics(
               descriptors: characteristic.descriptors
                   .map((descriptor) => BluetoothDescriptorStruct(
                         uuid: descriptor.uuid.toString(),
-                        deviceId: descriptor.deviceId.toString(),
+                        deviceId: descriptor.remoteId.toString(),
                         serviceUuid: descriptor.serviceUuid.toString(),
                         characteristicUuid:
                             descriptor.characteristicUuid.toString(),
