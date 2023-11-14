@@ -16,6 +16,8 @@ class DevicesModel extends FlutterFlowModel<DevicesWidget> {
 
   bool autoconnect = false;
 
+  bool isScanning = false;
+
   List<BTDevicesStruct> foundDevices = [];
   void addToFoundDevices(BTDevicesStruct item) => foundDevices.add(item);
   void removeFromFoundDevices(BTDevicesStruct item) =>

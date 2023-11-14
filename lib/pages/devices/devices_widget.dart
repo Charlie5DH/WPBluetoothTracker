@@ -101,6 +101,10 @@ class _DevicesWidgetState extends State<DevicesWidget>
         _model.isBluetoothEnabled = widget.isBTEnabled;
       });
 
+      setState(() {
+        _model.isScanning = true;
+      });
+
       if (_model.isBluetoothEnabled!) {
         _model.isFetchingConnectedDevices = true;
         _model.isFetchingDevices = true;
@@ -117,6 +121,11 @@ class _DevicesWidgetState extends State<DevicesWidget>
                 _model.foundDevices.removeWhere(
                     (element) => element.id == r.device.remoteId.toString());
               });
+            }
+
+            if (_model.isScanning == false) {
+              _scanResultsSubscription.cancel();
+              return;
             }
 
             if (r.device.platformName.isNotEmpty &&
@@ -170,7 +179,7 @@ class _DevicesWidgetState extends State<DevicesWidget>
                 }
               });
 
-              //print(r.device.platformName);
+              print(r.device.platformName);
 
               // connect the device
             }
@@ -191,6 +200,10 @@ class _DevicesWidgetState extends State<DevicesWidget>
 
         // Cancel the subscription
         await _scanResultsSubscription.cancel();
+
+        setState(() {
+          _model.isScanning = false;
+        });
 
         _model.fetchedConnectedDevices = await actions.getConnectedDevices(
           valueOrDefault<String>(
@@ -1111,7 +1124,7 @@ class _DevicesWidgetState extends State<DevicesWidget>
                                                   }
                                                   return ListView.separated(
                                                     padding: EdgeInsets.zero,
-                                                    shrinkWrap: false,
+                                                    shrinkWrap: true,
                                                     physics:
                                                         ClampingScrollPhysics(),
                                                     scrollDirection:
@@ -1686,7 +1699,7 @@ class _DevicesWidgetState extends State<DevicesWidget>
                                                     },
                                                     child: ListView.separated(
                                                       padding: EdgeInsets.zero,
-                                                      shrinkWrap: false,
+                                                      shrinkWrap: true,
                                                       physics:
                                                           ClampingScrollPhysics(),
                                                       scrollDirection:
@@ -1807,6 +1820,15 @@ class _DevicesWidgetState extends State<DevicesWidget>
                                                                     _model.isConnectingToDevice =
                                                                         false;
                                                                   });
+                                                                  setState(() {
+                                                                    _model.isScanning =
+                                                                        false;
+                                                                    _model.isFetchingDevices =
+                                                                        false;
+                                                                    _model.isFetchingConnectedDevices =
+                                                                        false;
+                                                                  });
+
                                                                   Navigator.pop(
                                                                       context);
                                                                   context

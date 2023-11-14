@@ -68,7 +68,9 @@ class _GravarLocalizationWidgetState extends State<GravarLocalizationWidget> {
       String firstPart = timestamp.substring(0, 10);
       String secondPart = timestamp.substring(11, 19);
       timestamp = firstPart + ", " + secondPart;
+      print('---------------------Timestamp----------------');
       print(timestamp);
+      print('----------------------------------------------');
     });
 
     getCurrentUserLocation(defaultLocation: LatLng(0.0, 0.0), cached: true)
@@ -271,7 +273,10 @@ class _GravarLocalizationWidgetState extends State<GravarLocalizationWidget> {
 
                             setState(() {});
                           },
-                          text: _model.currentLocalization,
+                          text: valueOrDefault<String>(
+                            _model.currentLocalization,
+                            'solicitando...',
+                          ),
                           options: FFButtonOptions(
                             width: MediaQuery.sizeOf(context).width * 1.0,
                             height: MediaQuery.sizeOf(context).height * 1.0,
