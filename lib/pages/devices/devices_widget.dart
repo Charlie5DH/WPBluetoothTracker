@@ -101,9 +101,9 @@ class _DevicesWidgetState extends State<DevicesWidget>
         _model.isBluetoothEnabled = widget.isBTEnabled;
       });
 
-      setState(() {
-        _model.isScanning = true;
-      });
+      // setState(() {
+      //   _model.isScanning = true;
+      // });
 
       if (_model.isBluetoothEnabled!) {
         _model.isFetchingConnectedDevices = true;
@@ -123,10 +123,10 @@ class _DevicesWidgetState extends State<DevicesWidget>
               });
             }
 
-            if (_model.isScanning == false) {
-              _scanResultsSubscription.cancel();
-              return;
-            }
+            // if (_model.isScanning == false) {
+            //   _scanResultsSubscription.cancel();
+            //   return;
+            // }
 
             if (r.device.platformName.isNotEmpty &&
                 (r.device.platformName.startsWith("STS") ||
@@ -201,9 +201,9 @@ class _DevicesWidgetState extends State<DevicesWidget>
         // Cancel the subscription
         await _scanResultsSubscription.cancel();
 
-        setState(() {
-          _model.isScanning = false;
-        });
+        // setState(() {
+        //   _model.isScanning = false;
+        // });
 
         _model.fetchedConnectedDevices = await actions.getConnectedDevices(
           valueOrDefault<String>(
@@ -924,140 +924,6 @@ class _DevicesWidgetState extends State<DevicesWidget>
                                               ),
                                             ],
                                           ),
-                                          // Row(
-                                          //   mainAxisSize: MainAxisSize.max,
-                                          //   mainAxisAlignment:
-                                          //       MainAxisAlignment.spaceBetween,
-                                          //   children: [
-                                          //     Padding(
-                                          //       padding: EdgeInsetsDirectional
-                                          //           .fromSTEB(0.0, 5.0, 0.0, 5.0),
-                                          //       child: Column(
-                                          //         mainAxisSize: MainAxisSize.max,
-                                          //         crossAxisAlignment:
-                                          //             CrossAxisAlignment.start,
-                                          //         children: [
-                                          //           Padding(
-                                          //             padding:
-                                          //                 EdgeInsetsDirectional
-                                          //                     .fromSTEB(0.0, 5.0,
-                                          //                         0.0, 5.0),
-                                          //             child: Text(
-                                          //               'Sort list by:',
-                                          //               style:
-                                          //                   FlutterFlowTheme.of(
-                                          //                           context)
-                                          //                       .bodyMedium,
-                                          //             ),
-                                          //           ),
-                                          //           Align(
-                                          //             alignment:
-                                          //                 AlignmentDirectional(
-                                          //                     0.00, 0.00),
-                                          //             child:
-                                          //                 FlutterFlowChoiceChips(
-                                          //               options: [
-                                          //                 ChipData('STC-STS'),
-                                          //                 ChipData('STS-STC'),
-                                          //                 ChipData('RSSI')
-                                          //               ],
-                                          //               onChanged: (val) async {
-                                          //                 setState(() => _model
-                                          //                         .choiceChipsValue =
-                                          //                     val?.first);
-                                          //                 setState(() {
-                                          //                   _model.foundDevices = functions
-                                          //                       .sortDevices(
-                                          //                           _model
-                                          //                               .choiceChipsValue,
-                                          //                           _model
-                                          //                               .foundDevices
-                                          //                               .toList())
-                                          //                       .toList()
-                                          //                       .cast<
-                                          //                           BTDevicesStruct>();
-                                          //                 });
-                                          //               },
-                                          //               selectedChipStyle:
-                                          //                   ChipStyle(
-                                          //                 backgroundColor:
-                                          //                     FlutterFlowTheme.of(
-                                          //                             context)
-                                          //                         .success,
-                                          //                 textStyle:
-                                          //                     FlutterFlowTheme.of(
-                                          //                             context)
-                                          //                         .bodyMedium
-                                          //                         .override(
-                                          //                           fontFamily:
-                                          //                               'DM Sans',
-                                          //                           color: FlutterFlowTheme.of(
-                                          //                                   context)
-                                          //                               .primaryText,
-                                          //                         ),
-                                          //                 iconColor:
-                                          //                     FlutterFlowTheme.of(
-                                          //                             context)
-                                          //                         .primaryText,
-                                          //                 iconSize: 18.0,
-                                          //                 elevation: 4.0,
-                                          //                 borderWidth: 1.0,
-                                          //                 borderRadius:
-                                          //                     BorderRadius
-                                          //                         .circular(16.0),
-                                          //               ),
-                                          //               unselectedChipStyle:
-                                          //                   ChipStyle(
-                                          //                 backgroundColor:
-                                          //                     FlutterFlowTheme.of(
-                                          //                             context)
-                                          //                         .alternate,
-                                          //                 textStyle:
-                                          //                     FlutterFlowTheme.of(
-                                          //                             context)
-                                          //                         .bodyMedium
-                                          //                         .override(
-                                          //                           fontFamily:
-                                          //                               'DM Sans',
-                                          //                           color: FlutterFlowTheme.of(
-                                          //                                   context)
-                                          //                               .secondaryText,
-                                          //                         ),
-                                          //                 iconColor:
-                                          //                     FlutterFlowTheme.of(
-                                          //                             context)
-                                          //                         .secondaryText,
-                                          //                 iconSize: 18.0,
-                                          //                 elevation: 0.0,
-                                          //                 borderColor:
-                                          //                     Color(0xFF323B43),
-                                          //                 borderWidth: 1.0,
-                                          //                 borderRadius:
-                                          //                     BorderRadius
-                                          //                         .circular(16.0),
-                                          //               ),
-                                          //               chipSpacing: 12.0,
-                                          //               rowSpacing: 10.0,
-                                          //               multiselect: false,
-                                          //               initialized: _model
-                                          //                       .choiceChipsValue !=
-                                          //                   null,
-                                          //               alignment:
-                                          //                   WrapAlignment.start,
-                                          //               controller: _model
-                                          //                       .choiceChipsValueController ??=
-                                          //                   FormFieldController<
-                                          //                       List<String>>(
-                                          //                 ['STC-STS'],
-                                          //               ),
-                                          //               wrapped: true,
-                                          //             ),
-                                          //           ),
-                                          //         ],
-                                          //       ),
-                                          //     ),
-                                          //   ],
-                                          // ),
                                           if (_model.connectedDevices.length !=
                                               0)
                                             Padding(
@@ -1407,81 +1273,6 @@ class _DevicesWidgetState extends State<DevicesWidget>
                                                         ).animateOnPageLoad(
                                                             animationsMap[
                                                                 'textOnPageLoadAnimation2']!),
-                                                      // if (_model
-                                                      //         .isFetchingDevices ==
-                                                      //     false)
-                                                      //   Text(
-                                                      //     _model.autoconnect
-                                                      //         ? 'Autoconnect'
-                                                      //         : 'Manual',
-                                                      //     style:
-                                                      //         FlutterFlowTheme.of(
-                                                      //                 context)
-                                                      //             .bodyMedium,
-                                                      //   ),
-                                                      // if (_model
-                                                      //         .isFetchingDevices ==
-                                                      //     false)
-                                                      //   Switch.adaptive(
-                                                      //     value: _model
-                                                      //             .switchValue1 ??=
-                                                      //         _model.autoconnect,
-                                                      //     onChanged:
-                                                      //         (newValue) async {
-                                                      //       setState(() => _model
-                                                      //               .switchValue1 =
-                                                      //           newValue);
-                                                      //       if (newValue) {
-                                                      //         setState(() {
-                                                      //           _model.autoconnect =
-                                                      //               true;
-                                                      //         });
-                                                      //         ScaffoldMessenger
-                                                      //                 .of(context)
-                                                      //             .showSnackBar(
-                                                      //           SnackBar(
-                                                      //             content: Text(
-                                                      //               'Device will autoconnect with all STS and STC it finds',
-                                                      //               style:
-                                                      //                   TextStyle(
-                                                      //                 color: FlutterFlowTheme.of(
-                                                      //                         context)
-                                                      //                     .primaryText,
-                                                      //               ),
-                                                      //             ),
-                                                      //             duration: Duration(
-                                                      //                 milliseconds:
-                                                      //                     3000),
-                                                      //             backgroundColor:
-                                                      //                 FlutterFlowTheme.of(
-                                                      //                         context)
-                                                      //                     .primary,
-                                                      //           ),
-                                                      //         );
-                                                      //       } else {
-                                                      //         setState(() {
-                                                      //           _model.autoconnect =
-                                                      //               false;
-                                                      //         });
-                                                      //       }
-                                                      //     },
-                                                      //     activeColor:
-                                                      //         FlutterFlowTheme.of(
-                                                      //                 context)
-                                                      //             .secondary,
-                                                      //     activeTrackColor:
-                                                      //         FlutterFlowTheme.of(
-                                                      //                 context)
-                                                      //             .success,
-                                                      //     inactiveTrackColor:
-                                                      //         FlutterFlowTheme.of(
-                                                      //                 context)
-                                                      //             .secondaryText,
-                                                      //     inactiveThumbColor:
-                                                      //         FlutterFlowTheme.of(
-                                                      //                 context)
-                                                      //             .secondaryText,
-                                                      //   ),
                                                     ],
                                                   ),
                                                 ],
@@ -1518,180 +1309,6 @@ class _DevicesWidgetState extends State<DevicesWidget>
                                                             true;
                                                       });
 
-                                                      // await actions.findDevices(
-                                                      //     _model
-                                                      //         .choiceChipsValue!,
-                                                      //     setState,
-                                                      //     _model.foundDevices);
-
-                                                      //--------------------------------------------------------------
-                                                      //-------------------------------------------------------------
-
-                                                      // _scanResultsSubscription =
-                                                      //     FlutterBluePlus
-                                                      //         .scanResults
-                                                      //         .listen((results) {
-                                                      //   for (ScanResult r
-                                                      //       in results) {
-                                                      //     // if the device is already in the list, replace it with the new one
-                                                      //     if (_model.foundDevices
-                                                      //         .any((element) =>
-                                                      //             element.id ==
-                                                      //             r.device
-                                                      //                 .remoteId
-                                                      //                 .toString())) {
-                                                      //       setState(() {
-                                                      //         _model.foundDevices
-                                                      //             .removeWhere((element) =>
-                                                      //                 element
-                                                      //                     .id ==
-                                                      //                 r.device
-                                                      //                     .remoteId
-                                                      //                     .toString());
-                                                      //       });
-                                                      //     }
-
-                                                      //     if (r
-                                                      //         .device
-                                                      //         .platformName
-                                                      //         .isNotEmpty) {
-                                                      //       setState(() {
-                                                      //         _model.foundDevices.add(
-                                                      //             BTDevicesStruct(
-                                                      //           name: r.device
-                                                      //               .platformName,
-                                                      //           id: r.device
-                                                      //               .remoteId
-                                                      //               .toString(),
-                                                      //           rssi: r.rssi,
-                                                      //           type: "BLE",
-                                                      //           connectable: r
-                                                      //               .advertisementData
-                                                      //               .connectable,
-                                                      //         ));
-
-                                                      //         _model.foundDevices
-                                                      //             .sort((a, b) => b
-                                                      //                 .rssi
-                                                      //                 .compareTo(a
-                                                      //                     .rssi));
-                                                      //         // sort the STS by rssi, then STC by rssi, then everything else by rssi
-                                                      //         startsWithSTS = _model
-                                                      //             .foundDevices
-                                                      //             .where((element) =>
-                                                      //                 element.name
-                                                      //                     .startsWith(
-                                                      //                         'STS'))
-                                                      //             .toList();
-                                                      //         startsWithSTC = _model
-                                                      //             .foundDevices
-                                                      //             .where((element) =>
-                                                      //                 element.name
-                                                      //                     .startsWith(
-                                                      //                         'STC'))
-                                                      //             .toList();
-                                                      //         otherObjects = _model
-                                                      //             .foundDevices
-                                                      //             .where((element) =>
-                                                      //                 !element
-                                                      //                     .name
-                                                      //                     .startsWith(
-                                                      //                         'STS') &&
-                                                      //                 !element
-                                                      //                     .name
-                                                      //                     .startsWith(
-                                                      //                         'STC'))
-                                                      //             .toList();
-
-                                                      //         startsWithSTS.sort(
-                                                      //             (a, b) => b.rssi
-                                                      //                 .compareTo(a
-                                                      //                     .rssi));
-                                                      //         startsWithSTC.sort(
-                                                      //             (a, b) => b.rssi
-                                                      //                 .compareTo(a
-                                                      //                     .rssi));
-                                                      //         otherObjects.sort(
-                                                      //             (a, b) => b.rssi
-                                                      //                 .compareTo(a
-                                                      //                     .rssi));
-
-                                                      //         _model.foundDevices =
-                                                      //             [
-                                                      //           ...startsWithSTS,
-                                                      //           ...startsWithSTC,
-                                                      //           ...otherObjects
-                                                      //         ];
-
-                                                      //         final connectedDevices =
-                                                      //             FlutterBluePlus
-                                                      //                 .connectedDevices;
-                                                      //         if (connectedDevices
-                                                      //                     .contains(r
-                                                      //                         .device) ==
-                                                      //                 false &&
-                                                      //             r.advertisementData
-                                                      //                     .connectable ==
-                                                      //                 true &&
-                                                      //             (r.device
-                                                      //                     .platformName
-                                                      //                     .startsWith(
-                                                      //                         "STS") ||
-                                                      //                 r.device
-                                                      //                     .platformName
-                                                      //                     .startsWith(
-                                                      //                         "STC"))) {
-                                                      //           try {
-                                                      //             print(
-                                                      //                 'connecting to ${r.device.platformName}');
-                                                      //             r.device
-                                                      //                 .connect();
-                                                      //             print(
-                                                      //                 "connected to ${r.device.platformName}");
-                                                      //           } catch (e) {
-                                                      //             // print(e);
-                                                      //             print(
-                                                      //                 "failed to connect to ${r.device.platformName}");
-                                                      //           }
-                                                      //         }
-                                                      //       });
-
-                                                      //       print(r.device
-                                                      //           .platformName);
-
-                                                      //       // connect the device
-                                                      //     }
-                                                      //   }
-                                                      // });
-
-                                                      // print("starting scan");
-
-                                                      // try {
-                                                      //   // await FlutterBluePlus.startScan(timeout: const Duration(seconds: 15));
-                                                      //   await FlutterBluePlus
-                                                      //       .startScan();
-                                                      // } catch (e) {
-                                                      //   print(e);
-                                                      // }
-
-                                                      // // Wait for the scan to complete
-                                                      // await Future.delayed(
-                                                      //     Duration(seconds: 15));
-
-                                                      // // Cancel the subscription
-                                                      // await _scanResultsSubscription
-                                                      //     .cancel();
-
-                                                      //-------------------------------------------------------------
-//--------------------------------------------------------------
-
-                                                      // setState(() {
-                                                      //   _model.foundDevices = _model
-                                                      //       .devicesRefreshPull!
-                                                      //       .toList()
-                                                      //       .cast<
-                                                      //           BTDevicesStruct>();
-                                                      // });
                                                       setState(() {
                                                         _model.isFetchingDevices =
                                                             false;
@@ -1821,8 +1438,8 @@ class _DevicesWidgetState extends State<DevicesWidget>
                                                                         false;
                                                                   });
                                                                   setState(() {
-                                                                    _model.isScanning =
-                                                                        false;
+                                                                    // _model.isScanning =
+                                                                    //     false;
                                                                     _model.isFetchingDevices =
                                                                         false;
                                                                     _model.isFetchingConnectedDevices =
