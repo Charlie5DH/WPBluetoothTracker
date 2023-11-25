@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:device_info/device_info.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:from_css_color/from_css_color.dart';
@@ -8,7 +9,6 @@ import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
 import 'package:json_path/json_path.dart';
 import 'package:timeago/timeago.dart' as timeago;
-import 'package:url_launcher/url_launcher.dart';
 
 import '../main.dart';
 
@@ -211,14 +211,21 @@ const kTextValidatorWebsiteRegex =
 
 LatLng? cachedUserLocation;
 Future<LatLng> getCurrentUserLocation(
-    {required LatLng defaultLocation, bool cached = false}) async {
+    {required LatLng defaultLocation,
+    bool cached = false,
+    timeout = 10}) async {
   if (cached && cachedUserLocation != null) {
+    print('-----------------------------------------------');
+    print('Using cached user location');
+    print('-----------------------------------------------');
     return cachedUserLocation!;
   }
-  return queryCurrentUserLocation().then((loc) {
+
+  return queryCurrentUserLocation(timeout).then((loc) {
     if (loc != null) {
       cachedUserLocation = loc;
     }
+
     return loc ?? defaultLocation;
   }).onError((error, _) {
     print("Error querying user location: $error");
@@ -226,15 +233,12 @@ Future<LatLng> getCurrentUserLocation(
   });
 }
 
-Future<LatLng?> queryCurrentUserLocation() async {
+Future<LatLng?> queryCurrentUserLocation(timeout) async {
   late bool serviceEnabled;
   late LocationPermission permission;
 
   serviceEnabled = await Geolocator.isLocationServiceEnabled();
   if (!serviceEnabled) {
-    // Location services are not enabled don't continue
-    // accessing the position and request users of the
-    // App to enable the location services.
     return Future.error('Location services are disabled.');
   }
 
@@ -242,11 +246,6 @@ Future<LatLng?> queryCurrentUserLocation() async {
   if (permission == LocationPermission.denied) {
     permission = await Geolocator.requestPermission();
     if (permission == LocationPermission.denied) {
-      // Permissions are denied, next time you could try
-      // requesting permissions again (this is also where
-      // Android's shouldShowRequestPermissionRationale
-      // returned true. According to Android guidelines
-      // your App should show an explanatory UI now.
       return Future.error('Location permissions are denied');
     }
   }
@@ -256,12 +255,72 @@ Future<LatLng?> queryCurrentUserLocation() async {
         'Location permissions are permanently denied, we cannot request permissions.');
   }
 
-  // When we reach here, permissions are granted and we can
-  // continue accessing the position of the device.
+  print('------------------Permission-------------------');
+  print('$permission');
+  print('--------------Fetching Position----------------');
 
-  final position = await Geolocator.getCurrentPosition();
+  final position;
+  // check if android version is 12 or above
+  if (Platform.isAndroid) {
+    var androidInfo = await DeviceInfoPlugin().androidInfo;
+    var release = androidInfo.version.release;
+    var sdkInt = androidInfo.version.sdkInt;
+    var manufacturer = androidInfo.manufacturer;
+    var model = androidInfo.model;
+    print('Android $release (SDK $sdkInt), $manufacturer $model');
+
+    if (sdkInt >= 31) {
+      position = await Geolocator.getCurrentPosition(
+              desiredAccuracy: LocationAccuracy.best,
+              forceAndroidLocationManager: true)
+          .timeout(Duration(seconds: timeout));
+    } else {
+      position = await Geolocator.getCurrentPosition()
+          .timeout(Duration(seconds: timeout));
+    }
+  } else {
+    position = await Geolocator.getCurrentPosition()
+        .timeout(Duration(seconds: timeout));
+  }
 
   print('---------------------Position----------------');
+  print(position);
+  print('----------------------------------------------');
+
+  return position != null && position.latitude != 0 && position.longitude != 0
+      ? LatLng(position.latitude, position.longitude)
+      : null;
+}
+
+Future<LatLng?> queryPrevUserLocation(timeout) async {
+  late bool serviceEnabled;
+  late LocationPermission permission;
+
+  serviceEnabled = await Geolocator.isLocationServiceEnabled();
+  if (!serviceEnabled) {
+    return Future.error('Location services are disabled.');
+  }
+
+  permission = await Geolocator.checkPermission();
+  if (permission == LocationPermission.denied) {
+    permission = await Geolocator.requestPermission();
+    if (permission == LocationPermission.denied) {
+      return Future.error('Location permissions are denied');
+    }
+  }
+
+  if (permission == LocationPermission.deniedForever) {
+    return Future.error(
+        'Location permissions are permanently denied, we cannot request permissions.');
+  }
+
+  print('Permission: $permission');
+
+  final position =
+      await Geolocator.getLastKnownPosition(forceAndroidLocationManager: true)
+          .timeout(Duration(seconds: timeout));
+
+  print('---------------------Prev Position----------------');
   print(position);
   print('----------------------------------------------');
 

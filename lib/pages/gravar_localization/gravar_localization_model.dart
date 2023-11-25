@@ -14,6 +14,12 @@ class GravarLocalizationModel
 
   String currentLocalization = '';
 
+  bool seeWarning = true;
+
+  LatLng? deviceLocation;
+
+  LatLng? devicePrevLocation;
+
   ///  State fields for stateful widgets in this page.
 
   final unfocusNode = FocusNode();

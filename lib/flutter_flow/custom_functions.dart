@@ -1,4 +1,3 @@
-
 import '/backend/backend.dart';
 import '/backend/schema/structs/index.dart';
 
@@ -134,6 +133,24 @@ bool hasDegreeSymbol(String text) {
   } else {
     return false;
   }
+}
+
+String formatLatLng(String latitude, String longitude) {
+  // format the latitude and longitude from
+  // LatLng(lat: double, lng: double) to
+  // lat: double, lng: double
+  // with 6 decimal places
+  latitude = latitude.substring(
+      0,
+      latitude.indexOf('.') + 7 >= latitude.length
+          ? latitude.length
+          : latitude.indexOf('.') + 7);
+  longitude = longitude.substring(
+      0,
+      longitude.indexOf('.') + 7 >= longitude.length
+          ? longitude.length
+          : longitude.indexOf('.') + 7);
+  return 'lat: ' + latitude + ', lng: ' + longitude;
 }
 
 int? castStringToNumber(String? textNumber) {

@@ -25,7 +25,7 @@ Future<bool> connectDevice(BTDevicesStruct deviceInfo) async {
     print("-----------------------------------------------");
     print("Connecting to ${device.platformName}");
     await device.connect(
-        timeout: const Duration(seconds: 25), autoConnect: true);
+        timeout: const Duration(seconds: 60), autoConnect: true);
     print("-----------------------------------------------");
   } catch (e) {
     print("-----------Exception on connecting device-------------");
