@@ -1,4 +1,6 @@
 import 'package:bluetooth_w_p/flutter_flow/custom_functions.dart';
+import 'package:bluetooth_w_p/flutter_flow/flutter_flow_animations.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 
 import '/backend/schema/structs/index.dart';
 import '/flutter_flow/flutter_flow_choice_chips.dart';
@@ -46,6 +48,23 @@ class _GravarLocalizationWidgetState extends State<GravarLocalizationWidget> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
   // LatLng? currentUserLocationValue;
 
+  final animationsMap = {
+    'textOnPageLoadAnimation1': AnimationInfo(
+      loop: true,
+      reverse: true,
+      trigger: AnimationTrigger.onPageLoad,
+      effects: [
+        FadeEffect(
+          curve: Curves.easeInOut,
+          delay: 0.ms,
+          duration: 1000.ms,
+          begin: 0.5,
+          end: 1.0,
+        ),
+      ],
+    ),
+  };
+
   @override
   void initState() {
     super.initState();
@@ -75,7 +94,7 @@ class _GravarLocalizationWidgetState extends State<GravarLocalizationWidget> {
     });
 
     getCurrentUserLocation(
-            defaultLocation: LatLng(0.0, 0.0), cached: true, timeout: 60)
+            defaultLocation: LatLng(0.0, 0.0), cached: true, timeout: 15)
         .then((loc) => setState(() => _model.deviceLocation = loc));
 
     if (_model.deviceLocation == LatLng(0.0, 0.0)) {
@@ -216,11 +235,11 @@ class _GravarLocalizationWidgetState extends State<GravarLocalizationWidget> {
                         ],
                       ),
                       // FlutterFlowIconButton(
-                      //     borderColor: FlutterFlowTheme.of(context).primary,
-                      //     borderRadius: 20,
+                      //     borderColor: FlutterFlowTheme.of(context).accent1,
+                      //     borderRadius: 8,
                       //     borderWidth: 1,
                       //     buttonSize: 40,
-                      //     fillColor: FlutterFlowTheme.of(context).accent1,
+                      //     fillColor: FlutterFlowTheme.of(context).primary,
                       //     showLoadingIndicator: true,
                       //     icon: Icon(
                       //       Icons.my_location,
@@ -231,8 +250,8 @@ class _GravarLocalizationWidgetState extends State<GravarLocalizationWidget> {
                       //       _model.deviceLocation =
                       //           await getCurrentUserLocation(
                       //         defaultLocation: LatLng(0.0, 0.0),
-                      //         timeout: 10,
-                      //         cached: false,
+                      //         timeout: 15,
+                      //         cached: true,
                       //       );
                       //       setState(() {});
                       //     }),
@@ -261,7 +280,7 @@ class _GravarLocalizationWidgetState extends State<GravarLocalizationWidget> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          'Localização atual',
+                          'Localização do STC',
                           style: FlutterFlowTheme.of(context).bodyLarge,
                         ),
                       ],
@@ -271,7 +290,7 @@ class _GravarLocalizationWidgetState extends State<GravarLocalizationWidget> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          'Pressione o botão para atualizar',
+                          'Pressione para solicitar novamente',
                           style: FlutterFlowTheme.of(context).labelMedium,
                         ),
                       ],
@@ -281,22 +300,22 @@ class _GravarLocalizationWidgetState extends State<GravarLocalizationWidget> {
                           EdgeInsetsDirectional.fromSTEB(0.0, 10.0, 0.0, 10.0),
                       child: Material(
                         color: Colors.transparent,
-                        elevation: 5.0,
+                        // elevation: 5.0,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(6.0),
                         ),
                         child: Container(
-                          width: MediaQuery.sizeOf(context).width * 0.7,
+                          width: MediaQuery.sizeOf(context).width * 0.9,
                           height: 80.0,
                           decoration: BoxDecoration(
                             color: FlutterFlowTheme.of(context).alternate,
-                            boxShadow: [
-                              BoxShadow(
-                                blurRadius: 4.0,
-                                color: Color(0x33000000),
-                                offset: Offset(0.0, 2.0),
-                              )
-                            ],
+                            // boxShadow: [
+                            //   BoxShadow(
+                            //     blurRadius: 4.0,
+                            //     color: Color(0x33000000),
+                            //     offset: Offset(0.0, 2.0),
+                            //   )
+                            // ],
                             borderRadius: BorderRadius.circular(6.0),
                             border: Border.all(
                               color: Color(0xFF353F49),
@@ -489,151 +508,196 @@ class _GravarLocalizationWidgetState extends State<GravarLocalizationWidget> {
                       ),
                     if (_model.seeWarning &&
                         _model.deviceLocation == LatLng(0.0, 0.0))
-                      Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(5, 10, 5, 10),
-                        child: Material(
-                          color: Colors.transparent,
-                          elevation: 5,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: Container(
-                            width: double.infinity,
-                            height: 40,
-                            decoration: BoxDecoration(
-                              color: FlutterFlowTheme.of(context).tertiary,
-                              boxShadow: [
-                                BoxShadow(
-                                  blurRadius: 5,
-                                  color: Color(0x3416202A),
-                                  offset: Offset(0, 2),
-                                )
-                              ],
-                              borderRadius: BorderRadius.circular(20),
-                              shape: BoxShape.rectangle,
+                      InkWell(
+                        splashColor: Colors.transparent,
+                        focusColor: Colors.transparent,
+                        hoverColor: Colors.transparent,
+                        highlightColor: Colors.transparent,
+                        onTap: () async {
+                          setState(
+                              () => _model.isRequestingLocalization = true);
+                          _model.deviceLocation = await getCurrentUserLocation(
+                            defaultLocation: LatLng(0.0, 0.0),
+                            timeout: 15,
+                            cached: true,
+                          );
+                          setState(
+                              () => _model.isRequestingLocalization = false);
+                          setState(() {});
+                        },
+                        child: Padding(
+                          padding: EdgeInsetsDirectional.fromSTEB(2, 10, 2, 10),
+                          child: Material(
+                            color: Colors.transparent,
+                            elevation: 5,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(6),
                             ),
-                            child: Padding(
-                              padding:
-                                  EdgeInsetsDirectional.fromSTEB(8, 8, 8, 8),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.max,
-                                children: [
-                                  Expanded(
-                                    child: Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          12, 0, 0, 0),
-                                      child: Text(
-                                        'Não foi possível obter a localização atual',
-                                        style: FlutterFlowTheme.of(context)
-                                            .bodyMedium
-                                            .override(
-                                              fontFamily: 'DM Sans',
-                                              fontWeight: FontWeight.normal,
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .primaryText,
-                                            ),
+                            child: Container(
+                              width: MediaQuery.sizeOf(context).width * 0.9,
+                              height: 60,
+                              decoration: BoxDecoration(
+                                color: FlutterFlowTheme.of(context).alternate,
+                                boxShadow: [
+                                  BoxShadow(
+                                    blurRadius: 4.0,
+                                    color: Color(0x33000000),
+                                    offset: Offset(0.0, 2.0),
+                                  )
+                                ],
+                                borderRadius: BorderRadius.circular(6.0),
+                                border: Border.all(
+                                  color: Color(0xFF353F49),
+                                ),
+                              ),
+                              child: Padding(
+                                padding:
+                                    EdgeInsetsDirectional.fromSTEB(8, 8, 8, 8),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.max,
+                                  children: [
+                                    Expanded(
+                                      child: Padding(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                            12, 0, 0, 0),
+                                        child: _model.isRequestingLocalization
+                                            ? Text(
+                                                'Solicitando localização...',
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyMedium
+                                                        .override(
+                                                          fontFamily: 'DM Sans',
+                                                          fontWeight:
+                                                              FontWeight.normal,
+                                                          color: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .tertiary,
+                                                        ),
+                                                textAlign: TextAlign.center,
+                                              ).animateOnPageLoad(animationsMap[
+                                                'textOnPageLoadAnimation1']!)
+                                            : Text(
+                                                'Não foi possível obter as coordenadas do GPS. Pressione para atualizar ou insira manualmente.',
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyMedium
+                                                        .override(
+                                                          fontFamily: 'DM Sans',
+                                                          fontWeight:
+                                                              FontWeight.normal,
+                                                          color: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .tertiary,
+                                                        ),
+                                                textAlign: TextAlign.center,
+                                              ),
                                       ),
                                     ),
-                                  ),
-                                  InkWell(
-                                    splashColor: Colors.transparent,
-                                    focusColor: Colors.transparent,
-                                    hoverColor: Colors.transparent,
-                                    highlightColor: Colors.transparent,
-                                    onTap: () async {
-                                      setState(() {
-                                        _model.seeWarning = false;
-                                      });
-                                    },
-                                    child: Icon(
-                                      Icons.close,
-                                      color: FlutterFlowTheme.of(context)
-                                          .primaryText,
-                                      size: 24,
-                                    ),
-                                  ),
-                                ],
+                                    // InkWell(
+                                    //   splashColor: Colors.transparent,
+                                    //   focusColor: Colors.transparent,
+                                    //   hoverColor: Colors.transparent,
+                                    //   highlightColor: Colors.transparent,
+                                    //   onTap: () async {
+                                    //     _model.deviceLocation =
+                                    //         await getCurrentUserLocation(
+                                    //       defaultLocation: LatLng(0.0, 0.0),
+                                    //       timeout: 15,
+                                    //       cached: true,
+                                    //     );
+                                    //     setState(() {});
+                                    //   },
+                                    //   child: Icon(
+                                    //     Icons.replay_rounded,
+                                    //     color: FlutterFlowTheme.of(context)
+                                    //         .primaryText,
+                                    //     size: 24,
+                                    //   ),
+                                    // ),
+                                  ],
+                                ),
                               ),
                             ),
                           ),
                         ),
                       ),
-                    if (_model.choiceChipsValue == 'Custom localization' ||
-                        _model.deviceLocation == LatLng(0.0, 0.0))
-                      Divider(
-                        thickness: 1.2,
-                        color: Color(0xFF323B43),
-                      ),
-                    if (_model.devicePrevLocation != LatLng(0.0, 0.0) &&
-                        _model.deviceLocation == LatLng(0.0, 0.0))
-                      Padding(
-                        padding:
-                            EdgeInsetsDirectional.fromSTEB(0.0, 6.0, 0.0, 6.0),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.max,
-                          children: [
-                            Column(
-                              mainAxisSize: MainAxisSize.max,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  mainAxisSize: MainAxisSize.max,
-                                  children: [
-                                    Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          0.0, 0.0, 6.0, 0.0),
-                                      child: Icon(
-                                        Icons.my_location_rounded,
-                                        color: FlutterFlowTheme.of(context)
-                                            .primaryText,
-                                        size: 22.0,
-                                      ),
-                                    ),
-                                    SelectionArea(
-                                      child: Text(
-                                        'Últimas coordenadas registradas: ',
-                                        style: FlutterFlowTheme.of(context)
-                                            .bodyMedium
-                                            .override(
-                                              fontFamily: 'DM Sans',
-                                              fontWeight: FontWeight.w600,
-                                            ),
-                                      ),
-                                    )
-                                  ],
-                                ),
-                                Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      0.0, 6.0, 0.0, 6.0),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.max,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      if (_model.devicePrevLocation != null)
-                                        SelectionArea(
-                                          child: Text(
-                                            formatLatLng(
-                                              _model
-                                                  .devicePrevLocation!.latitude
-                                                  .toString(),
-                                              _model
-                                                  .devicePrevLocation!.longitude
-                                                  .toString(),
-                                            ),
-                                            style: FlutterFlowTheme.of(context)
-                                                .labelMedium,
-                                          ),
-                                        ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
+
+                    // if (_model.choiceChipsValue == 'Custom localization' ||
+                    //     _model.deviceLocation == LatLng(0.0, 0.0))
+                    //   Divider(
+                    //     thickness: 1.2,
+                    //     color: Color(0xFF323B43),
+                    //   ),
+                    // if (_model.devicePrevLocation != LatLng(0.0, 0.0) &&
+                    //     _model.deviceLocation == LatLng(0.0, 0.0))
+                    //   Padding(
+                    //     padding:
+                    //         EdgeInsetsDirectional.fromSTEB(0.0, 6.0, 0.0, 6.0),
+                    //     child: Row(
+                    //       mainAxisSize: MainAxisSize.max,
+                    //       children: [
+                    //         Column(
+                    //           mainAxisSize: MainAxisSize.max,
+                    //           crossAxisAlignment: CrossAxisAlignment.start,
+                    //           children: [
+                    //             Row(
+                    //               mainAxisSize: MainAxisSize.max,
+                    //               children: [
+                    //                 Padding(
+                    //                   padding: EdgeInsetsDirectional.fromSTEB(
+                    //                       0.0, 0.0, 6.0, 0.0),
+                    //                   child: Icon(
+                    //                     Icons.my_location_rounded,
+                    //                     color: FlutterFlowTheme.of(context)
+                    //                         .primaryText,
+                    //                     size: 22.0,
+                    //                   ),
+                    //                 ),
+                    //                 SelectionArea(
+                    //                   child: Text(
+                    //                     'Últimas coordenadas registradas: ',
+                    //                     style: FlutterFlowTheme.of(context)
+                    //                         .bodyMedium
+                    //                         .override(
+                    //                           fontFamily: 'DM Sans',
+                    //                           fontWeight: FontWeight.w600,
+                    //                         ),
+                    //                   ),
+                    //                 )
+                    //               ],
+                    //             ),
+                    //             Padding(
+                    //               padding: EdgeInsetsDirectional.fromSTEB(
+                    //                   0.0, 6.0, 0.0, 6.0),
+                    //               child: Row(
+                    //                 mainAxisSize: MainAxisSize.max,
+                    //                 mainAxisAlignment:
+                    //                     MainAxisAlignment.spaceBetween,
+                    //                 children: [
+                    //                   if (_model.devicePrevLocation != null)
+                    //                     SelectionArea(
+                    //                       child: Text(
+                    //                         formatLatLng(
+                    //                           _model
+                    //                               .devicePrevLocation!.latitude
+                    //                               .toString(),
+                    //                           _model
+                    //                               .devicePrevLocation!.longitude
+                    //                               .toString(),
+                    //                         ),
+                    //                         style: FlutterFlowTheme.of(context)
+                    //                             .labelMedium,
+                    //                       ),
+                    //                     ),
+                    //                 ],
+                    //               ),
+                    //             ),
+                    //           ],
+                    //         ),
+                    //       ],
+                    //     ),
+                    //   ),
                     if (_model.choiceChipsValue == 'Custom localization' ||
                         _model.deviceLocation == LatLng(0.0, 0.0))
                       Divider(

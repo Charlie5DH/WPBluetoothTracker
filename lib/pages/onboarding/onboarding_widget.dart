@@ -48,7 +48,6 @@ class _OnboardingWidgetState extends State<OnboardingWidget> {
         ),
       );
     }
-
     return GestureDetector(
       onTap: () => _model.unfocusNode.canRequestFocus
           ? FocusScope.of(context).requestFocus(_model.unfocusNode)
