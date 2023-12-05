@@ -12,6 +12,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'motor_model.dart';
 export 'motor_model.dart';
+import 'package:flutter/cupertino.dart';
 
 class MotorWidget extends StatefulWidget {
   const MotorWidget({
@@ -43,6 +44,19 @@ class _MotorWidgetState extends State<MotorWidget> {
 
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
+      _model.motorListElements = await actions.getMotorList(
+        BTDevicesStruct(
+          name: widget.nomeDispositivo,
+          id: widget.idDispositivo,
+          rssi: widget.rssi,
+          type: 'STC',
+          connectable: true,
+        ),
+        widget.characteristicUUID,
+      );
+
+      print(_model.motorListElements);
+
       _model.instantTimer = InstantTimer.periodic(
         duration: Duration(milliseconds: 1000),
         callback: (timer) async {
@@ -218,7 +232,7 @@ class _MotorWidgetState extends State<MotorWidget> {
                     },
                     child: Material(
                       color: Colors.transparent,
-                      elevation: 5.0,
+                      elevation: 0.0,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(6.0),
                       ),
@@ -226,14 +240,14 @@ class _MotorWidgetState extends State<MotorWidget> {
                         width: MediaQuery.sizeOf(context).width * 0.75,
                         height: 80.0,
                         decoration: BoxDecoration(
-                          color: FlutterFlowTheme.of(context).alternate,
-                          boxShadow: [
-                            BoxShadow(
-                              blurRadius: 4.0,
-                              color: Color(0x33000000),
-                              offset: Offset(0.0, 2.0),
-                            )
-                          ],
+                          color: FlutterFlowTheme.of(context).primaryBackground,
+                          // boxShadow: [
+                          //   BoxShadow(
+                          //     blurRadius: 4.0,
+                          //     color: Color(0x33000000),
+                          //     offset: Offset(0.0, 2.0),
+                          //   )
+                          // ],
                           borderRadius: BorderRadius.circular(6.0),
                           border: Border.all(
                             color: Color(0xFF353F49),
@@ -259,22 +273,11 @@ class _MotorWidgetState extends State<MotorWidget> {
                                         .override(
                                           fontFamily: 'DM Sans',
                                           fontWeight: FontWeight.w500,
+                                          fontSize: 20.0,
                                         ),
+                                    textAlign: TextAlign.center,
                                   ),
                                 ),
-                                // if (_model.currentAngle != 'EMERGÊNCIA' &&
-                                //     _model.currentAngle != 'ERRO' &&
-                                //     _model.currentAngle != '')
-                                //   Padding(
-                                //     padding: EdgeInsetsDirectional.fromSTEB(
-                                //         5.0, 0.0, 0.0, 14.0),
-                                //     child: Icon(
-                                //       Icons.circle_outlined,
-                                //       color: FlutterFlowTheme.of(context)
-                                //           .primaryText,
-                                //       size: 12.0,
-                                //     ),
-                                //   ),
                               ],
                             ),
                           ],
@@ -283,27 +286,29 @@ class _MotorWidgetState extends State<MotorWidget> {
                     ),
                   ),
                 ),
+                Divider(
+                  thickness: 1.5,
+                  color: FlutterFlowTheme.of(context).alternate,
+                ),
                 Row(
                   mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Padding(
                       padding:
                           EdgeInsetsDirectional.fromSTEB(0.0, 6.0, 0.0, 6.0),
                       child: Text(
-                        'Movimente o motor do tracker selecionando a direção',
+                        'Aperte para selecionar a posição do motor',
                         style:
                             FlutterFlowTheme.of(context).labelMedium.override(
                                   fontFamily: 'DM Sans',
                                   fontSize: 14.0,
                                   lineHeight: 1.4,
                                 ),
+                        textAlign: TextAlign.center,
                       ),
                     ),
                   ],
-                ),
-                Divider(
-                  thickness: 1.5,
-                  color: FlutterFlowTheme.of(context).alternate,
                 ),
                 Padding(
                   padding: EdgeInsetsDirectional.fromSTEB(0.0, 10.0, 0.0, 10.0),
@@ -311,384 +316,499 @@ class _MotorWidgetState extends State<MotorWidget> {
                     mainAxisSize: MainAxisSize.max,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Row(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          FFButtonWidget(
-                            onPressed: () async {
-                              setState(() {
-                                _model.selectedAngle = 'West';
-                                _model.writeAngleValue = 102;
-                              });
-                            },
-                            text: 'West',
-                            options: FFButtonOptions(
-                              height: 36.0,
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  20.0, 6.0, 20.0, 6.0),
-                              iconPadding: EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 0.0, 0.0, 0.0),
-                              color: _model.selectedAngle == 'West'
-                                  ? FlutterFlowTheme.of(context).success
-                                  : FlutterFlowTheme.of(context).alternate,
-                              textStyle: FlutterFlowTheme.of(context)
-                                  .bodyMedium
-                                  .override(
-                                    fontFamily: 'DM Sans',
-                                    fontSize: 14.0,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                              elevation: 5.0,
-                              borderSide: BorderSide(
-                                color: Colors.transparent,
-                                width: 1.0,
-                              ),
-                              borderRadius: BorderRadius.circular(24.0),
-                            ),
-                          ),
-                          FFButtonWidget(
-                            onPressed: () async {
-                              setState(() {
-                                _model.selectedAngle = 'Zero';
-                                _model.writeAngleValue = 100;
-                              });
-                            },
-                            text: 'Zero',
-                            options: FFButtonOptions(
-                              height: 36.0,
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  20.0, 6.0, 20.0, 6.0),
-                              iconPadding: EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 0.0, 0.0, 0.0),
-                              color: _model.selectedAngle == 'Zero'
-                                  ? FlutterFlowTheme.of(context).success
-                                  : FlutterFlowTheme.of(context).alternate,
-                              textStyle: FlutterFlowTheme.of(context)
-                                  .bodyMedium
-                                  .override(
-                                    fontFamily: 'DM Sans',
-                                    fontSize: 14.0,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                              elevation: 5.0,
-                              borderSide: BorderSide(
-                                color: Colors.transparent,
-                                width: 1.0,
-                              ),
-                              borderRadius: BorderRadius.circular(24.0),
-                            ),
-                          ),
-                          FFButtonWidget(
-                            onPressed: () async {
-                              setState(() {
-                                _model.selectedAngle = 'East';
-                                _model.writeAngleValue = 101;
-                              });
-                            },
-                            text: 'East',
-                            options: FFButtonOptions(
-                              height: 36.0,
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  20.0, 6.0, 20.0, 6.0),
-                              iconPadding: EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 0.0, 0.0, 0.0),
-                              color: _model.selectedAngle == 'East'
-                                  ? FlutterFlowTheme.of(context).success
-                                  : FlutterFlowTheme.of(context).alternate,
-                              textStyle: FlutterFlowTheme.of(context)
-                                  .bodyLarge
-                                  .override(
-                                    fontFamily: 'DM Sans',
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                              elevation: 5.0,
-                              borderSide: BorderSide(
-                                color: Colors.transparent,
-                                width: 1.0,
-                              ),
-                              borderRadius: BorderRadius.circular(24.0),
-                            ),
-                          ),
-                        ].divide(SizedBox(width: 30.0)),
-                      ),
-                      Row(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          FFButtonWidget(
-                            onPressed: () async {
-                              setState(() {
-                                _model.selectedAngle = 'Clean west';
-                                _model.writeAngleValue = 104;
-                              });
-                            },
-                            text: 'Clean west',
-                            options: FFButtonOptions(
-                              height: 36.0,
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  20.0, 6.0, 20.0, 6.0),
-                              iconPadding: EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 0.0, 0.0, 0.0),
-                              color: _model.selectedAngle == 'Clean west'
-                                  ? FlutterFlowTheme.of(context).success
-                                  : FlutterFlowTheme.of(context).alternate,
-                              textStyle: FlutterFlowTheme.of(context)
-                                  .bodyMedium
-                                  .override(
-                                    fontFamily: 'DM Sans',
-                                    fontSize: 14.0,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                              elevation: 5.0,
-                              borderSide: BorderSide(
-                                color: Colors.transparent,
-                                width: 1.0,
-                              ),
-                              borderRadius: BorderRadius.circular(24.0),
-                            ),
-                          ),
-                          FFButtonWidget(
-                            onPressed: () async {
-                              setState(() {
-                                _model.selectedAngle = 'Clean east';
-                                _model.writeAngleValue = 103;
-                              });
-                            },
-                            text: 'Clean east',
-                            options: FFButtonOptions(
-                              height: 36.0,
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  20.0, 6.0, 20.0, 6.0),
-                              iconPadding: EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 0.0, 0.0, 0.0),
-                              color: _model.selectedAngle == 'Clean east'
-                                  ? FlutterFlowTheme.of(context).success
-                                  : FlutterFlowTheme.of(context).alternate,
-                              textStyle: FlutterFlowTheme.of(context)
-                                  .bodyMedium
-                                  .override(
-                                    fontFamily: 'DM Sans',
-                                    fontSize: 14.0,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                              elevation: 5.0,
-                              borderSide: BorderSide(
-                                color: Colors.transparent,
-                                width: 1.0,
-                              ),
-                              borderRadius: BorderRadius.circular(24.0),
-                            ),
-                          ),
-                        ].divide(SizedBox(width: 15.0)),
-                      ),
-                      Row(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          FFButtonWidget(
-                            onPressed: () async {
-                              setState(() {
-                                _model.selectedAngle = 'Rest';
-                                _model.writeAngleValue = 105;
-                              });
-                            },
-                            text: 'Rest',
-                            options: FFButtonOptions(
-                              height: 36.0,
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  20.0, 6.0, 20.0, 6.0),
-                              iconPadding: EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 0.0, 0.0, 0.0),
-                              color: _model.selectedAngle == 'Rest'
-                                  ? FlutterFlowTheme.of(context).success
-                                  : FlutterFlowTheme.of(context).alternate,
-                              textStyle: FlutterFlowTheme.of(context)
-                                  .bodyMedium
-                                  .override(
-                                    fontFamily: 'DM Sans',
-                                    fontSize: 14.0,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                              elevation: 5.0,
-                              borderSide: BorderSide(
-                                color: Colors.transparent,
-                                width: 1.0,
-                              ),
-                              borderRadius: BorderRadius.circular(24.0),
-                            ),
-                          ),
-                          FFButtonWidget(
-                            onPressed: () async {
-                              setState(() {
-                                _model.selectedAngle = 'Storm';
-                                _model.writeAngleValue = 106;
-                              });
-                            },
-                            text: 'Storm',
-                            options: FFButtonOptions(
-                              height: 36.0,
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  20.0, 6.0, 20.0, 6.0),
-                              iconPadding: EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 0.0, 0.0, 0.0),
-                              color: _model.selectedAngle == 'Storm'
-                                  ? FlutterFlowTheme.of(context).success
-                                  : FlutterFlowTheme.of(context).alternate,
-                              textStyle: FlutterFlowTheme.of(context)
-                                  .bodyMedium
-                                  .override(
-                                    fontFamily: 'DM Sans',
-                                    fontSize: 14.0,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                              elevation: 5.0,
-                              borderSide: BorderSide(
-                                color: Colors.transparent,
-                                width: 1.0,
-                              ),
-                              borderRadius: BorderRadius.circular(24.0),
-                            ),
-                          ),
-                        ].divide(SizedBox(width: 12.0)),
-                      ),
-                      Row(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          FFButtonWidget(
-                            onPressed: () async {
-                              setState(() {
-                                _model.selectedAngle = 'Custom';
-                              });
-                            },
-                            text: 'Custom',
-                            options: FFButtonOptions(
-                              height: 36.0,
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  20.0, 6.0, 20.0, 6.0),
-                              iconPadding: EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 0.0, 0.0, 0.0),
-                              color: _model.selectedAngle == 'Custom'
-                                  ? FlutterFlowTheme.of(context).success
-                                  : FlutterFlowTheme.of(context).alternate,
-                              textStyle: FlutterFlowTheme.of(context)
-                                  .bodyMedium
-                                  .override(
-                                    fontFamily: 'DM Sans',
-                                    fontSize: 14.0,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                              elevation: 5.0,
-                              borderSide: BorderSide(
-                                color: Colors.transparent,
-                                width: 1.0,
-                              ),
-                              borderRadius: BorderRadius.circular(24.0),
-                            ),
-                          ),
-                        ].divide(SizedBox(width: 10.0)),
-                      ),
-                    ].divide(SizedBox(height: 14.0)),
-                  ),
-                ),
-                Divider(
-                  thickness: 1.5,
-                  color: FlutterFlowTheme.of(context).alternate,
-                ),
-                Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(0.0, 5.0, 0.0, 0.0),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.max,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Selecione um valor entre -55 e 55',
-                        style:
-                            FlutterFlowTheme.of(context).labelMedium.override(
-                                  fontFamily: 'DM Sans',
-                                  fontSize: 14.0,
-                                  lineHeight: 1.4,
-                                ),
-                      ),
-                      if (_model.selectedAngle == 'Custom')
-                        Text(
-                          valueOrDefault<String>(
-                            _model.sliderValue?.toString(),
-                            '0',
-                          ),
-                          style:
-                              FlutterFlowTheme.of(context).labelMedium.override(
-                                    fontFamily: 'DM Sans',
-                                    fontSize: 14.0,
-                                    lineHeight: 1.4,
-                                  ),
+                      // display a button to show a cupertino picker in a bottom sheet
+                      // with the options in the list of motorListElements
+                      // add a transition to the bottom sheet
+                      FFButtonWidget(
+                        // the text of the button is "Select angle" if the list of motorListElements is empty
+                        text: valueOrDefault<String>(
+                          _model.motorListElements.isEmpty
+                              ? 'Select angle'
+                              : _model.selectedAngle,
+                          'Select angle',
                         ),
-                      Row(
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                          Column(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                '-55',
-                                style: FlutterFlowTheme.of(context).labelMedium,
-                              ),
-                              Text(
-                                'West',
-                                style: FlutterFlowTheme.of(context).labelMedium,
-                              ),
-                            ],
+                        options: FFButtonOptions(
+                          width: MediaQuery.sizeOf(context).width * 0.75,
+                          height: 42.0,
+                          padding: EdgeInsetsDirectional.fromSTEB(
+                              20.0, 6.0, 20.0, 6.0),
+                          iconPadding: EdgeInsetsDirectional.fromSTEB(
+                              0.0, 0.0, 0.0, 0.0),
+                          color: FlutterFlowTheme.of(context).alternate,
+                          textStyle:
+                              FlutterFlowTheme.of(context).titleSmall.override(
+                                    fontFamily: 'DM Sans',
+                                    color: Colors.white,
+                                  ),
+                          elevation: 3.0,
+                          disabledColor: Color(0xC6505D69),
+                          disabledTextColor:
+                              FlutterFlowTheme.of(context).secondaryText,
+                          borderSide: BorderSide(
+                            color: Color(0xFF353F49),
+                            width: 1.0,
                           ),
-                          Expanded(
-                            child: Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 0.0, 0.0, 10.0),
-                              child: Slider(
-                                activeColor:
-                                    FlutterFlowTheme.of(context).primary,
-                                inactiveColor:
-                                    FlutterFlowTheme.of(context).alternate,
-                                min: -55.0,
-                                max: 55.0,
-                                value: _model.sliderValue ??= 0.0,
-                                label: _model.sliderValue.toString(),
-                                divisions: 55,
-                                onChanged: _model.selectedAngle != 'Custom'
-                                    ? null
-                                    : (newValue) {
-                                        newValue = double.parse(
-                                            newValue.toStringAsFixed(1));
-                                        setState(() =>
-                                            _model.sliderValue = newValue);
-                                      },
-                              ),
-                            ),
-                          ),
-                          Column(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                '+55',
-                                style: FlutterFlowTheme.of(context).labelMedium,
-                              ),
-                              Text(
-                                'East',
-                                style: FlutterFlowTheme.of(context).labelMedium,
-                              ),
-                            ],
-                          ),
-                        ],
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                        onPressed: () async {
+                          showModalBottomSheet(
+                            isScrollControlled: true,
+                            backgroundColor: Colors.transparent,
+                            enableDrag: false,
+                            elevation: 6,
+                            context: context,
+                            builder: (context) {
+                              return GestureDetector(
+                                onTap: () => _model.unfocusNode.canRequestFocus
+                                    ? FocusScope.of(context)
+                                        .requestFocus(_model.unfocusNode)
+                                    : FocusScope.of(context).unfocus(),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: FlutterFlowTheme.of(context)
+                                        .primaryBackground,
+                                    borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(12),
+                                      topRight: Radius.circular(12),
+                                      bottomLeft: Radius.circular(8),
+                                      bottomRight: Radius.circular(8),
+                                    ),
+                                  ),
+                                  height: 300,
+                                  child: CupertinoPicker(
+                                    scrollController:
+                                        FixedExtentScrollController(
+                                      // initial item to the middle of the list
+                                      initialItem:
+                                          _model.motorListElements.length ~/ 2,
+                                    ),
+                                    backgroundColor: Colors.transparent,
+                                    looping: false,
+                                    magnification: 1.15,
+                                    itemExtent: 40.0,
+                                    onSelectedItemChanged: (index) {
+                                      setState(() {
+                                        _model.selectedAngle =
+                                            _model.motorListElements[index];
+                                        _model.writeAngleValue = index + 100;
+                                      });
+                                    },
+                                    children: _model.motorListElements
+                                        .map(
+                                          (e) => Padding(
+                                            padding:
+                                                EdgeInsetsDirectional.fromSTEB(
+                                                    0.0, 10.0, 0.0, 10.0),
+                                            child: Text(
+                                              e,
+                                              style:
+                                                  FlutterFlowTheme.of(context)
+                                                      .bodyMedium
+                                                      .override(
+                                                        fontFamily: 'DM Sans',
+                                                        fontSize: 16.0,
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                      ),
+                                            ),
+                                          ),
+                                        )
+                                        .toList(),
+                                  ),
+                                  // Button to submitt the selected angle
+                                ),
+                              );
+                            },
+                          );
+                        },
                       ),
                     ],
                   ),
                 ),
-                Divider(
-                  thickness: 1.5,
-                  color: FlutterFlowTheme.of(context).alternate,
-                ),
+                // Padding(
+                //   padding: EdgeInsetsDirectional.fromSTEB(0.0, 10.0, 0.0, 10.0),
+                //   child: Column(
+                //     mainAxisSize: MainAxisSize.max,
+                //     mainAxisAlignment: MainAxisAlignment.center,
+                //     children: [
+                //       Row(
+                //         mainAxisSize: MainAxisSize.max,
+                //         mainAxisAlignment: MainAxisAlignment.center,
+                //         children: [
+                //           FFButtonWidget(
+                //             onPressed: () async {
+                //               setState(() {
+                //                 _model.selectedAngle = 'West';
+                //                 _model.writeAngleValue = 102;
+                //               });
+                //             },
+                //             text: 'West',
+                //             options: FFButtonOptions(
+                //               height: 36.0,
+                //               padding: EdgeInsetsDirectional.fromSTEB(
+                //                   20.0, 6.0, 20.0, 6.0),
+                //               iconPadding: EdgeInsetsDirectional.fromSTEB(
+                //                   0.0, 0.0, 0.0, 0.0),
+                //               color: _model.selectedAngle == 'West'
+                //                   ? FlutterFlowTheme.of(context).success
+                //                   : FlutterFlowTheme.of(context).alternate,
+                //               textStyle: FlutterFlowTheme.of(context)
+                //                   .bodyMedium
+                //                   .override(
+                //                     fontFamily: 'DM Sans',
+                //                     fontSize: 14.0,
+                //                     fontWeight: FontWeight.w500,
+                //                   ),
+                //               elevation: 5.0,
+                //               borderSide: BorderSide(
+                //                 color: Colors.transparent,
+                //                 width: 1.0,
+                //               ),
+                //               borderRadius: BorderRadius.circular(24.0),
+                //             ),
+                //           ),
+                //           FFButtonWidget(
+                //             onPressed: () async {
+                //               setState(() {
+                //                 _model.selectedAngle = 'Zero';
+                //                 _model.writeAngleValue = 100;
+                //               });
+                //             },
+                //             text: 'Zero',
+                //             options: FFButtonOptions(
+                //               height: 36.0,
+                //               padding: EdgeInsetsDirectional.fromSTEB(
+                //                   20.0, 6.0, 20.0, 6.0),
+                //               iconPadding: EdgeInsetsDirectional.fromSTEB(
+                //                   0.0, 0.0, 0.0, 0.0),
+                //               color: _model.selectedAngle == 'Zero'
+                //                   ? FlutterFlowTheme.of(context).success
+                //                   : FlutterFlowTheme.of(context).alternate,
+                //               textStyle: FlutterFlowTheme.of(context)
+                //                   .bodyMedium
+                //                   .override(
+                //                     fontFamily: 'DM Sans',
+                //                     fontSize: 14.0,
+                //                     fontWeight: FontWeight.w500,
+                //                   ),
+                //               elevation: 5.0,
+                //               borderSide: BorderSide(
+                //                 color: Colors.transparent,
+                //                 width: 1.0,
+                //               ),
+                //               borderRadius: BorderRadius.circular(24.0),
+                //             ),
+                //           ),
+                //           FFButtonWidget(
+                //             onPressed: () async {
+                //               setState(() {
+                //                 _model.selectedAngle = 'East';
+                //                 _model.writeAngleValue = 101;
+                //               });
+                //             },
+                //             text: 'East',
+                //             options: FFButtonOptions(
+                //               height: 36.0,
+                //               padding: EdgeInsetsDirectional.fromSTEB(
+                //                   20.0, 6.0, 20.0, 6.0),
+                //               iconPadding: EdgeInsetsDirectional.fromSTEB(
+                //                   0.0, 0.0, 0.0, 0.0),
+                //               color: _model.selectedAngle == 'East'
+                //                   ? FlutterFlowTheme.of(context).success
+                //                   : FlutterFlowTheme.of(context).alternate,
+                //               textStyle: FlutterFlowTheme.of(context)
+                //                   .bodyLarge
+                //                   .override(
+                //                     fontFamily: 'DM Sans',
+                //                     fontWeight: FontWeight.w500,
+                //                   ),
+                //               elevation: 5.0,
+                //               borderSide: BorderSide(
+                //                 color: Colors.transparent,
+                //                 width: 1.0,
+                //               ),
+                //               borderRadius: BorderRadius.circular(24.0),
+                //             ),
+                //           ),
+                //         ].divide(SizedBox(width: 30.0)),
+                //       ),
+                //       Row(
+                //         mainAxisSize: MainAxisSize.max,
+                //         mainAxisAlignment: MainAxisAlignment.center,
+                //         children: [
+                //           FFButtonWidget(
+                //             onPressed: () async {
+                //               setState(() {
+                //                 _model.selectedAngle = 'Clean west';
+                //                 _model.writeAngleValue = 104;
+                //               });
+                //             },
+                //             text: 'Clean west',
+                //             options: FFButtonOptions(
+                //               height: 36.0,
+                //               padding: EdgeInsetsDirectional.fromSTEB(
+                //                   20.0, 6.0, 20.0, 6.0),
+                //               iconPadding: EdgeInsetsDirectional.fromSTEB(
+                //                   0.0, 0.0, 0.0, 0.0),
+                //               color: _model.selectedAngle == 'Clean west'
+                //                   ? FlutterFlowTheme.of(context).success
+                //                   : FlutterFlowTheme.of(context).alternate,
+                //               textStyle: FlutterFlowTheme.of(context)
+                //                   .bodyMedium
+                //                   .override(
+                //                     fontFamily: 'DM Sans',
+                //                     fontSize: 14.0,
+                //                     fontWeight: FontWeight.w500,
+                //                   ),
+                //               elevation: 5.0,
+                //               borderSide: BorderSide(
+                //                 color: Colors.transparent,
+                //                 width: 1.0,
+                //               ),
+                //               borderRadius: BorderRadius.circular(24.0),
+                //             ),
+                //           ),
+                //           FFButtonWidget(
+                //             onPressed: () async {
+                //               setState(() {
+                //                 _model.selectedAngle = 'Clean east';
+                //                 _model.writeAngleValue = 103;
+                //               });
+                //             },
+                //             text: 'Clean east',
+                //             options: FFButtonOptions(
+                //               height: 36.0,
+                //               padding: EdgeInsetsDirectional.fromSTEB(
+                //                   20.0, 6.0, 20.0, 6.0),
+                //               iconPadding: EdgeInsetsDirectional.fromSTEB(
+                //                   0.0, 0.0, 0.0, 0.0),
+                //               color: _model.selectedAngle == 'Clean east'
+                //                   ? FlutterFlowTheme.of(context).success
+                //                   : FlutterFlowTheme.of(context).alternate,
+                //               textStyle: FlutterFlowTheme.of(context)
+                //                   .bodyMedium
+                //                   .override(
+                //                     fontFamily: 'DM Sans',
+                //                     fontSize: 14.0,
+                //                     fontWeight: FontWeight.w500,
+                //                   ),
+                //               elevation: 5.0,
+                //               borderSide: BorderSide(
+                //                 color: Colors.transparent,
+                //                 width: 1.0,
+                //               ),
+                //               borderRadius: BorderRadius.circular(24.0),
+                //             ),
+                //           ),
+                //         ].divide(SizedBox(width: 15.0)),
+                //       ),
+                //       Row(
+                //         mainAxisSize: MainAxisSize.max,
+                //         mainAxisAlignment: MainAxisAlignment.center,
+                //         children: [
+                //           FFButtonWidget(
+                //             onPressed: () async {
+                //               setState(() {
+                //                 _model.selectedAngle = 'Rest';
+                //                 _model.writeAngleValue = 105;
+                //               });
+                //             },
+                //             text: 'Rest',
+                //             options: FFButtonOptions(
+                //               height: 36.0,
+                //               padding: EdgeInsetsDirectional.fromSTEB(
+                //                   20.0, 6.0, 20.0, 6.0),
+                //               iconPadding: EdgeInsetsDirectional.fromSTEB(
+                //                   0.0, 0.0, 0.0, 0.0),
+                //               color: _model.selectedAngle == 'Rest'
+                //                   ? FlutterFlowTheme.of(context).success
+                //                   : FlutterFlowTheme.of(context).alternate,
+                //               textStyle: FlutterFlowTheme.of(context)
+                //                   .bodyMedium
+                //                   .override(
+                //                     fontFamily: 'DM Sans',
+                //                     fontSize: 14.0,
+                //                     fontWeight: FontWeight.w500,
+                //                   ),
+                //               elevation: 5.0,
+                //               borderSide: BorderSide(
+                //                 color: Colors.transparent,
+                //                 width: 1.0,
+                //               ),
+                //               borderRadius: BorderRadius.circular(24.0),
+                //             ),
+                //           ),
+                //           FFButtonWidget(
+                //             onPressed: () async {
+                //               setState(() {
+                //                 _model.selectedAngle = 'Storm';
+                //                 _model.writeAngleValue = 106;
+                //               });
+                //             },
+                //             text: 'Storm',
+                //             options: FFButtonOptions(
+                //               height: 36.0,
+                //               padding: EdgeInsetsDirectional.fromSTEB(
+                //                   20.0, 6.0, 20.0, 6.0),
+                //               iconPadding: EdgeInsetsDirectional.fromSTEB(
+                //                   0.0, 0.0, 0.0, 0.0),
+                //               color: _model.selectedAngle == 'Storm'
+                //                   ? FlutterFlowTheme.of(context).success
+                //                   : FlutterFlowTheme.of(context).alternate,
+                //               textStyle: FlutterFlowTheme.of(context)
+                //                   .bodyMedium
+                //                   .override(
+                //                     fontFamily: 'DM Sans',
+                //                     fontSize: 14.0,
+                //                     fontWeight: FontWeight.w500,
+                //                   ),
+                //               elevation: 5.0,
+                //               borderSide: BorderSide(
+                //                 color: Colors.transparent,
+                //                 width: 1.0,
+                //               ),
+                //               borderRadius: BorderRadius.circular(24.0),
+                //             ),
+                //           ),
+                //         ].divide(SizedBox(width: 12.0)),
+                //       ),
+                //       Row(
+                //         mainAxisSize: MainAxisSize.max,
+                //         mainAxisAlignment: MainAxisAlignment.center,
+                //         children: [
+                //           FFButtonWidget(
+                //             onPressed: () async {
+                //               setState(() {
+                //                 _model.selectedAngle = 'Custom';
+                //               });
+                //             },
+                //             text: 'Custom',
+                //             options: FFButtonOptions(
+                //               height: 36.0,
+                //               padding: EdgeInsetsDirectional.fromSTEB(
+                //                   20.0, 6.0, 20.0, 6.0),
+                //               iconPadding: EdgeInsetsDirectional.fromSTEB(
+                //                   0.0, 0.0, 0.0, 0.0),
+                //               color: _model.selectedAngle == 'Custom'
+                //                   ? FlutterFlowTheme.of(context).success
+                //                   : FlutterFlowTheme.of(context).alternate,
+                //               textStyle: FlutterFlowTheme.of(context)
+                //                   .bodyMedium
+                //                   .override(
+                //                     fontFamily: 'DM Sans',
+                //                     fontSize: 14.0,
+                //                     fontWeight: FontWeight.w500,
+                //                   ),
+                //               elevation: 5.0,
+                //               borderSide: BorderSide(
+                //                 color: Colors.transparent,
+                //                 width: 1.0,
+                //               ),
+                //               borderRadius: BorderRadius.circular(24.0),
+                //             ),
+                //           ),
+                //         ].divide(SizedBox(width: 10.0)),
+                //       ),
+                //     ].divide(SizedBox(height: 14.0)),
+                //   ),
+                // ),
+                // Divider(
+                //   thickness: 1.5,
+                //   color: FlutterFlowTheme.of(context).alternate,
+                // ),
+                // Padding(
+                //   padding: EdgeInsetsDirectional.fromSTEB(0.0, 5.0, 0.0, 0.0),
+                //   child: Column(
+                //     mainAxisSize: MainAxisSize.max,
+                //     crossAxisAlignment: CrossAxisAlignment.start,
+                //     children: [
+                //       Text(
+                //         'Selecione um valor entre -55 e 55',
+                //         style:
+                //             FlutterFlowTheme.of(context).labelMedium.override(
+                //                   fontFamily: 'DM Sans',
+                //                   fontSize: 14.0,
+                //                   lineHeight: 1.4,
+                //                 ),
+                //       ),
+                //       if (_model.selectedAngle == 'Custom')
+                //         Text(
+                //           valueOrDefault<String>(
+                //             _model.sliderValue?.toString(),
+                //             '0',
+                //           ),
+                //           style:
+                //               FlutterFlowTheme.of(context).labelMedium.override(
+                //                     fontFamily: 'DM Sans',
+                //                     fontSize: 14.0,
+                //                     lineHeight: 1.4,
+                //                   ),
+                //         ),
+                //       Row(
+                //         mainAxisSize: MainAxisSize.max,
+                //         children: [
+                //           Column(
+                //             mainAxisSize: MainAxisSize.max,
+                //             mainAxisAlignment: MainAxisAlignment.center,
+                //             children: [
+                //               Text(
+                //                 '-55',
+                //                 style: FlutterFlowTheme.of(context).labelMedium,
+                //               ),
+                //               Text(
+                //                 'West',
+                //                 style: FlutterFlowTheme.of(context).labelMedium,
+                //               ),
+                //             ],
+                //           ),
+                //           Expanded(
+                //             child: Padding(
+                //               padding: EdgeInsetsDirectional.fromSTEB(
+                //                   0.0, 0.0, 0.0, 10.0),
+                //               child: Slider(
+                //                 activeColor:
+                //                     FlutterFlowTheme.of(context).primary,
+                //                 inactiveColor:
+                //                     FlutterFlowTheme.of(context).alternate,
+                //                 min: -55.0,
+                //                 max: 55.0,
+                //                 value: _model.sliderValue ??= 0.0,
+                //                 label: _model.sliderValue.toString(),
+                //                 divisions: 55,
+                //                 onChanged: _model.selectedAngle != 'Custom'
+                //                     ? null
+                //                     : (newValue) {
+                //                         newValue = double.parse(
+                //                             newValue.toStringAsFixed(1));
+                //                         setState(() =>
+                //                             _model.sliderValue = newValue);
+                //                       },
+                //               ),
+                //             ),
+                //           ),
+                //           Column(
+                //             mainAxisSize: MainAxisSize.max,
+                //             mainAxisAlignment: MainAxisAlignment.center,
+                //             children: [
+                //               Text(
+                //                 '+55',
+                //                 style: FlutterFlowTheme.of(context).labelMedium,
+                //               ),
+                //               Text(
+                //                 'East',
+                //                 style: FlutterFlowTheme.of(context).labelMedium,
+                //               ),
+                //             ],
+                //           ),
+                //         ],
+                //       ),
+                //     ],
+                //   ),
+                // ),
+                // Divider(
+                //   thickness: 1.5,
+                //   color: FlutterFlowTheme.of(context).alternate,
+                // ),
                 Expanded(
                   child: Align(
                     alignment: AlignmentDirectional(0.00, 1.00),
