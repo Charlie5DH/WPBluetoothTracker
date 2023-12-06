@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 class MotorModel extends FlutterFlowModel<MotorWidget> {
   ///  Local state fields for this page.
 
-  String selectedAngle = 'Zero';
+  String selectedAngle = 'Solicitando...';
 
   String currentAngle = 'Solicitando...';
 

@@ -28,8 +28,14 @@ Future writeMotorAngle(
 
   // returns the characteristic with the given UUID
   BluetoothCharacteristic characteristic = service.characteristics.firstWhere(
-      (element) => element.uuid.toString() == characteristicUUID,
+      (element) =>
+          element.uuid.toString() == 'bf645b46-3d5b-4cdd-bbeb-d17d3a1fef4d',
       orElse: () => throw Exception("Characteristic not found"));
+
+  // returns the characteristic with the given UUID
+  // BluetoothCharacteristic characteristic = service.characteristics.firstWhere(
+  //     (element) => element.uuid.toString() == characteristicUUID,
+  //     orElse: () => throw Exception("Characteristic not found"));
 
   print('----------------------------------------');
   print("write to characteristic: " + characteristic.uuid.toString());

@@ -55,7 +55,11 @@ class _MotorWidgetState extends State<MotorWidget> {
         widget.characteristicUUID,
       );
 
-      print(_model.motorListElements);
+      setState(() {
+        if (_model.motorListElements.length > 0) {
+          _model.selectedAngle = _model.motorListElements[0];
+        }
+      });
 
       _model.instantTimer = InstantTimer.periodic(
         duration: Duration(milliseconds: 1000),
@@ -266,7 +270,7 @@ class _MotorWidgetState extends State<MotorWidget> {
                                   child: Text(
                                     valueOrDefault<String>(
                                       _model.currentAngle,
-                                      'requesting...',
+                                      'Solicitando...',
                                     ),
                                     style: FlutterFlowTheme.of(context)
                                         .headlineMedium
@@ -376,12 +380,9 @@ class _MotorWidgetState extends State<MotorWidget> {
                                   ),
                                   height: 300,
                                   child: CupertinoPicker(
-                                    scrollController:
-                                        FixedExtentScrollController(
-                                      // initial item to the middle of the list
-                                      initialItem:
-                                          _model.motorListElements.length ~/ 2,
-                                    ),
+                                    scrollController: FixedExtentScrollController(
+                                        // initial item to the middle of the list
+                                        initialItem: 0),
                                     backgroundColor: Colors.transparent,
                                     looping: false,
                                     magnification: 1.15,
@@ -816,8 +817,7 @@ class _MotorWidgetState extends State<MotorWidget> {
                       padding:
                           EdgeInsetsDirectional.fromSTEB(0.0, 20.0, 0.0, 20.0),
                       child: FFButtonWidget(
-                        onPressed: _model.currentAngle == 'EMERGÊNCIA' ||
-                                _model.currentAngle == 'Solicitando...' ||
+                        onPressed: _model.currentAngle == 'Solicitando...' ||
                                 _model.currentAngle == '' ||
                                 !functions.hasDegreeSymbol(_model.currentAngle)
                             ? null
@@ -893,7 +893,7 @@ class _MotorWidgetState extends State<MotorWidget> {
                                       connectable: true,
                                     ),
                                     valueOrDefault<String>(
-                                      _model.writeAngleValue?.toString(),
+                                      _model.selectedAngle,
                                       '0',
                                     ),
                                     widget.characteristicUUID,

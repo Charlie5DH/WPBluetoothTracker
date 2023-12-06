@@ -35,15 +35,49 @@ Future<List<String>> getMotorList(
           element.uuid.toString() == 'bf645b46-3d5b-4cdd-bbeb-d17d3a1fef4d',
       orElse: () => throw Exception("Characteristic not found"));
 
-  // reads the value from the characteristic
-  List<int> value = await characteristic.read();
+  // reads the value from the characteristic until found the "END" string
 
-  // String stringValue = String.fromCharCodes(value);
-  // convert the String to UTF-8
-  String stringValue = utf8.decode(value);
-  // remove the last character from the string
-  stringValue = stringValue.substring(0, stringValue.length - 1);
+  String accumulatedValue = '';
+  bool endFound = false;
+  int iterationCount = 0;
+  int maxIterations = 5;
 
-  motorList = stringValue.split("\n");
+  while (!endFound && iterationCount < maxIterations) {
+    // waits 100ms before reading again
+    await Future.delayed(Duration(milliseconds: 100));
+    List<int> value = await characteristic.read();
+    String receivedString = utf8.decode(value);
+    // remove last character
+    receivedString = receivedString.substring(0, receivedString.length - 1);
+
+    // check if received string is equal to the previous one
+    // if so, it means that the value is not changing anymore
+    // so it is the last value
+    if (receivedString == accumulatedValue) {
+      endFound = true;
+      print('END found, final accumulated value: $accumulatedValue');
+      break;
+    }
+
+    accumulatedValue += receivedString;
+
+    iterationCount = iterationCount + 1;
+
+    print('Received: $receivedString');
+    print('Accumulated: $accumulatedValue');
+
+    if (accumulatedValue.contains("END")) {
+      endFound = true;
+      accumulatedValue = accumulatedValue.substring(
+        0,
+        accumulatedValue.indexOf("END"),
+      );
+      print('END found, final accumulated value: $accumulatedValue');
+    }
+  }
+
+  motorList = accumulatedValue.split("\n");
+  print('Final Motor List: $motorList');
+
   return motorList;
 }
