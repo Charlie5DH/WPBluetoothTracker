@@ -76,8 +76,13 @@ Future<List<String>> getMotorList(
     }
   }
 
+  print(accumulatedValue);
   motorList = accumulatedValue.split("\n");
   print('Final Motor List: $motorList');
+  // check if the last value is empty
+  if (motorList.last == "" || motorList.last == "\n" || motorList.last == " ") {
+    motorList.removeLast();
+  }
 
   return motorList;
 }

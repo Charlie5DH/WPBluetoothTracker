@@ -67,12 +67,7 @@ class _ReceiveDataMonoWidgetState extends State<ReceiveDataMonoWidget> {
                           children: [
                             Padding(
                               padding:
-                                  EdgeInsetsDirectional.fromSTEB(0, 0, 5, 0),
-                              child: Icon(
-                                Icons.arrow_right,
-                                color: FlutterFlowTheme.of(context).primaryText,
-                                size: 20,
-                              ),
+                                  EdgeInsetsDirectional.fromSTEB(0, 0, 3, 0),
                             ),
                             Text(listdataItem,
                                 style: TextStyle(

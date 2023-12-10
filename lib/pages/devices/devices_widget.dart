@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -491,15 +492,22 @@ class _DevicesWidgetState extends State<DevicesWidget>
                     mainAxisSize: MainAxisSize.max,
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      Text(
-                        widget.isBTEnabled == true ? 'Enable' : 'Disable',
-                        style: FlutterFlowTheme.of(context).bodyMedium.override(
-                              fontFamily: 'DM Sans',
-                              fontSize: 12.0,
-                              fontWeight: FontWeight.w600,
-                            ),
+                      // Text(
+                      //   widget.isBTEnabled == true ? 'Ativado' : 'Desativado',
+                      //   style: FlutterFlowTheme.of(context).bodyMedium.override(
+                      //         fontFamily: 'DM Sans',
+                      //         fontSize: 14.0,
+                      //         fontWeight: FontWeight.w400,
+                      //       ),
+                      // ),
+                      Icon(
+                        widget.isBTEnabled == true
+                            ? Icons.bluetooth
+                            : Icons.bluetooth_disabled,
+                        color: FlutterFlowTheme.of(context).secondaryText,
+                        size: 24.0,
                       ),
-                      Switch.adaptive(
+                      CupertinoSwitch(
                         value: _model.switchValue ??= widget.isBTEnabled,
                         onChanged: (newValue) async {
                           setState(() => _model.switchValue = newValue);
@@ -677,12 +685,9 @@ class _DevicesWidgetState extends State<DevicesWidget>
                             setState(() {});
                           }
                         },
-                        activeColor: FlutterFlowTheme.of(context).secondary,
-                        activeTrackColor: FlutterFlowTheme.of(context).success,
-                        inactiveTrackColor:
-                            FlutterFlowTheme.of(context).secondaryText,
-                        inactiveThumbColor:
-                            FlutterFlowTheme.of(context).secondaryText,
+                        activeColor: FlutterFlowTheme.of(context).success,
+                        trackColor: FlutterFlowTheme.of(context).alternate,
+                        thumbColor: Color(0xFFFAFAFA),
                       ),
                     ],
                   ),

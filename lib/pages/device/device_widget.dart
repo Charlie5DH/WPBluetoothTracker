@@ -1,3 +1,5 @@
+import 'package:flutter/cupertino.dart';
+
 import '/backend/backend.dart';
 import '/backend/schema/structs/index.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
@@ -259,19 +261,27 @@ class _DeviceWidgetState extends State<DeviceWidget> {
                     padding: EdgeInsetsDirectional.fromSTEB(0.0, 8.0, 0.0, 5.0),
                     child: Row(
                       mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(
-                              0.0, 0.0, 5.0, 0.0),
-                          child: Icon(
-                            Icons.play_arrow,
-                            color: FlutterFlowTheme.of(context).secondaryText,
-                            size: 16.0,
-                          ),
-                        ),
+                        // Padding(
+                        //   padding: EdgeInsetsDirectional.fromSTEB(
+                        //       0.0, 0.0, 5.0, 0.0),
+                        //   child: Icon(
+                        //     Icons.play_arrow,
+                        //     color: FlutterFlowTheme.of(context).secondaryText,
+                        //     size: 16.0,
+                        //   ),
+                        // ),
                         Text(
                           'Nome do dispositivo: ',
-                          style: FlutterFlowTheme.of(context).bodyMedium,
+                          style: FlutterFlowTheme.of(context)
+                              .bodyLarge
+                              .override(
+                                fontFamily: 'DM Sans',
+                                color:
+                                    FlutterFlowTheme.of(context).secondaryText,
+                                fontSize: 14.0,
+                              ),
                         ),
                         Padding(
                           padding: EdgeInsetsDirectional.fromSTEB(
@@ -283,7 +293,7 @@ class _DeviceWidgetState extends State<DeviceWidget> {
                                       fontFamily: 'DM Sans',
                                       color: FlutterFlowTheme.of(context)
                                           .secondaryText,
-                                      fontSize: 16.0,
+                                      fontSize: 14.0,
                                     ),
                           ),
                         ),
@@ -294,19 +304,27 @@ class _DeviceWidgetState extends State<DeviceWidget> {
                     padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 5.0),
                     child: Row(
                       mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(
-                              0.0, 0.0, 5.0, 0.0),
-                          child: Icon(
-                            Icons.play_arrow,
-                            color: FlutterFlowTheme.of(context).secondaryText,
-                            size: 16.0,
-                          ),
-                        ),
+                        // Padding(
+                        //   padding: EdgeInsetsDirectional.fromSTEB(
+                        //       0.0, 0.0, 5.0, 0.0),
+                        //   child: Icon(
+                        //     Icons.play_arrow,
+                        //     color: FlutterFlowTheme.of(context).secondaryText,
+                        //     size: 16.0,
+                        //   ),
+                        // ),
                         Text(
                           'ID: ',
-                          style: FlutterFlowTheme.of(context).bodyMedium,
+                          style: FlutterFlowTheme.of(context)
+                              .bodyLarge
+                              .override(
+                                fontFamily: 'DM Sans',
+                                color:
+                                    FlutterFlowTheme.of(context).secondaryText,
+                                fontSize: 14.0,
+                              ),
                         ),
                         Padding(
                           padding: EdgeInsetsDirectional.fromSTEB(
@@ -325,29 +343,61 @@ class _DeviceWidgetState extends State<DeviceWidget> {
                       ],
                     ),
                   ),
-                  Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(0.0, 3.0, 0.0, 5.0),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(
-                              0.0, 0.0, 5.0, 0.0),
-                          child: Icon(
-                            Icons.play_arrow,
-                            color: FlutterFlowTheme.of(context).secondaryText,
-                            size: 16.0,
-                          ),
-                        ),
-                        Text(
-                          'É conectável: ',
-                          style: FlutterFlowTheme.of(context).bodyMedium,
-                        ),
-                        Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(
-                              0.0, 0.0, 8.0, 0.0),
-                          child: Text(
-                            widget.deviceConnectable! ? 'True' : 'False',
+                  // Padding(
+                  //   padding: EdgeInsetsDirectional.fromSTEB(0.0, 3.0, 0.0, 5.0),
+                  //   child: Row(
+                  //     mainAxisSize: MainAxisSize.max,
+                  //     children: [
+                  //       Padding(
+                  //         padding: EdgeInsetsDirectional.fromSTEB(
+                  //             0.0, 0.0, 5.0, 0.0),
+                  //         child: Icon(
+                  //           Icons.play_arrow,
+                  //           color: FlutterFlowTheme.of(context).secondaryText,
+                  //           size: 16.0,
+                  //         ),
+                  //       ),
+                  //       Text(
+                  //         'É conectável: ',
+                  //         style: FlutterFlowTheme.of(context).bodyMedium,
+                  //       ),
+                  //       Padding(
+                  //         padding: EdgeInsetsDirectional.fromSTEB(
+                  //             0.0, 0.0, 8.0, 0.0),
+                  //         child: Text(
+                  //           widget.deviceConnectable! ? 'True' : 'False',
+                  //           style:
+                  //               FlutterFlowTheme.of(context).bodyLarge.override(
+                  //                     fontFamily: 'DM Sans',
+                  //                     color: FlutterFlowTheme.of(context)
+                  //                         .secondaryText,
+                  //                     fontSize: 14.0,
+                  //                   ),
+                  //         ),
+                  //       ),
+                  //     ],
+                  //   ),
+                  // ),
+                  if (functions.isSTC(widget.deviceName)! ||
+                      functions.isSTS(widget.deviceName)!)
+                    Padding(
+                      padding:
+                          EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 2.0),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          // Padding(
+                          //   padding: EdgeInsetsDirectional.fromSTEB(
+                          //       0.0, 0.0, 5.0, 0.0),
+                          //   child: Icon(
+                          //     Icons.play_arrow,
+                          //     color: FlutterFlowTheme.of(context).secondaryText,
+                          //     size: 16.0,
+                          //   ),
+                          // ),
+                          Text(
+                            'Dispositivo: ',
                             style:
                                 FlutterFlowTheme.of(context).bodyLarge.override(
                                       fontFamily: 'DM Sans',
@@ -355,31 +405,6 @@ class _DeviceWidgetState extends State<DeviceWidget> {
                                           .secondaryText,
                                       fontSize: 14.0,
                                     ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  if (functions.isSTC(widget.deviceName)! ||
-                      functions.isSTS(widget.deviceName)!)
-                    Padding(
-                      padding:
-                          EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 5.0),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                          Padding(
-                            padding: EdgeInsetsDirectional.fromSTEB(
-                                0.0, 0.0, 5.0, 0.0),
-                            child: Icon(
-                              Icons.play_arrow,
-                              color: FlutterFlowTheme.of(context).secondaryText,
-                              size: 16.0,
-                            ),
-                          ),
-                          Text(
-                            'Dispositivo: ',
-                            style: FlutterFlowTheme.of(context).bodyMedium,
                           ),
                           Padding(
                             padding: EdgeInsetsDirectional.fromSTEB(
@@ -418,16 +443,61 @@ class _DeviceWidgetState extends State<DeviceWidget> {
                       functions.isSTC(widget.deviceName)!)
                     Padding(
                       padding:
-                          EdgeInsetsDirectional.fromSTEB(0.0, 5.0, 0.0, 10.0),
+                          EdgeInsetsDirectional.fromSTEB(0.0, 5.0, 0.0, 16.0),
                       child: Row(
                         mainAxisSize: MainAxisSize.max,
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Expanded(
-                            child: Text(
-                              'Functions:',
-                              style: FlutterFlowTheme.of(context).bodyMedium,
-                            ),
+                          Text(
+                            'Serviços',
+                            style: FlutterFlowTheme.of(context).bodyLarge,
+                          ),
+                          // Language selector
+                          CupertinoSlidingSegmentedControl(
+                            children: {
+                              'POR': Text(
+                                'POR',
+                                style: FlutterFlowTheme.of(context)
+                                    .bodySmall
+                                    .override(
+                                      fontFamily: 'DM Sans',
+                                      color: FlutterFlowTheme.of(context)
+                                          .primaryText,
+                                    ),
+                              ),
+                              'ENG': Text(
+                                'ENG',
+                                style: FlutterFlowTheme.of(context)
+                                    .bodySmall
+                                    .override(
+                                      fontFamily: 'DM Sans',
+                                      color: FlutterFlowTheme.of(context)
+                                          .primaryText,
+                                    ),
+                              ),
+                              'SPA': Text(
+                                'SPA',
+                                style: FlutterFlowTheme.of(context)
+                                    .bodySmall
+                                    .override(
+                                      fontFamily: 'DM Sans',
+                                      color: FlutterFlowTheme.of(context)
+                                          .primaryText,
+                                    ),
+                              ),
+                            },
+                            groupValue: _model.language,
+                            onValueChanged: (newValue) async {
+                              setState(() => _model.language = newValue!);
+                              await actions.sendLanguageSetting(
+                                BTDevicesStruct(
+                                  name: widget.deviceName,
+                                  id: widget.deviceId,
+                                  rssi: widget.deviceRssi,
+                                ),
+                                _model.language,
+                              );
+                            },
                           ),
                         ],
                       ),
@@ -722,8 +792,8 @@ class _DeviceWidgetState extends State<DeviceWidget> {
                       Expanded(
                         child: Text(
                           _model.switchValue == false
-                              ? 'Show services'
-                              : 'Hide Services',
+                              ? 'Outros serviços'
+                              : 'Ocultar',
                           style:
                               FlutterFlowTheme.of(context).bodyLarge.override(
                                     fontFamily: 'DM Sans',
@@ -731,17 +801,14 @@ class _DeviceWidgetState extends State<DeviceWidget> {
                                   ),
                         ),
                       ),
-                      Switch.adaptive(
+                      CupertinoSwitch(
                         value: _model.switchValue ??= false,
                         onChanged: (newValue) async {
                           setState(() => _model.switchValue = newValue);
                         },
                         activeColor: FlutterFlowTheme.of(context).primary,
-                        activeTrackColor: FlutterFlowTheme.of(context).accent1,
-                        inactiveTrackColor:
-                            FlutterFlowTheme.of(context).alternate,
-                        inactiveThumbColor:
-                            FlutterFlowTheme.of(context).secondaryText,
+                        trackColor: FlutterFlowTheme.of(context).alternate,
+                        thumbColor: FlutterFlowTheme.of(context).secondaryText,
                       ),
                     ],
                   ),

@@ -13,6 +13,8 @@ class DeviceModel extends FlutterFlowModel<DeviceWidget> {
 
   String receivedValue = '';
 
+  String language = 'POR';
+
   List<ServiceStruct> deviceServices = [];
   void addToDeviceServices(ServiceStruct item) => deviceServices.add(item);
   void removeFromDeviceServices(ServiceStruct item) =>
