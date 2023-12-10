@@ -1,5 +1,6 @@
 import 'package:bluetooth_w_p/flutter_flow/custom_functions.dart';
 import 'package:bluetooth_w_p/flutter_flow/flutter_flow_animations.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
 import '/backend/schema/structs/index.dart';
@@ -94,8 +95,8 @@ class _GravarLocalizationWidgetState extends State<GravarLocalizationWidget> {
     });
 
     getCurrentUserLocation(
-            defaultLocation: LatLng(0.0, 0.0), cached: true, timeout: 15)
-        .then((loc) => setState(() => _model.deviceLocation = loc));
+            defaultLocation: LatLng(0.0, 0.0), cached: false, timeout: 10)
+        .then((loc) => (setState(() => _model.deviceLocation = loc)));
 
     if (_model.deviceLocation == LatLng(0.0, 0.0)) {
       queryPrevUserLocation(15)
@@ -234,27 +235,73 @@ class _GravarLocalizationWidgetState extends State<GravarLocalizationWidget> {
                           ),
                         ],
                       ),
-                      // FlutterFlowIconButton(
-                      //     borderColor: FlutterFlowTheme.of(context).accent1,
-                      //     borderRadius: 8,
-                      //     borderWidth: 1,
-                      //     buttonSize: 40,
-                      //     fillColor: FlutterFlowTheme.of(context).primary,
-                      //     showLoadingIndicator: true,
-                      //     icon: Icon(
-                      //       Icons.my_location,
-                      //       color: FlutterFlowTheme.of(context).primaryText,
-                      //       size: 20,
-                      //     ),
-                      //     onPressed: () async {
-                      //       _model.deviceLocation =
-                      //           await getCurrentUserLocation(
-                      //         defaultLocation: LatLng(0.0, 0.0),
-                      //         timeout: 15,
-                      //         cached: true,
-                      //       );
-                      //       setState(() {});
-                      //     }),
+                      FlutterFlowIconButton(
+                          borderColor: FlutterFlowTheme.of(context).accent1,
+                          borderRadius: 20,
+                          borderWidth: 2,
+                          buttonSize: 42,
+                          fillColor: FlutterFlowTheme.of(context).accent1,
+                          showLoadingIndicator: true,
+                          icon: Icon(
+                            Icons.replay_rounded,
+                            color: FlutterFlowTheme.of(context).primaryText,
+                            size: 20,
+                          ),
+                          onPressed: () async {
+                            setState(
+                                () => _model.isRequestingLocalization = true);
+                            _model.deviceLocation =
+                                await getCurrentUserLocation(
+                              defaultLocation: LatLng(0.0, 0.0),
+                              timeout: 10,
+                              cached: false,
+                            );
+                            setState(
+                                () => _model.isRequestingLocalization = false);
+                            // if (_model.deviceLocation == LatLng(0.0, 0.0)) {
+                            //   showCupertinoModalPopup(
+                            //       context: context,
+                            //       builder: (context) {
+                            //         return CupertinoAlertDialog(
+                            //             title: Text('Atenção'),
+                            //             content: (_model
+                            //                     .isRequestingLocalization
+                            //                 ? Text('Solicitando coordenadas do GPS...')
+                            //                     .animateOnPageLoad(animationsMap[
+                            //                         'textOnPageLoadAnimation1']!)
+                            //                 : Text(
+                            //                     'Não foi possível obter as coordenadas do GPS. Tente novamente ou insira manualmente.')),
+                            //             actions: [
+                            //               CupertinoDialogAction(
+                            //                 onPressed: () {
+                            //                   Navigator.pop(context);
+                            //                 },
+                            //                 child: Text('Sair'),
+                            //               ),
+                            //               CupertinoDialogAction(
+                            //                   onPressed: () async {
+                            //                     setState(() => _model
+                            //                             .isRequestingLocalization =
+                            //                         true);
+                            //                     Navigator.pop(context);
+                            //                     _model.deviceLocation =
+                            //                         await getCurrentUserLocation(
+                            //                       defaultLocation:
+                            //                           LatLng(0.0, 0.0),
+                            //                       timeout: 5,
+                            //                       cached: false,
+                            //                     );
+                            //                     setState(() => _model
+                            //                             .isRequestingLocalization =
+                            //                         false);
+                            //                     setState(() {});
+                            //                   },
+                            //                   child: Text('Tentar novamente')),
+                            //             ]);
+                            //       });
+                            // }
+                            setState(() {});
+                          }),
                     ],
                   )
                 ],
@@ -380,9 +427,9 @@ class _GravarLocalizationWidgetState extends State<GravarLocalizationWidget> {
                           children: [
                             FlutterFlowChoiceChips(
                               options: [
-                                ChipData('My Localization', Icons.my_location),
+                                ChipData('GPS', Icons.my_location),
                                 ChipData(
-                                  'Custom localization',
+                                  'Manual',
                                   Icons.edit_location_alt_outlined,
                                 )
                               ],
@@ -432,7 +479,7 @@ class _GravarLocalizationWidgetState extends State<GravarLocalizationWidget> {
                               alignment: WrapAlignment.start,
                               controller: _model.choiceChipsValueController ??=
                                   FormFieldController<List<String>>(
-                                ['My Localization'],
+                                ['GPS'],
                               ),
                               wrapped: true,
                             ),
@@ -440,12 +487,12 @@ class _GravarLocalizationWidgetState extends State<GravarLocalizationWidget> {
                         ),
                       ),
                     if (_model.deviceLocation != LatLng(0.0, 0.0) &&
-                        _model.choiceChipsValue == 'My Localization')
+                        _model.choiceChipsValue == 'GPS')
                       Divider(
                         thickness: 1.2,
                         color: Color(0xFF323B43),
                       ),
-                    if (_model.choiceChipsValue == 'My Localization' &&
+                    if (_model.choiceChipsValue == 'GPS' &&
                         _model.deviceLocation != LatLng(0.0, 0.0))
                       Padding(
                         padding:
@@ -471,7 +518,7 @@ class _GravarLocalizationWidgetState extends State<GravarLocalizationWidget> {
                                       ),
                                     ),
                                     Text(
-                                      'Your localization:',
+                                      'Coordenadas do GPS:',
                                       style: FlutterFlowTheme.of(context)
                                           .bodyMedium
                                           .override(
@@ -529,27 +576,27 @@ class _GravarLocalizationWidgetState extends State<GravarLocalizationWidget> {
                           padding: EdgeInsetsDirectional.fromSTEB(2, 10, 2, 10),
                           child: Material(
                             color: Colors.transparent,
-                            elevation: 5,
+                            // elevation: 5,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(6),
                             ),
                             child: Container(
                               width: MediaQuery.sizeOf(context).width * 0.9,
-                              height: 60,
+                              // height: 60,
                               decoration: BoxDecoration(
-                                color: FlutterFlowTheme.of(context).alternate,
-                                boxShadow: [
-                                  BoxShadow(
-                                    blurRadius: 4.0,
-                                    color: Color(0x33000000),
-                                    offset: Offset(0.0, 2.0),
-                                  )
-                                ],
-                                borderRadius: BorderRadius.circular(6.0),
-                                border: Border.all(
-                                  color: Color(0xFF353F49),
-                                ),
-                              ),
+                                  // color: FlutterFlowTheme.of(context).alternate,
+                                  // boxShadow: [
+                                  //   BoxShadow(
+                                  //     blurRadius: 4.0,
+                                  //     color: Color(0x33000000),
+                                  //     offset: Offset(0.0, 2.0),
+                                  //   )
+                                  // ],
+                                  // borderRadius: BorderRadius.circular(6.0),
+                                  // border: Border.all(
+                                  //   color: Color(0xFF353F49),
+                                  // ),
+                                  ),
                               child: Padding(
                                 padding:
                                     EdgeInsetsDirectional.fromSTEB(8, 8, 8, 8),
@@ -562,7 +609,7 @@ class _GravarLocalizationWidgetState extends State<GravarLocalizationWidget> {
                                             12, 0, 0, 0),
                                         child: _model.isRequestingLocalization
                                             ? Text(
-                                                'Solicitando localização...',
+                                                'Solicitando coordenadas do GPS...',
                                                 style:
                                                     FlutterFlowTheme.of(context)
                                                         .bodyMedium
@@ -578,7 +625,7 @@ class _GravarLocalizationWidgetState extends State<GravarLocalizationWidget> {
                                               ).animateOnPageLoad(animationsMap[
                                                 'textOnPageLoadAnimation1']!)
                                             : Text(
-                                                'Não foi possível obter as coordenadas do GPS. Pressione para atualizar ou insira manualmente.',
+                                                'Não foi possível obter as coordenadas do GPS. Tente novamente ou insira manualmente.',
                                                 style:
                                                     FlutterFlowTheme.of(context)
                                                         .bodyMedium
@@ -623,7 +670,7 @@ class _GravarLocalizationWidgetState extends State<GravarLocalizationWidget> {
                         ),
                       ),
 
-                    // if (_model.choiceChipsValue == 'Custom localization' ||
+                    // if (_model.choiceChipsValue == 'Manual' ||
                     //     _model.deviceLocation == LatLng(0.0, 0.0))
                     //   Divider(
                     //     thickness: 1.2,
@@ -698,13 +745,13 @@ class _GravarLocalizationWidgetState extends State<GravarLocalizationWidget> {
                     //       ],
                     //     ),
                     //   ),
-                    if (_model.choiceChipsValue == 'Custom localization' ||
+                    if (_model.choiceChipsValue == 'Manual' ||
                         _model.deviceLocation == LatLng(0.0, 0.0))
                       Divider(
                         thickness: 1.2,
                         color: Color(0xFF323B43),
                       ),
-                    if (_model.choiceChipsValue == 'Custom localization' ||
+                    if (_model.choiceChipsValue == 'Manual' ||
                         _model.deviceLocation == LatLng(0.0, 0.0))
                       Padding(
                         padding:
@@ -747,9 +794,9 @@ class _GravarLocalizationWidgetState extends State<GravarLocalizationWidget> {
                               child: Text(
                                 valueOrDefault<String>(
                                     _model.deviceLocation != LatLng(0.0, 0.0)
-                                        ? 'Grave sua localização e o timemstamp atual (UTC), no botão "My Localization" ou uma localização diferente, no botão "Custom localization".'
+                                        ? 'Grave sua localização e o timemstamp atual (UTC), no botão "GPS" ou uma localização diferente, no botão "Manual".'
                                         : 'Grave uma localização e o timemstamp atual (UTC).',
-                                    'Grave sua localização e o timemstamp atual (UTC), no botão "My Localization" ou uma localização diferente, no botão "Custom localization".'),
+                                    'Grave sua localização e o timemstamp atual (UTC), no botão "GPS" ou uma localização diferente, no botão "Manual".'),
                                 style: FlutterFlowTheme.of(context)
                                     .labelMedium
                                     .override(
@@ -992,24 +1039,24 @@ class _GravarLocalizationWidgetState extends State<GravarLocalizationWidget> {
                                   height:
                                       MediaQuery.sizeOf(context).height * 0.7,
                                   child: ConfirmLocalizationWidget(
-                                    latitude: _model.choiceChipsValue ==
-                                                'My Localization' &&
-                                            _model.deviceLocation !=
-                                                LatLng(0.0, 0.0)
-                                        ? _model.deviceLocation?.latitude
-                                            .toString()
-                                        : _model.textController1.text == ''
-                                            ? '0.0'
-                                            : _model.textController1.text,
-                                    longitude: _model.choiceChipsValue ==
-                                                'My Localization' &&
-                                            _model.deviceLocation !=
-                                                LatLng(0.0, 0.0)
-                                        ? _model.deviceLocation?.longitude
-                                            .toString()
-                                        : _model.textController2.text == ''
-                                            ? '0.0'
-                                            : _model.textController2.text,
+                                    latitude:
+                                        _model.choiceChipsValue == 'GPS' &&
+                                                _model.deviceLocation !=
+                                                    LatLng(0.0, 0.0)
+                                            ? _model.deviceLocation?.latitude
+                                                .toString()
+                                            : _model.textController1.text == ''
+                                                ? '0.0'
+                                                : _model.textController1.text,
+                                    longitude:
+                                        _model.choiceChipsValue == 'GPS' &&
+                                                _model.deviceLocation !=
+                                                    LatLng(0.0, 0.0)
+                                            ? _model.deviceLocation?.longitude
+                                                .toString()
+                                            : _model.textController2.text == ''
+                                                ? '0.0'
+                                                : _model.textController2.text,
                                     timestamp: () {
                                       DateTime now = DateTime.now().toUtc();
                                       String timestamp = now.toString();
@@ -1023,10 +1070,10 @@ class _GravarLocalizationWidgetState extends State<GravarLocalizationWidget> {
                                     }(),
                                     localization:
                                         _model.deviceLocation!.toString(),
-                                    fullLocalization: _model.choiceChipsValue ==
-                                            'My Localization' &&
-                                        _model.deviceLocation !=
-                                            LatLng(0.0, 0.0),
+                                    fullLocalization:
+                                        _model.choiceChipsValue == 'GPS' &&
+                                            _model.deviceLocation !=
+                                                LatLng(0.0, 0.0),
                                     device: BTDevicesStruct(
                                       name: widget.nomeDispositivo,
                                       id: widget.idDispositivo,
@@ -1065,18 +1112,18 @@ class _GravarLocalizationWidgetState extends State<GravarLocalizationWidget> {
                         //     connectable: true,
                         //   ),
                         //   widget.serviceUUID,
-                        //   _model.choiceChipsValue == 'My Localization'
+                        //   _model.choiceChipsValue == 'GPS'
                         //       ? _model.deviceLocation?.toString()
                         //       : _model.textController1.text == ''
                         //           ? '0.0'
                         //           : _model.textController1.text,
-                        //   _model.choiceChipsValue == 'My Localization'
+                        //   _model.choiceChipsValue == 'GPS'
                         //       ? _model.deviceLocation?.toString()
                         //       : _model.textController2.text == ''
                         //           ? '0.0'
                         //           : _model.textController2.text,
                         //   _model.deviceLocation?.toString(),
-                        //   _model.choiceChipsValue == 'My Localization',
+                        //   _model.choiceChipsValue == 'GPS',
                         // );
                         // ScaffoldMessenger.of(context).showSnackBar(
                         //   SnackBar(

@@ -26,16 +26,7 @@ class MotorModel extends FlutterFlowModel<MotorWidget> {
   // Stores action output result for [Custom Action - readMotorAngle] action in Button widget.
   String? readAngleUpdatedAfterWrite;
   // Model for StrengthIndicator component.
-  List<String> motorListElements = [
-    'East',
-    'Zero',
-    'West',
-    'Clean east',
-    'Clean west',
-    'Rest',
-    'Storm',
-    'Custom'
-  ];
+  List<String> motorListElements = [];
   late StrengthIndicatorModel strengthIndicatorModel;
 
   /// Initialization and disposal methods.

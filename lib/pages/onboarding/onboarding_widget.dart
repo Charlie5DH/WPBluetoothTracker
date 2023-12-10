@@ -108,14 +108,29 @@ class _OnboardingWidgetState extends State<OnboardingWidget> {
                             fontWeight: FontWeight.bold,
                           ),
                     ),
+                    // Padding(
+                    //   padding: EdgeInsetsDirectional.fromSTEB(24, 8, 24, 0),
+                    //   child: Text(
+                    //     'Soluções de Monitoramento e Gestão de Ativos',
+                    //     textAlign: TextAlign.center,
+                    //     style: FlutterFlowTheme.of(context).titleSmall.override(
+                    //           fontFamily: 'DM Sans',
+                    //           color: FlutterFlowTheme.of(context).secondaryText,
+                    //         ),
+                    //   ),
+                    // ),
                     Padding(
                       padding: EdgeInsetsDirectional.fromSTEB(24, 8, 24, 0),
                       child: Text(
-                        'Soluções de Monitoramento e Gestão de Ativos',
+                        'Versão 0.14.17',
                         textAlign: TextAlign.center,
-                        style: FlutterFlowTheme.of(context).titleSmall.override(
-                              fontFamily: 'DM Sans',
-                              color: FlutterFlowTheme.of(context).secondaryText,
+                        style: FlutterFlowTheme.of(context)
+                            .headlineLarge
+                            .override(
+                              fontFamily: 'Montserrat',
+                              color: FlutterFlowTheme.of(context).primaryText,
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
                             ),
                       ),
                     ),

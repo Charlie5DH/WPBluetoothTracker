@@ -206,10 +206,10 @@ class _MotorWidgetState extends State<MotorWidget> {
                   'Ângulo atual do motor',
                   style: FlutterFlowTheme.of(context).bodyLarge,
                 ),
-                Text(
-                  'Pressione o quadrado para atualizar',
-                  style: FlutterFlowTheme.of(context).labelMedium,
-                ),
+                // Text(
+                //   'Pressione o quadrado para atualizar',
+                //   style: FlutterFlowTheme.of(context).labelMedium,
+                // ),
                 Padding(
                   padding: EdgeInsetsDirectional.fromSTEB(0.0, 10.0, 0.0, 10.0),
                   child: InkWell(
@@ -302,7 +302,7 @@ class _MotorWidgetState extends State<MotorWidget> {
                       padding:
                           EdgeInsetsDirectional.fromSTEB(0.0, 6.0, 0.0, 6.0),
                       child: Text(
-                        'Aperte para selecionar a posição do motor',
+                        'Selecione a opção para acionar o motor',
                         style:
                             FlutterFlowTheme.of(context).labelMedium.override(
                                   fontFamily: 'DM Sans',
@@ -320,108 +320,63 @@ class _MotorWidgetState extends State<MotorWidget> {
                     mainAxisSize: MainAxisSize.max,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      // display a button to show a cupertino picker in a bottom sheet
-                      // with the options in the list of motorListElements
-                      // add a transition to the bottom sheet
-                      FFButtonWidget(
-                        // the text of the button is "Select angle" if the list of motorListElements is empty
-                        text: valueOrDefault<String>(
-                          _model.motorListElements.isEmpty
-                              ? 'Select angle'
-                              : _model.selectedAngle,
-                          'Select angle',
-                        ),
-                        options: FFButtonOptions(
-                          width: MediaQuery.sizeOf(context).width * 0.75,
-                          height: 42.0,
-                          padding: EdgeInsetsDirectional.fromSTEB(
-                              20.0, 6.0, 20.0, 6.0),
-                          iconPadding: EdgeInsetsDirectional.fromSTEB(
-                              0.0, 0.0, 0.0, 0.0),
-                          color: FlutterFlowTheme.of(context).alternate,
-                          textStyle:
-                              FlutterFlowTheme.of(context).titleSmall.override(
-                                    fontFamily: 'DM Sans',
-                                    color: Colors.white,
-                                  ),
-                          elevation: 3.0,
-                          disabledColor: Color(0xC6505D69),
-                          disabledTextColor:
-                              FlutterFlowTheme.of(context).secondaryText,
-                          borderSide: BorderSide(
-                            color: Color(0xFF353F49),
-                            width: 1.0,
-                          ),
+                      Container(
+                        width: MediaQuery.of(context).size.width * 0.8,
+                        alignment: AlignmentDirectional(0.00, 0.00),
+                        height: 320.0,
+                        decoration: BoxDecoration(
+                          color: FlutterFlowTheme.of(context).primaryBackground,
                           borderRadius: BorderRadius.circular(8.0),
+                          border: Border.all(
+                            color: Color(0xFF353F49),
+                          ),
                         ),
-                        onPressed: () async {
-                          showModalBottomSheet(
-                            isScrollControlled: true,
-                            backgroundColor: Colors.transparent,
-                            enableDrag: false,
-                            elevation: 6,
-                            context: context,
-                            builder: (context) {
-                              return GestureDetector(
-                                onTap: () => _model.unfocusNode.canRequestFocus
-                                    ? FocusScope.of(context)
-                                        .requestFocus(_model.unfocusNode)
-                                    : FocusScope.of(context).unfocus(),
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    color: FlutterFlowTheme.of(context)
-                                        .primaryBackground,
-                                    borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(12),
-                                      topRight: Radius.circular(12),
-                                      bottomLeft: Radius.circular(8),
-                                      bottomRight: Radius.circular(8),
+                        child: _model.motorListElements.isEmpty
+                            ? Text(
+                                'Solcitando...',
+                                style: FlutterFlowTheme.of(context)
+                                    .bodyMedium
+                                    .override(
+                                      fontFamily: 'DM Sans',
+                                      fontSize: 16.0,
+                                      fontWeight: FontWeight.w500,
                                     ),
-                                  ),
-                                  height: 300,
-                                  child: CupertinoPicker(
-                                    scrollController: FixedExtentScrollController(
-                                        // initial item to the middle of the list
-                                        initialItem: 0),
-                                    backgroundColor: Colors.transparent,
-                                    looping: false,
-                                    magnification: 1.15,
-                                    itemExtent: 40.0,
-                                    onSelectedItemChanged: (index) {
-                                      setState(() {
-                                        _model.selectedAngle =
-                                            _model.motorListElements[index];
-                                        _model.writeAngleValue = index + 100;
-                                      });
-                                    },
-                                    children: _model.motorListElements
-                                        .map(
-                                          (e) => Padding(
-                                            padding:
-                                                EdgeInsetsDirectional.fromSTEB(
-                                                    0.0, 10.0, 0.0, 10.0),
-                                            child: Text(
-                                              e,
-                                              style:
-                                                  FlutterFlowTheme.of(context)
-                                                      .bodyMedium
-                                                      .override(
-                                                        fontFamily: 'DM Sans',
-                                                        fontSize: 16.0,
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                      ),
-                                            ),
-                                          ),
-                                        )
-                                        .toList(),
-                                  ),
-                                  // Button to submitt the selected angle
-                                ),
-                              );
-                            },
-                          );
-                        },
+                              )
+                            : CupertinoPicker(
+                                scrollController: FixedExtentScrollController(
+                                    // initial item to the middle of the list
+                                    initialItem: 0),
+                                backgroundColor: Colors.transparent,
+                                looping: false,
+                                magnification: 1.15,
+                                itemExtent: 40.0,
+                                diameterRatio: 1,
+                                onSelectedItemChanged: (index) {
+                                  setState(() {
+                                    _model.selectedAngle =
+                                        _model.motorListElements[index];
+                                    _model.writeAngleValue = index + 100;
+                                  });
+                                },
+                                children: _model.motorListElements
+                                    .map(
+                                      (e) => Padding(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                            0.0, 10.0, 0.0, 10.0),
+                                        child: Text(
+                                          e,
+                                          style: FlutterFlowTheme.of(context)
+                                              .bodyMedium
+                                              .override(
+                                                fontFamily: 'DM Sans',
+                                                fontSize: 16.0,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                        ),
+                                      ),
+                                    )
+                                    .toList(),
+                              ),
                       ),
                     ],
                   ),
