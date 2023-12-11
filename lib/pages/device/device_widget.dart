@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:provider/provider.dart';
 
 import '/backend/backend.dart';
 import '/backend/schema/structs/index.dart';
@@ -125,6 +126,8 @@ class _DeviceWidgetState extends State<DeviceWidget> {
       );
     }
 
+    context.watch<FFAppState>();
+
     return GestureDetector(
       onTap: () => _model.unfocusNode.canRequestFocus
           ? FocusScope.of(context).requestFocus(_model.unfocusNode)
@@ -205,42 +208,43 @@ class _DeviceWidgetState extends State<DeviceWidget> {
               child: Row(
                 mainAxisSize: MainAxisSize.max,
                 children: [
-                  FFButtonWidget(
-                    onPressed: () async {
-                      await actions.disconnectDevice(
+                  CupertinoSlidingSegmentedControl(
+                    children: {
+                      'POR': Text(
+                        'POR',
+                        style: FlutterFlowTheme.of(context).bodySmall.override(
+                              fontFamily: 'DM Sans',
+                              color: FlutterFlowTheme.of(context).primaryText,
+                            ),
+                      ),
+                      'ENG': Text(
+                        'ENG',
+                        style: FlutterFlowTheme.of(context).bodySmall.override(
+                              fontFamily: 'DM Sans',
+                              color: FlutterFlowTheme.of(context).primaryText,
+                            ),
+                      ),
+                      'SPA': Text(
+                        'SPA',
+                        style: FlutterFlowTheme.of(context).bodySmall.override(
+                              fontFamily: 'DM Sans',
+                              color: FlutterFlowTheme.of(context).primaryText,
+                            ),
+                      ),
+                    },
+                    groupValue: FFAppState().languageCode,
+                    onValueChanged: (newValue) async {
+                      setState(() => _model.language = newValue!);
+                      FFAppState().languageCode = newValue!;
+                      await actions.sendLanguageSetting(
                         BTDevicesStruct(
                           name: widget.deviceName,
                           id: widget.deviceId,
-                          rssi: _model.currentRssi,
+                          rssi: widget.deviceRssi,
                         ),
+                        FFAppState().languageCode,
                       );
-                      context.safePop();
                     },
-                    text: 'Disconnect',
-                    icon: Icon(
-                      Icons.bluetooth_disabled,
-                      color: FlutterFlowTheme.of(context).error,
-                      size: 28.0,
-                    ),
-                    options: FFButtonOptions(
-                      height: 40.0,
-                      padding:
-                          EdgeInsetsDirectional.fromSTEB(10.0, 0.0, 10.0, 0.0),
-                      iconPadding:
-                          EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
-                      color: FlutterFlowTheme.of(context).primaryBackground,
-                      textStyle:
-                          FlutterFlowTheme.of(context).labelSmall.override(
-                                fontFamily: 'DM Sans',
-                                fontWeight: FontWeight.w500,
-                              ),
-                      elevation: 0.0,
-                      borderSide: BorderSide(
-                        color: Colors.transparent,
-                        width: 1.0,
-                      ),
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
                   ),
                 ],
               ),
@@ -257,127 +261,6 @@ class _DeviceWidgetState extends State<DeviceWidget> {
               child: Column(
                 mainAxisSize: MainAxisSize.max,
                 children: [
-                  Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(0.0, 8.0, 0.0, 5.0),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        // Padding(
-                        //   padding: EdgeInsetsDirectional.fromSTEB(
-                        //       0.0, 0.0, 5.0, 0.0),
-                        //   child: Icon(
-                        //     Icons.play_arrow,
-                        //     color: FlutterFlowTheme.of(context).secondaryText,
-                        //     size: 16.0,
-                        //   ),
-                        // ),
-                        Text(
-                          'Nome do dispositivo: ',
-                          style: FlutterFlowTheme.of(context)
-                              .bodyLarge
-                              .override(
-                                fontFamily: 'DM Sans',
-                                color:
-                                    FlutterFlowTheme.of(context).secondaryText,
-                                fontSize: 14.0,
-                              ),
-                        ),
-                        Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(
-                              0.0, 0.0, 8.0, 0.0),
-                          child: Text(
-                            widget.deviceName!,
-                            style:
-                                FlutterFlowTheme.of(context).bodyLarge.override(
-                                      fontFamily: 'DM Sans',
-                                      color: FlutterFlowTheme.of(context)
-                                          .secondaryText,
-                                      fontSize: 14.0,
-                                    ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 5.0),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        // Padding(
-                        //   padding: EdgeInsetsDirectional.fromSTEB(
-                        //       0.0, 0.0, 5.0, 0.0),
-                        //   child: Icon(
-                        //     Icons.play_arrow,
-                        //     color: FlutterFlowTheme.of(context).secondaryText,
-                        //     size: 16.0,
-                        //   ),
-                        // ),
-                        Text(
-                          'ID: ',
-                          style: FlutterFlowTheme.of(context)
-                              .bodyLarge
-                              .override(
-                                fontFamily: 'DM Sans',
-                                color:
-                                    FlutterFlowTheme.of(context).secondaryText,
-                                fontSize: 14.0,
-                              ),
-                        ),
-                        Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(
-                              0.0, 0.0, 8.0, 0.0),
-                          child: Text(
-                            widget.deviceId!,
-                            style:
-                                FlutterFlowTheme.of(context).bodyLarge.override(
-                                      fontFamily: 'DM Sans',
-                                      color: FlutterFlowTheme.of(context)
-                                          .secondaryText,
-                                      fontSize: 14.0,
-                                    ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  // Padding(
-                  //   padding: EdgeInsetsDirectional.fromSTEB(0.0, 3.0, 0.0, 5.0),
-                  //   child: Row(
-                  //     mainAxisSize: MainAxisSize.max,
-                  //     children: [
-                  //       Padding(
-                  //         padding: EdgeInsetsDirectional.fromSTEB(
-                  //             0.0, 0.0, 5.0, 0.0),
-                  //         child: Icon(
-                  //           Icons.play_arrow,
-                  //           color: FlutterFlowTheme.of(context).secondaryText,
-                  //           size: 16.0,
-                  //         ),
-                  //       ),
-                  //       Text(
-                  //         'É conectável: ',
-                  //         style: FlutterFlowTheme.of(context).bodyMedium,
-                  //       ),
-                  //       Padding(
-                  //         padding: EdgeInsetsDirectional.fromSTEB(
-                  //             0.0, 0.0, 8.0, 0.0),
-                  //         child: Text(
-                  //           widget.deviceConnectable! ? 'True' : 'False',
-                  //           style:
-                  //               FlutterFlowTheme.of(context).bodyLarge.override(
-                  //                     fontFamily: 'DM Sans',
-                  //                     color: FlutterFlowTheme.of(context)
-                  //                         .secondaryText,
-                  //                     fontSize: 14.0,
-                  //                   ),
-                  //         ),
-                  //       ),
-                  //     ],
-                  //   ),
-                  // ),
                   if (functions.isSTC(widget.deviceName)! ||
                       functions.isSTS(widget.deviceName)!)
                     Padding(
@@ -387,17 +270,12 @@ class _DeviceWidgetState extends State<DeviceWidget> {
                         mainAxisSize: MainAxisSize.max,
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          // Padding(
-                          //   padding: EdgeInsetsDirectional.fromSTEB(
-                          //       0.0, 0.0, 5.0, 0.0),
-                          //   child: Icon(
-                          //     Icons.play_arrow,
-                          //     color: FlutterFlowTheme.of(context).secondaryText,
-                          //     size: 16.0,
-                          //   ),
-                          // ),
                           Text(
-                            'Dispositivo: ',
+                            FFAppState().languageCode == 'POR'
+                                ? 'Dispositivo: '
+                                : FFAppState().languageCode == 'ENG'
+                                    ? 'Device: '
+                                    : 'Dispositivo: ',
                             style:
                                 FlutterFlowTheme.of(context).bodyLarge.override(
                                       fontFamily: 'DM Sans',
@@ -443,62 +321,63 @@ class _DeviceWidgetState extends State<DeviceWidget> {
                       functions.isSTC(widget.deviceName)!)
                     Padding(
                       padding:
-                          EdgeInsetsDirectional.fromSTEB(0.0, 5.0, 0.0, 16.0),
+                          EdgeInsetsDirectional.fromSTEB(0.0, 5.0, 0.0, 8.0),
                       child: Row(
                         mainAxisSize: MainAxisSize.max,
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            'Serviços',
+                            FFAppState().languageCode == 'POR'
+                                ? 'Serviços: '
+                                : FFAppState().languageCode == 'ENG'
+                                    ? 'Services: '
+                                    : 'Servicios: ',
                             style: FlutterFlowTheme.of(context).bodyLarge,
                           ),
-                          // Language selector
-                          CupertinoSlidingSegmentedControl(
-                            children: {
-                              'POR': Text(
-                                'POR',
-                                style: FlutterFlowTheme.of(context)
-                                    .bodySmall
-                                    .override(
-                                      fontFamily: 'DM Sans',
-                                      color: FlutterFlowTheme.of(context)
-                                          .primaryText,
-                                    ),
-                              ),
-                              'ENG': Text(
-                                'ENG',
-                                style: FlutterFlowTheme.of(context)
-                                    .bodySmall
-                                    .override(
-                                      fontFamily: 'DM Sans',
-                                      color: FlutterFlowTheme.of(context)
-                                          .primaryText,
-                                    ),
-                              ),
-                              'SPA': Text(
-                                'SPA',
-                                style: FlutterFlowTheme.of(context)
-                                    .bodySmall
-                                    .override(
-                                      fontFamily: 'DM Sans',
-                                      color: FlutterFlowTheme.of(context)
-                                          .primaryText,
-                                    ),
-                              ),
-                            },
-                            groupValue: _model.language,
-                            onValueChanged: (newValue) async {
-                              setState(() => _model.language = newValue!);
-                              await actions.sendLanguageSetting(
+                          FFButtonWidget(
+                            onPressed: () async {
+                              await actions.disconnectDevice(
                                 BTDevicesStruct(
                                   name: widget.deviceName,
                                   id: widget.deviceId,
-                                  rssi: widget.deviceRssi,
+                                  rssi: _model.currentRssi,
                                 ),
-                                _model.language,
                               );
+                              context.safePop();
                             },
+                            text: FFAppState().languageCode == 'POR'
+                                ? 'Desconectar'
+                                : FFAppState().languageCode == 'ENG'
+                                    ? 'Disconnect'
+                                    : 'Desconectar',
+                            icon: Icon(
+                              Icons.bluetooth_disabled,
+                              color: FlutterFlowTheme.of(context).error,
+                              size: 24.0,
+                            ),
+                            options: FFButtonOptions(
+                              height: 40.0,
+                              padding: EdgeInsetsDirectional.fromSTEB(
+                                  10.0, 0.0, 10.0, 0.0),
+                              iconPadding: EdgeInsetsDirectional.fromSTEB(
+                                  0.0, 0.0, 0.0, 0.0),
+                              color: FlutterFlowTheme.of(context)
+                                  .primaryBackground,
+                              textStyle: FlutterFlowTheme.of(context)
+                                  .labelSmall
+                                  .override(
+                                    fontFamily: 'DM Sans',
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                              elevation: 0.0,
+                              borderSide: BorderSide(
+                                color: Colors.transparent,
+                                width: 1.0,
+                              ),
+                              borderRadius: BorderRadius.circular(8.0),
+                            ),
                           ),
+                          // Language selector
                         ],
                       ),
                     ),
@@ -547,7 +426,11 @@ class _DeviceWidgetState extends State<DeviceWidget> {
                                     },
                                   );
                                 },
-                                text: 'Status',
+                                text: FFAppState().languageCode == 'POR'
+                                    ? 'Status'
+                                    : FFAppState().languageCode == 'ENG'
+                                        ? 'Status'
+                                        : 'Estado',
                                 options: FFButtonOptions(
                                   height: 60.0,
                                   padding: EdgeInsetsDirectional.fromSTEB(
@@ -607,7 +490,11 @@ class _DeviceWidgetState extends State<DeviceWidget> {
                                     },
                                   );
                                 },
-                                text: 'Config',
+                                text: FFAppState().languageCode == 'POR'
+                                    ? 'Configurações'
+                                    : FFAppState().languageCode == 'ENG'
+                                        ? 'Settings'
+                                        : 'Configuraciones',
                                 options: FFButtonOptions(
                                   width: MediaQuery.sizeOf(context).width * 0.4,
                                   height: 60,
@@ -682,7 +569,11 @@ class _DeviceWidgetState extends State<DeviceWidget> {
                                       },
                                     );
                                   },
-                                  text: 'Sync',
+                                  text: FFAppState().languageCode == 'POR'
+                                      ? 'Sincronizar'
+                                      : FFAppState().languageCode == 'ENG'
+                                          ? 'Sync'
+                                          : 'Sincronizar',
                                   icon: Icon(
                                     Icons.edit_location_alt_rounded,
                                     size: 24.0,
@@ -779,40 +670,41 @@ class _DeviceWidgetState extends State<DeviceWidget> {
                         ),
                       ],
                     ),
-                  if (functions.isSTC(widget.deviceName)! ||
-                      functions.isSTS(widget.deviceName)!)
+                  if ((functions.isSTC(widget.deviceName)! ||
+                          functions.isSTS(widget.deviceName)!) &&
+                      FFAppState().languageCode == 'ENG')
                     Divider(
                       thickness: 1.5,
                       color: Color(0xFF353F49),
                     ),
-                  Row(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                        child: Text(
-                          _model.switchValue == false
-                              ? 'Outros serviços'
-                              : 'Ocultar',
+                  if (FFAppState().languageCode == 'ENG')
+                    Row(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Text(
+                          _model.switchValue == false ? 'Debug' : 'Ocultar',
                           style:
-                              FlutterFlowTheme.of(context).bodyLarge.override(
+                              FlutterFlowTheme.of(context).bodyMedium.override(
                                     fontFamily: 'DM Sans',
                                     fontWeight: FontWeight.w500,
+                                    fontSize: 14.0,
                                   ),
                         ),
-                      ),
-                      CupertinoSwitch(
-                        value: _model.switchValue ??= false,
-                        onChanged: (newValue) async {
-                          setState(() => _model.switchValue = newValue);
-                        },
-                        activeColor: FlutterFlowTheme.of(context).primary,
-                        trackColor: FlutterFlowTheme.of(context).alternate,
-                        thumbColor: FlutterFlowTheme.of(context).secondaryText,
-                      ),
-                    ],
-                  ),
-                  if (_model.switchValue ?? true)
+                        CupertinoSwitch(
+                          value: _model.switchValue ??= false,
+                          onChanged: (newValue) async {
+                            setState(() => _model.switchValue = newValue);
+                          },
+                          activeColor: FlutterFlowTheme.of(context).primary,
+                          trackColor: FlutterFlowTheme.of(context).alternate,
+                          thumbColor:
+                              FlutterFlowTheme.of(context).secondaryText,
+                        ),
+                      ],
+                    ),
+                  if (_model.switchValue ??
+                      true && FFAppState().languageCode == 'ENG')
                     SingleChildScrollView(
                       child: Column(
                         mainAxisSize: MainAxisSize.max,

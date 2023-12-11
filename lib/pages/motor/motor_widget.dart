@@ -1,3 +1,5 @@
+import 'package:provider/provider.dart';
+
 import '/backend/schema/structs/index.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
@@ -103,6 +105,8 @@ class _MotorWidgetState extends State<MotorWidget> {
       );
     }
 
+    context.watch<FFAppState>();
+
     return GestureDetector(
       onTap: () => _model.unfocusNode.canRequestFocus
           ? FocusScope.of(context).requestFocus(_model.unfocusNode)
@@ -203,7 +207,11 @@ class _MotorWidgetState extends State<MotorWidget> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(
-                  'Ângulo atual do motor',
+                  FFAppState().languageCode == 'POR'
+                      ? 'Ângulo atual do motor'
+                      : FFAppState().languageCode == 'ENG'
+                          ? 'Current motor angle'
+                          : 'Ángulo actual del motor',
                   style: FlutterFlowTheme.of(context).bodyLarge,
                 ),
                 // Text(
@@ -302,7 +310,11 @@ class _MotorWidgetState extends State<MotorWidget> {
                       padding:
                           EdgeInsetsDirectional.fromSTEB(0.0, 6.0, 0.0, 6.0),
                       child: Text(
-                        'Selecione a opção para acionar o motor',
+                        FFAppState().languageCode == 'POR'
+                            ? 'Selecione a opção para acionar o motor'
+                            : FFAppState().languageCode == 'ENG'
+                                ? 'Select the option to trigger the motor'
+                                : 'Seleccione la opción para activar el motor',
                         style:
                             FlutterFlowTheme.of(context).labelMedium.override(
                                   fontFamily: 'DM Sans',
@@ -902,8 +914,16 @@ class _MotorWidgetState extends State<MotorWidget> {
                                   !functions
                                       .hasDegreeSymbol(_model.currentAngle)
                               ? 'Não Permitido'
-                              : 'Acionar',
-                          'Acionar',
+                              : FFAppState().languageCode == 'POR'
+                                  ? 'Acionar'
+                                  : FFAppState().languageCode == 'ENG'
+                                      ? 'Go'
+                                      : 'Accionar',
+                          FFAppState().languageCode == 'POR'
+                              ? 'Acionar'
+                              : FFAppState().languageCode == 'ENG'
+                                  ? 'Go'
+                                  : 'Accionar',
                         ),
                         options: FFButtonOptions(
                           width: MediaQuery.sizeOf(context).width * 0.8,

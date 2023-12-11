@@ -1,4 +1,5 @@
 import 'package:flutter/scheduler.dart';
+import 'package:provider/provider.dart';
 
 import '/backend/schema/structs/index.dart';
 import '/flutter_flow/flutter_flow_animations.dart';
@@ -148,6 +149,8 @@ class _DeviceInformationWidgetState extends State<DeviceInformationWidget>
       );
     }
 
+    context.watch<FFAppState>();
+
     return GestureDetector(
       onTap: () => _model.unfocusNode.canRequestFocus
           ? FocusScope.of(context).requestFocus(_model.unfocusNode)
@@ -248,7 +251,11 @@ class _DeviceInformationWidgetState extends State<DeviceInformationWidget>
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          'Device Information',
+                          FFAppState().languageCode == 'POR'
+                              ? 'Configurações'
+                              : FFAppState().languageCode == 'ENG'
+                                  ? 'Settings'
+                                  : 'Configuraciones',
                           style: FlutterFlowTheme.of(context).bodyLarge,
                         ),
                         Row(
@@ -312,8 +319,16 @@ class _DeviceInformationWidgetState extends State<DeviceInformationWidget>
                               },
                               text: valueOrDefault<String>(
                                 _model.info.length == 0
-                                    ? 'Solicitar'
-                                    : 'Atualizar',
+                                    ? FFAppState().languageCode == 'POR'
+                                        ? 'Solicitar'
+                                        : FFAppState().languageCode == 'ENG'
+                                            ? 'Request'
+                                            : 'Solicitar'
+                                    : FFAppState().languageCode == 'POR'
+                                        ? 'Atualizar'
+                                        : FFAppState().languageCode == 'ENG'
+                                            ? 'Update'
+                                            : 'Actualizar',
                                 'Solicitar',
                               ),
                               options: FFButtonOptions(

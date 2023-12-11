@@ -1,4 +1,5 @@
 import 'package:flutter/scheduler.dart';
+import 'package:provider/provider.dart';
 import '/backend/schema/structs/index.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
@@ -138,6 +139,8 @@ class _LineStatusWidgetState extends State<LineStatusWidget> {
       );
     }
 
+    context.watch<FFAppState>();
+
     return GestureDetector(
       onTap: () => _model.unfocusNode.canRequestFocus
           ? FocusScope.of(context).requestFocus(_model.unfocusNode)
@@ -237,7 +240,11 @@ class _LineStatusWidgetState extends State<LineStatusWidget> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          'Line status service',
+                          FFAppState().languageCode == "POR"
+                              ? "Status da Linha" //POR
+                              : FFAppState().languageCode == "ENG"
+                                  ? "Line Status" //ENG
+                                  : "Estado de la Línea", //SPA
                           style: FlutterFlowTheme.of(context).bodyLarge,
                         ),
                         Row(
@@ -298,8 +305,12 @@ class _LineStatusWidgetState extends State<LineStatusWidget> {
                               },
                               text: valueOrDefault<String>(
                                 _model.measures.length == 0
-                                    ? 'Solicitar'
-                                    : 'Atualizar',
+                                    ? FFAppState().languageCode == "POR"
+                                        ? "Solicitar" //POR
+                                        : "Request" //ENG
+                                    : FFAppState().languageCode == "POR"
+                                        ? "Atualizar" //POR
+                                        : "Update", //ENG
                                 'Solicitar',
                               ),
                               icon: Icon(

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_animations.dart';
@@ -248,6 +249,8 @@ class _DevicesWidgetState extends State<DevicesWidget>
       );
     }
 
+    context.watch<FFAppState>();
+
     return GestureDetector(
       onTap: () => _model.unfocusNode.canRequestFocus
           ? FocusScope.of(context).requestFocus(_model.unfocusNode)
@@ -473,7 +476,11 @@ class _DevicesWidgetState extends State<DevicesWidget>
                 Align(
                   alignment: AlignmentDirectional(0.00, 0.00),
                   child: Text(
-                    'Bluetooth Devices',
+                    FFAppState().languageCode == 'POR'
+                        ? 'Dispositivos'
+                        : FFAppState().languageCode == 'ENG'
+                            ? 'Devices'
+                            : 'Dispositivos',
                     style: FlutterFlowTheme.of(context).headlineMedium.override(
                           fontFamily: 'Montserrat',
                           color: FlutterFlowTheme.of(context).secondaryText,
@@ -832,8 +839,15 @@ class _DevicesWidgetState extends State<DevicesWidget>
                                                           decoration:
                                                               InputDecoration(
                                                             isDense: true,
-                                                            labelText:
-                                                                'Find device',
+                                                            labelText: FFAppState()
+                                                                        .languageCode ==
+                                                                    'POR'
+                                                                ? 'Pesquisar'
+                                                                : FFAppState()
+                                                                            .languageCode ==
+                                                                        'ENG'
+                                                                    ? 'Search'
+                                                                    : 'Pesquisar',
                                                             labelStyle:
                                                                 FlutterFlowTheme.of(
                                                                         context)
@@ -941,7 +955,14 @@ class _DevicesWidgetState extends State<DevicesWidget>
                                                         .spaceBetween,
                                                 children: [
                                                   Text(
-                                                    'Dispositivos Conectados',
+                                                    FFAppState().languageCode ==
+                                                            'POR'
+                                                        ? 'Dispositivos Conectados'
+                                                        : FFAppState()
+                                                                    .languageCode ==
+                                                                'ENG'
+                                                            ? 'Connected Devices'
+                                                            : 'Dispositivos Conectados',
                                                     style: FlutterFlowTheme.of(
                                                             context)
                                                         .bodyLarge
@@ -1241,7 +1262,14 @@ class _DevicesWidgetState extends State<DevicesWidget>
                                                       0)
                                                     Expanded(
                                                       child: Text(
-                                                        'Dispositivos Encontrados',
+                                                        FFAppState().languageCode ==
+                                                                'POR'
+                                                            ? 'Dispositivos Encontrados'
+                                                            : FFAppState()
+                                                                        .languageCode ==
+                                                                    'ENG'
+                                                                ? 'Found Devices'
+                                                                : 'Dispositivos Encontrados',
                                                         style:
                                                             FlutterFlowTheme.of(
                                                                     context)

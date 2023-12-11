@@ -2,6 +2,7 @@ import 'package:bluetooth_w_p/flutter_flow/custom_functions.dart';
 import 'package:bluetooth_w_p/flutter_flow/flutter_flow_animations.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:provider/provider.dart';
 
 import '/backend/schema/structs/index.dart';
 import '/flutter_flow/flutter_flow_choice_chips.dart';
@@ -126,6 +127,8 @@ class _GravarLocalizationWidgetState extends State<GravarLocalizationWidget> {
         ),
       );
     }
+
+    context.watch<FFAppState>();
 
     if (_model.deviceLocation == null) {
       return Container(
@@ -327,7 +330,11 @@ class _GravarLocalizationWidgetState extends State<GravarLocalizationWidget> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          'Localização do STC',
+                          FFAppState().languageCode == 'POR'
+                              ? 'Localização do STC'
+                              : FFAppState().languageCode == 'ENG'
+                                  ? 'STC Location'
+                                  : 'Localización de STC',
                           style: FlutterFlowTheme.of(context).bodyLarge,
                         ),
                       ],
@@ -337,7 +344,11 @@ class _GravarLocalizationWidgetState extends State<GravarLocalizationWidget> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          'Pressione para solicitar novamente',
+                          FFAppState().languageCode == 'POR'
+                              ? 'Pressione para solicitar novamente'
+                              : FFAppState().languageCode == 'ENG'
+                                  ? 'Press to request again'
+                                  : 'Presione para solicitar nuevamente',
                           style: FlutterFlowTheme.of(context).labelMedium,
                         ),
                       ],
@@ -387,10 +398,20 @@ class _GravarLocalizationWidgetState extends State<GravarLocalizationWidget> {
 
                               setState(() {});
                             },
-                            text: valueOrDefault<String>(
-                              _model.currentLocalization,
-                              'solicitando...',
-                            ),
+                            text: _model.deviceLocation != LatLng(0.0, 0.0)
+                                ? valueOrDefault<String>(
+                                    _model.currentLocalization,
+                                    FFAppState().languageCode == "POR"
+                                        ? 'solicitando...'
+                                        : FFAppState().languageCode == "ENG"
+                                            ? 'requesting...'
+                                            : 'solicitando...',
+                                  )
+                                : FFAppState().languageCode == "POR"
+                                    ? 'erro de solicitação'
+                                    : FFAppState().languageCode == "ENG"
+                                        ? 'request error'
+                                        : 'error de solicitud',
                             options: FFButtonOptions(
                               width: MediaQuery.sizeOf(context).width * 1.0,
                               height: MediaQuery.sizeOf(context).height * 1.0,
@@ -518,7 +539,11 @@ class _GravarLocalizationWidgetState extends State<GravarLocalizationWidget> {
                                       ),
                                     ),
                                     Text(
-                                      'Coordenadas do GPS:',
+                                      FFAppState().languageCode == 'POR'
+                                          ? 'Coordenadas do GPS:'
+                                          : FFAppState().languageCode == 'ENG'
+                                              ? 'GPS coordinates:'
+                                              : 'Coordenadas del GPS:',
                                       style: FlutterFlowTheme.of(context)
                                           .bodyMedium
                                           .override(
@@ -609,7 +634,14 @@ class _GravarLocalizationWidgetState extends State<GravarLocalizationWidget> {
                                             12, 0, 0, 0),
                                         child: _model.isRequestingLocalization
                                             ? Text(
-                                                'Solicitando coordenadas do GPS...',
+                                                FFAppState().languageCode ==
+                                                        'POR'
+                                                    ? 'Solicitando coordenadas do GPS...'
+                                                    : FFAppState()
+                                                                .languageCode ==
+                                                            'ENG'
+                                                        ? 'Requesting GPS coordinates...'
+                                                        : 'Solicitando coordenadas del GPS...',
                                                 style:
                                                     FlutterFlowTheme.of(context)
                                                         .bodyMedium
@@ -625,7 +657,14 @@ class _GravarLocalizationWidgetState extends State<GravarLocalizationWidget> {
                                               ).animateOnPageLoad(animationsMap[
                                                 'textOnPageLoadAnimation1']!)
                                             : Text(
-                                                'Não foi possível obter as coordenadas do GPS. Tente novamente ou insira manualmente.',
+                                                FFAppState().languageCode ==
+                                                        'POR'
+                                                    ? 'Não foi possível obter as coordenadas do GPS. Tente novamente ou insira manualmente.'
+                                                    : FFAppState()
+                                                                .languageCode ==
+                                                            'ENG'
+                                                        ? 'Unable to get GPS coordinates. Try again or enter manually.'
+                                                        : 'No se pudieron obtener las coordenadas del GPS. Inténtelo de nuevo o ingréselas manualmente.',
                                                 style:
                                                     FlutterFlowTheme.of(context)
                                                         .bodyMedium
@@ -776,7 +815,11 @@ class _GravarLocalizationWidgetState extends State<GravarLocalizationWidget> {
                                     ),
                                   ),
                                   Text(
-                                    'Insira a localização (Lat, Lng):',
+                                    FFAppState().languageCode == 'POR'
+                                        ? 'Insira a localização (Lat, Lng):'
+                                        : FFAppState().languageCode == 'ENG'
+                                            ? 'Enter location (Lat, Lng):'
+                                            : 'Ingrese la ubicación (Lat, Lng):',
                                     textAlign: TextAlign.start,
                                     style: FlutterFlowTheme.of(context)
                                         .bodyMedium
@@ -794,9 +837,21 @@ class _GravarLocalizationWidgetState extends State<GravarLocalizationWidget> {
                               child: Text(
                                 valueOrDefault<String>(
                                     _model.deviceLocation != LatLng(0.0, 0.0)
+                                        ? FFAppState().languageCode == 'POR'
+                                            ? 'Grave sua localização e o timemstamp atual (UTC), no botão "GPS" ou uma localização diferente, no botão "Manual".'
+                                            : FFAppState().languageCode == 'ENG'
+                                                ? 'Record your location and the current timestamp (UTC), on the "GPS" button or a different location, on the "Manual" button.'
+                                                : 'Grabe su ubicación y la marca de tiempo actual (UTC), en el botón "GPS" o una ubicación diferente, en el botón "Manual".'
+                                        : FFAppState().languageCode == 'POR'
+                                            ? 'Grave uma localização e o timemstamp atual (UTC).'
+                                            : FFAppState().languageCode == 'ENG'
+                                                ? 'Record a location and the current timestamp (UTC).'
+                                                : 'Grabe una ubicación y la marca de tiempo actual (UTC).',
+                                    FFAppState().languageCode == 'POR'
                                         ? 'Grave sua localização e o timemstamp atual (UTC), no botão "GPS" ou uma localização diferente, no botão "Manual".'
-                                        : 'Grave uma localização e o timemstamp atual (UTC).',
-                                    'Grave sua localização e o timemstamp atual (UTC), no botão "GPS" ou uma localização diferente, no botão "Manual".'),
+                                        : FFAppState().languageCode == 'ENG'
+                                            ? 'Record your location and the current timestamp (UTC), on the "GPS" button or a different location, on the "Manual" button.'
+                                            : 'Grabe su ubicación y la marca de tiempo actual (UTC), en el botón "GPS" o una ubicación diferente, en el botón "Manual".'),
                                 style: FlutterFlowTheme.of(context)
                                     .labelMedium
                                     .override(
@@ -1156,7 +1211,11 @@ class _GravarLocalizationWidgetState extends State<GravarLocalizationWidget> {
 
                         // setState(() {});
                       },
-                      text: 'Gravar',
+                      text: FFAppState().languageCode == 'POR'
+                          ? 'Gravar'
+                          : FFAppState().languageCode == 'ENG'
+                              ? 'Record'
+                              : 'Grabar',
                       options: FFButtonOptions(
                         width: MediaQuery.sizeOf(context).width * 0.8,
                         height: 42.0,
