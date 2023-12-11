@@ -18,6 +18,8 @@ class DevicesModel extends FlutterFlowModel<DevicesWidget> {
 
   bool isScanning = false;
 
+  String language = 'POR';
+
   List<BTDevicesStruct> foundDevices = [];
   void addToFoundDevices(BTDevicesStruct item) => foundDevices.add(item);
   void removeFromFoundDevices(BTDevicesStruct item) =>

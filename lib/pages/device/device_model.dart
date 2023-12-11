@@ -36,7 +36,7 @@ class DeviceModel extends FlutterFlowModel<DeviceWidget> {
   // Stores action output result for [Custom Action - getRssi] action in Device widget.
   int? updatedRssi;
   // State field(s) for Switch widget.
-  bool? switchValue;
+  bool switchValue = false;
   // Stores action output result for [Custom Action - getDeviceServices] action in ScannedDevicesList widget.
   List<ServiceStruct>? servicesFromDevice;
   // Model for StrengthIndicator component.

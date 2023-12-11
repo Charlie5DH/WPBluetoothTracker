@@ -492,214 +492,239 @@ class _DevicesWidgetState extends State<DevicesWidget>
               ],
             ),
             actions: [
-              Row(
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  Row(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      // Text(
-                      //   widget.isBTEnabled == true ? 'Ativado' : 'Desativado',
-                      //   style: FlutterFlowTheme.of(context).bodyMedium.override(
-                      //         fontFamily: 'DM Sans',
-                      //         fontSize: 14.0,
-                      //         fontWeight: FontWeight.w400,
-                      //       ),
-                      // ),
-                      Icon(
-                        widget.isBTEnabled == true
-                            ? Icons.bluetooth
-                            : Icons.bluetooth_disabled,
-                        color: FlutterFlowTheme.of(context).secondaryText,
-                        size: 24.0,
-                      ),
-                      CupertinoSwitch(
-                        value: _model.switchValue ??= widget.isBTEnabled,
-                        onChanged: (newValue) async {
-                          setState(() => _model.switchValue = newValue);
-                          if (newValue) {
-                            _model.isTurningOn =
-                                await actions.turnOnBluetooth();
-                            await Future.delayed(
-                                const Duration(milliseconds: 1000));
-                            setState(() {
-                              _model.isBluetoothEnabled = true;
-                            });
-                            if (widget.isBTEnabled) {
-                              setState(() {
-                                _model.isFetchingConnectedDevices = true;
-                                _model.isFetchingDevices = true;
-                              });
-                              _model.fetchedConnectedDevicesSW =
-                                  await actions.getConnectedDevices(
-                                valueOrDefault<String>(
-                                  _model.choiceChipsValue,
-                                  'STS-STC',
-                                ),
-                              );
-                              setState(() {
-                                _model.isFetchingConnectedDevices = false;
-                                _model.connectedDevices = _model
-                                    .fetchedConnectedDevicesSW!
-                                    .toList()
-                                    .cast<BTDevicesStruct>();
-                              });
-                              // await actions.findDevices(_model.choiceChipsValue!,
-                              //     setState, _model.foundDevices);
-
-                              //------------------------------------------------------------------
-                              setState(() {
-                                _model.foundDevices.clear();
-                              });
-                              //-------------------------------------------------------------
-
-                              _scanResultsSubscription =
-                                  FlutterBluePlus.scanResults.listen((results) {
-                                for (ScanResult r in results) {
-                                  // if the device is already in the list, replace it with the new one
-                                  if (_model.foundDevices.any((element) =>
-                                      element.id ==
-                                      r.device.remoteId.toString())) {
-                                    setState(() {
-                                      _model.foundDevices.removeWhere(
-                                          (element) =>
-                                              element.id ==
-                                              r.device.remoteId.toString());
-                                    });
-                                  }
-
-                                  if (r.device.platformName.isNotEmpty &&
-                                      (r.device.platformName
-                                              .startsWith("STS") ||
-                                          r.device.platformName
-                                              .startsWith("STC"))) {
-                                    setState(() {
-                                      _model.foundDevices.add(BTDevicesStruct(
-                                        name: r.device.platformName,
-                                        id: r.device.remoteId.toString(),
-                                        rssi: r.rssi,
-                                        type: "BLE",
-                                        connectable:
-                                            r.advertisementData.connectable,
-                                      ));
-
-                                      _model.foundDevices.sort(
-                                          (a, b) => b.rssi.compareTo(a.rssi));
-                                      // sort the STS by rssi, then STC by rssi, then everything else by rssi
-                                      startsWithSTS = _model.foundDevices
-                                          .where((element) =>
-                                              element.name.startsWith('STS'))
-                                          .toList();
-                                      startsWithSTC = _model.foundDevices
-                                          .where((element) =>
-                                              element.name.startsWith('STC'))
-                                          .toList();
-                                      otherObjects = _model.foundDevices
-                                          .where((element) =>
-                                              !element.name.startsWith('STS') &&
-                                              !element.name.startsWith('STC'))
-                                          .toList();
-
-                                      startsWithSTS.sort(
-                                          (a, b) => b.rssi.compareTo(a.rssi));
-                                      startsWithSTC.sort(
-                                          (a, b) => b.rssi.compareTo(a.rssi));
-                                      otherObjects.sort(
-                                          (a, b) => b.rssi.compareTo(a.rssi));
-
-                                      _model.foundDevices = [
-                                        ...startsWithSTS,
-                                        ...startsWithSTC,
-                                        ...otherObjects
-                                      ];
-
-                                      if (_model.autoconnect) {
-                                        final connectedDevices = FlutterBluePlus
-                                            .connectedDevices; // autoconnect
-                                        if (connectedDevices
-                                                    .contains(r.device) ==
-                                                false &&
-                                            r.advertisementData.connectable ==
-                                                true &&
-                                            (r.device.platformName
-                                                    .startsWith("STS") ||
-                                                r.device.platformName
-                                                    .startsWith("STC"))) {
-                                          try {
-                                            print(
-                                                'connecting to ${r.device.platformName}');
-                                            r.device.connect();
-                                            print(
-                                                "connected to ${r.device.platformName}");
-                                          } catch (e) {
-                                            // print(e);
-                                            print(
-                                                "failed to connect to ${r.device.platformName}");
-                                          }
-                                        }
-                                      }
-                                    });
-
-                                    print(r.device.platformName);
-
-                                    // connect the device
-                                  }
-                                }
-                              });
-
-                              print("starting scan");
-
-                              try {
-                                // await FlutterBluePlus.startScan(timeout: const Duration(seconds: 15));
-                                await FlutterBluePlus.startScan();
-                              } catch (e) {
-                                print(e);
-                              }
-
-                              // Wait for the scan to complete
-                              await Future.delayed(Duration(seconds: 15));
-
-                              // Cancel the subscription
-                              await _scanResultsSubscription.cancel();
-
-                              //-------------------------------------------------------------
-                              //------------------------------------------------------------------
-                              setState(() {
-                                _model.isFetchingDevices = false;
-                                // _model.foundDevices = _model.fetchedDevicesSW!
-                                //     .toList()
-                                //     .cast<BTDevicesStruct>();
-                              });
-                            }
-
-                            setState(() {});
-                          } else {
-                            _model.isTurningOff =
-                                await actions.turnOffBluetooth();
-                            await Future.delayed(
-                                const Duration(milliseconds: 2000));
-                            setState(() {
-                              _model.isBluetoothEnabled = false;
-                            });
-                            if (widget.isBTEnabled) {
-                              setState(() {
-                                _model.isFetchingConnectedDevices = false;
-                                _model.isFetchingDevices = false;
-                              });
-                            }
-
-                            setState(() {});
-                          }
-                        },
-                        activeColor: FlutterFlowTheme.of(context).success,
-                        trackColor: FlutterFlowTheme.of(context).alternate,
-                        thumbColor: Color(0xFFFAFAFA),
-                      ),
-                    ],
-                  ),
-                ],
+              Padding(
+                padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 10.0, 0.0),
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    CupertinoSlidingSegmentedControl(
+                      children: {
+                        'POR': Text(
+                          'POR',
+                          style: FlutterFlowTheme.of(context)
+                              .bodySmall
+                              .override(
+                                fontFamily: 'DM Sans',
+                                color: FlutterFlowTheme.of(context).primaryText,
+                              ),
+                        ),
+                        'ENG': Text(
+                          'ENG',
+                          style: FlutterFlowTheme.of(context)
+                              .bodySmall
+                              .override(
+                                fontFamily: 'DM Sans',
+                                color: FlutterFlowTheme.of(context).primaryText,
+                              ),
+                        ),
+                        'SPA': Text(
+                          'SPA',
+                          style: FlutterFlowTheme.of(context)
+                              .bodySmall
+                              .override(
+                                fontFamily: 'DM Sans',
+                                color: FlutterFlowTheme.of(context).primaryText,
+                              ),
+                        ),
+                      },
+                      groupValue: FFAppState().languageCode,
+                      onValueChanged: (newValue) async {
+                        setState(() => _model.language = newValue!);
+                        FFAppState().languageCode = newValue!;
+                      },
+                    ),
+                  ],
+                ),
               ),
+              // Row(
+              //   mainAxisSize: MainAxisSize.max,
+              //   mainAxisAlignment: MainAxisAlignment.end,
+              //   children: [
+              //     Icon(
+              //       widget.isBTEnabled == true
+              //           ? Icons.bluetooth
+              //           : Icons.bluetooth_disabled,
+              //       color: FlutterFlowTheme.of(context).secondaryText,
+              //       size: 24.0,
+              //     ),
+              //     CupertinoSwitch(
+              //       value: _model.switchValue ??= widget.isBTEnabled,
+              //       onChanged: (newValue) async {
+              //         setState(() => _model.switchValue = newValue);
+              //         if (newValue) {
+              //           _model.isTurningOn = await actions.turnOnBluetooth();
+              //           await Future.delayed(
+              //               const Duration(milliseconds: 1000));
+              //           setState(() {
+              //             _model.isBluetoothEnabled = true;
+              //           });
+              //           if (widget.isBTEnabled) {
+              //             setState(() {
+              //               _model.isFetchingConnectedDevices = true;
+              //               _model.isFetchingDevices = true;
+              //             });
+              //             _model.fetchedConnectedDevicesSW =
+              //                 await actions.getConnectedDevices(
+              //               valueOrDefault<String>(
+              //                 _model.choiceChipsValue,
+              //                 'STS-STC',
+              //               ),
+              //             );
+              //             setState(() {
+              //               _model.isFetchingConnectedDevices = false;
+              //               _model.connectedDevices = _model
+              //                   .fetchedConnectedDevicesSW!
+              //                   .toList()
+              //                   .cast<BTDevicesStruct>();
+              //             });
+              //             // await actions.findDevices(_model.choiceChipsValue!,
+              //             //     setState, _model.foundDevices);
+
+              //             //------------------------------------------------------------------
+              //             setState(() {
+              //               _model.foundDevices.clear();
+              //             });
+              //             //-------------------------------------------------------------
+
+              //             _scanResultsSubscription =
+              //                 FlutterBluePlus.scanResults.listen((results) {
+              //               for (ScanResult r in results) {
+              //                 // if the device is already in the list, replace it with the new one
+              //                 if (_model.foundDevices.any((element) =>
+              //                     element.id == r.device.remoteId.toString())) {
+              //                   setState(() {
+              //                     _model.foundDevices.removeWhere((element) =>
+              //                         element.id ==
+              //                         r.device.remoteId.toString());
+              //                   });
+              //                 }
+
+              //                 if (r.device.platformName.isNotEmpty &&
+              //                     (r.device.platformName.startsWith("STS") ||
+              //                         r.device.platformName
+              //                             .startsWith("STC"))) {
+              //                   setState(() {
+              //                     _model.foundDevices.add(BTDevicesStruct(
+              //                       name: r.device.platformName,
+              //                       id: r.device.remoteId.toString(),
+              //                       rssi: r.rssi,
+              //                       type: "BLE",
+              //                       connectable:
+              //                           r.advertisementData.connectable,
+              //                     ));
+
+              //                     _model.foundDevices
+              //                         .sort((a, b) => b.rssi.compareTo(a.rssi));
+              //                     // sort the STS by rssi, then STC by rssi, then everything else by rssi
+              //                     startsWithSTS = _model.foundDevices
+              //                         .where((element) =>
+              //                             element.name.startsWith('STS'))
+              //                         .toList();
+              //                     startsWithSTC = _model.foundDevices
+              //                         .where((element) =>
+              //                             element.name.startsWith('STC'))
+              //                         .toList();
+              //                     otherObjects = _model.foundDevices
+              //                         .where((element) =>
+              //                             !element.name.startsWith('STS') &&
+              //                             !element.name.startsWith('STC'))
+              //                         .toList();
+
+              //                     startsWithSTS
+              //                         .sort((a, b) => b.rssi.compareTo(a.rssi));
+              //                     startsWithSTC
+              //                         .sort((a, b) => b.rssi.compareTo(a.rssi));
+              //                     otherObjects
+              //                         .sort((a, b) => b.rssi.compareTo(a.rssi));
+
+              //                     _model.foundDevices = [
+              //                       ...startsWithSTS,
+              //                       ...startsWithSTC,
+              //                       ...otherObjects
+              //                     ];
+
+              //                     if (_model.autoconnect) {
+              //                       final connectedDevices = FlutterBluePlus
+              //                           .connectedDevices; // autoconnect
+              //                       if (connectedDevices.contains(r.device) ==
+              //                               false &&
+              //                           r.advertisementData.connectable ==
+              //                               true &&
+              //                           (r.device.platformName
+              //                                   .startsWith("STS") ||
+              //                               r.device.platformName
+              //                                   .startsWith("STC"))) {
+              //                         try {
+              //                           print(
+              //                               'connecting to ${r.device.platformName}');
+              //                           r.device.connect();
+              //                           print(
+              //                               "connected to ${r.device.platformName}");
+              //                         } catch (e) {
+              //                           // print(e);
+              //                           print(
+              //                               "failed to connect to ${r.device.platformName}");
+              //                         }
+              //                       }
+              //                     }
+              //                   });
+
+              //                   print(r.device.platformName);
+
+              //                   // connect the device
+              //                 }
+              //               }
+              //             });
+
+              //             print("starting scan");
+
+              //             try {
+              //               // await FlutterBluePlus.startScan(timeout: const Duration(seconds: 15));
+              //               await FlutterBluePlus.startScan();
+              //             } catch (e) {
+              //               print(e);
+              //             }
+
+              //             // Wait for the scan to complete
+              //             await Future.delayed(Duration(seconds: 15));
+
+              //             // Cancel the subscription
+              //             await _scanResultsSubscription.cancel();
+
+              //             //-------------------------------------------------------------
+              //             //------------------------------------------------------------------
+              //             setState(() {
+              //               _model.isFetchingDevices = false;
+              //               // _model.foundDevices = _model.fetchedDevicesSW!
+              //               //     .toList()
+              //               //     .cast<BTDevicesStruct>();
+              //             });
+              //           }
+
+              //           setState(() {});
+              //         } else {
+              //           _model.isTurningOff = await actions.turnOffBluetooth();
+              //           await Future.delayed(
+              //               const Duration(milliseconds: 2000));
+              //           setState(() {
+              //             _model.isBluetoothEnabled = false;
+              //           });
+              //           if (widget.isBTEnabled) {
+              //             setState(() {
+              //               _model.isFetchingConnectedDevices = false;
+              //               _model.isFetchingDevices = false;
+              //             });
+              //           }
+
+              //           setState(() {});
+              //         }
+              //       },
+              //       activeColor: FlutterFlowTheme.of(context).success,
+              //       trackColor: FlutterFlowTheme.of(context).alternate,
+              //       thumbColor: Color(0xFFFAFAFA),
+              //     ),
+              //   ],
+              // ),
             ],
             centerTitle: true,
             elevation: 0.0,

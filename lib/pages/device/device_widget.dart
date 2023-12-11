@@ -57,6 +57,7 @@ class _DeviceWidgetState extends State<DeviceWidget> {
       setState(() {
         _model.currentRssi = widget.deviceRssi;
       });
+
       _model.servicesInDevice = await actions.getDeviceServices(
         BTDevicesStruct(
           name: widget.deviceName,
@@ -66,6 +67,19 @@ class _DeviceWidgetState extends State<DeviceWidget> {
           connectable: widget.deviceConnectable,
         ),
       );
+      setState(() {
+        _model.language = FFAppState().languageCode;
+      });
+
+      await actions.sendLanguageSetting(
+        BTDevicesStruct(
+          name: widget.deviceName,
+          id: widget.deviceId,
+          rssi: widget.deviceRssi,
+        ),
+        FFAppState().languageCode,
+      );
+
       setState(() {
         _model.deviceServices =
             _model.servicesInDevice!.toList().cast<ServiceStruct>();
@@ -208,44 +222,44 @@ class _DeviceWidgetState extends State<DeviceWidget> {
               child: Row(
                 mainAxisSize: MainAxisSize.max,
                 children: [
-                  CupertinoSlidingSegmentedControl(
-                    children: {
-                      'POR': Text(
-                        'POR',
-                        style: FlutterFlowTheme.of(context).bodySmall.override(
-                              fontFamily: 'DM Sans',
-                              color: FlutterFlowTheme.of(context).primaryText,
-                            ),
-                      ),
-                      'ENG': Text(
-                        'ENG',
-                        style: FlutterFlowTheme.of(context).bodySmall.override(
-                              fontFamily: 'DM Sans',
-                              color: FlutterFlowTheme.of(context).primaryText,
-                            ),
-                      ),
-                      'SPA': Text(
-                        'SPA',
-                        style: FlutterFlowTheme.of(context).bodySmall.override(
-                              fontFamily: 'DM Sans',
-                              color: FlutterFlowTheme.of(context).primaryText,
-                            ),
-                      ),
-                    },
-                    groupValue: FFAppState().languageCode,
-                    onValueChanged: (newValue) async {
-                      setState(() => _model.language = newValue!);
-                      FFAppState().languageCode = newValue!;
-                      await actions.sendLanguageSetting(
-                        BTDevicesStruct(
-                          name: widget.deviceName,
-                          id: widget.deviceId,
-                          rssi: widget.deviceRssi,
-                        ),
-                        FFAppState().languageCode,
-                      );
-                    },
-                  ),
+                  // CupertinoSlidingSegmentedControl(
+                  //   children: {
+                  //     'POR': Text(
+                  //       'POR',
+                  //       style: FlutterFlowTheme.of(context).bodySmall.override(
+                  //             fontFamily: 'DM Sans',
+                  //             color: FlutterFlowTheme.of(context).primaryText,
+                  //           ),
+                  //     ),
+                  //     'ENG': Text(
+                  //       'ENG',
+                  //       style: FlutterFlowTheme.of(context).bodySmall.override(
+                  //             fontFamily: 'DM Sans',
+                  //             color: FlutterFlowTheme.of(context).primaryText,
+                  //           ),
+                  //     ),
+                  //     'SPA': Text(
+                  //       'SPA',
+                  //       style: FlutterFlowTheme.of(context).bodySmall.override(
+                  //             fontFamily: 'DM Sans',
+                  //             color: FlutterFlowTheme.of(context).primaryText,
+                  //           ),
+                  //     ),
+                  //   },
+                  //   groupValue: FFAppState().languageCode,
+                  //   onValueChanged: (newValue) async {
+                  //     setState(() => _model.language = newValue!);
+                  //     FFAppState().languageCode = newValue!;
+                  //     await actions.sendLanguageSetting(
+                  //       BTDevicesStruct(
+                  //         name: widget.deviceName,
+                  //         id: widget.deviceId,
+                  //         rssi: widget.deviceRssi,
+                  //       ),
+                  //       FFAppState().languageCode,
+                  //     );
+                  //   },
+                  // ),
                 ],
               ),
             ),
@@ -672,18 +686,18 @@ class _DeviceWidgetState extends State<DeviceWidget> {
                     ),
                   if ((functions.isSTC(widget.deviceName)! ||
                           functions.isSTS(widget.deviceName)!) &&
-                      FFAppState().languageCode == 'ENG')
+                      FFAppState().languageCode == "ENG")
                     Divider(
                       thickness: 1.5,
                       color: Color(0xFF353F49),
                     ),
-                  if (FFAppState().languageCode == 'ENG')
+                  if (FFAppState().languageCode == "ENG")
                     Row(
                       mainAxisSize: MainAxisSize.max,
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         Text(
-                          _model.switchValue == false ? 'Debug' : 'Ocultar',
+                          'Debug',
                           style:
                               FlutterFlowTheme.of(context).bodyMedium.override(
                                     fontFamily: 'DM Sans',
@@ -692,19 +706,18 @@ class _DeviceWidgetState extends State<DeviceWidget> {
                                   ),
                         ),
                         CupertinoSwitch(
-                          value: _model.switchValue ??= false,
+                          value: _model.switchValue,
                           onChanged: (newValue) async {
                             setState(() => _model.switchValue = newValue);
                           },
                           activeColor: FlutterFlowTheme.of(context).primary,
                           trackColor: FlutterFlowTheme.of(context).alternate,
-                          thumbColor:
-                              FlutterFlowTheme.of(context).secondaryText,
+                          thumbColor: Colors.white
+                              .withOpacity(_model.switchValue ? 1 : 0.5),
                         ),
                       ],
                     ),
-                  if (_model.switchValue ??
-                      true && FFAppState().languageCode == 'ENG')
+                  if (_model.switchValue)
                     SingleChildScrollView(
                       child: Column(
                         mainAxisSize: MainAxisSize.max,
