@@ -43,6 +43,8 @@ Future<List<ServiceStruct>?> getDeviceServices(
 
     print(service.uuid.toString());
 
+    // find the characteristic withthe name "Name"
+
     // print(service.characteristics);
 
     servicesList.add(ServiceStruct(

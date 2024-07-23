@@ -277,7 +277,9 @@ class _MotorWidgetState extends State<MotorWidget> {
                                   alignment: AlignmentDirectional(0.00, 0.00),
                                   child: Text(
                                     valueOrDefault<String>(
-                                      _model.currentAngle,
+                                      _model.currentAngle.startsWith('\$')
+                                          ? _model.currentAngle.substring(1)
+                                          : _model.currentAngle,
                                       'Solicitando...',
                                     ),
                                     style: FlutterFlowTheme.of(context)
@@ -786,6 +788,8 @@ class _MotorWidgetState extends State<MotorWidget> {
                       child: FFButtonWidget(
                         onPressed: _model.currentAngle == 'Solicitando...' ||
                                 _model.currentAngle == '' ||
+                                // _model.currentAngle starts with $
+                                _model.currentAngle.startsWith('\$') ||
                                 !functions.hasDegreeSymbol(_model.currentAngle)
                             ? null
                             : () async {

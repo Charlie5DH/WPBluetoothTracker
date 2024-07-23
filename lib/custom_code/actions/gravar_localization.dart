@@ -18,6 +18,7 @@ Future gravarLocalization(
   String? longitude,
   String? localization,
   bool? fullLocalization,
+  String? name,
 ) async {
   // Add your function code here!
   // This action writes the latitude and the longitude to the service related to the localization
@@ -32,6 +33,7 @@ Future gravarLocalization(
   }
 
   String timestampServiceUUID = "a617811d-d2a0-4155-923e-de09de01849c";
+  String nameCharacteristicUUID = "e1101add-cd18-49c0-92da-93ef1e227747";
 
   if (fullLocalization == true) {
     // the localization string has the format: LatLng(lat: latitude, lng: longitude)
@@ -77,15 +79,24 @@ Future gravarLocalization(
   // returns the first characteristic of the service, which is the latitude
   BluetoothCharacteristic characteristicLat = service.characteristics.first;
   // returns the second characteristic of the service, which is the longitude
-  BluetoothCharacteristic characteristicLng = service.characteristics.last;
+  BluetoothCharacteristic characteristicLng = service.characteristics[1];
   // returns the first characteristic of the timestamp service, which is the timestamp
   BluetoothCharacteristic characteristicTimestamp =
       timestampService.characteristics.first;
+
+  // returns the name characteristic
+  BluetoothCharacteristic nameCharacteristic = service.characteristics
+      .firstWhere(
+          (element) => element.uuid.toString() == nameCharacteristicUUID,
+          orElse: () => throw Exception("Characteristic not found"));
 
   // writes the latitude to the latitude characteristic
   await characteristicLat.write(latitude.codeUnits);
   // writes the longitude to the longitude characteristic
   await characteristicLng.write(longitude.codeUnits);
+
+  // writes the name to the name characteristic
+  await nameCharacteristic.write(name!.codeUnits);
 
   // now write the current timestamp of the phone to the timestamp characteristic, in UTC format
   DateTime now = DateTime.now().toUtc();

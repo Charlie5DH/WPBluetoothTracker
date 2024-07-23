@@ -122,7 +122,7 @@ class _OnboardingWidgetState extends State<OnboardingWidget> {
                     Padding(
                       padding: EdgeInsetsDirectional.fromSTEB(24, 8, 24, 0),
                       child: Text(
-                        'Versão 0.15.0',
+                        'Versão 0.15.2',
                         textAlign: TextAlign.center,
                         style: FlutterFlowTheme.of(context)
                             .headlineLarge

@@ -22,6 +22,8 @@ class GravarLocalizationModel
 
   bool isRequestingLocalization = false;
 
+  String nameToRecordInBoard = '';
+
   ///  State fields for stateful widgets in this page.
 
   final unfocusNode = FocusNode();
@@ -42,6 +44,10 @@ class GravarLocalizationModel
   FocusNode? textFieldFocusNode2;
   TextEditingController? textController2;
   String? Function(BuildContext, String?)? textController2Validator;
+
+  FocusNode? textFieldFocusNode3;
+  TextEditingController? textController3;
+  String? Function(BuildContext, String?)? textController3Validator;
   // Stores action output result for [Custom Action - getFullLocalizationFromService] action in Button widget.
   String? updatedLocalization;
 

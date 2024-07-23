@@ -1,3 +1,5 @@
+import 'package:provider/provider.dart';
+
 import '/backend/schema/structs/index.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -18,6 +20,7 @@ class ConfirmLocalizationWidget extends StatefulWidget {
     required this.fullLocalization,
     required this.device,
     required this.serviceUUID,
+    required this.nameToRecord,
   }) : super(key: key);
 
   final String? latitude;
@@ -27,6 +30,7 @@ class ConfirmLocalizationWidget extends StatefulWidget {
   final bool? fullLocalization;
   final BTDevicesStruct? device;
   final String? serviceUUID;
+  final String? nameToRecord;
 
   @override
   _ConfirmLocalizationWidgetState createState() =>
@@ -59,6 +63,8 @@ class _ConfirmLocalizationWidgetState extends State<ConfirmLocalizationWidget> {
 
   @override
   Widget build(BuildContext context) {
+    context.watch<FFAppState>();
+
     return Padding(
       padding: EdgeInsetsDirectional.fromSTEB(0, 60, 0, 10),
       child: Container(
@@ -107,7 +113,11 @@ class _ConfirmLocalizationWidgetState extends State<ConfirmLocalizationWidget> {
                                     padding: EdgeInsetsDirectional.fromSTEB(
                                         0, 6, 16, 6),
                                     child: Text(
-                                      'Confirme as informações a serem enviadas',
+                                      FFAppState().languageCode == 'POR'
+                                          ? 'Confirme as informações a serem enviadas'
+                                          : FFAppState().languageCode == "ENG"
+                                              ? 'Confirm the information to be sent'
+                                              : 'Confirme las informaciones a enviar',
                                       textAlign: TextAlign.center,
                                       style: FlutterFlowTheme.of(context)
                                           .titleMedium,
@@ -136,7 +146,11 @@ class _ConfirmLocalizationWidgetState extends State<ConfirmLocalizationWidget> {
                                     padding: EdgeInsetsDirectional.fromSTEB(
                                         0, 8, 0, 0),
                                     child: Text(
-                                      'Localização:',
+                                      FFAppState().languageCode == 'POR'
+                                          ? 'Localização:'
+                                          : FFAppState().languageCode == 'ENG'
+                                              ? 'Localization:'
+                                              : 'Localización:',
                                       style: FlutterFlowTheme.of(context)
                                           .titleSmall,
                                     ),
@@ -231,6 +245,39 @@ class _ConfirmLocalizationWidgetState extends State<ConfirmLocalizationWidget> {
                                       ],
                                     ),
                                   ),
+                                  Padding(
+                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                        0, 12, 0, 0),
+                                    child: Text(
+                                      'Name:',
+                                      style: FlutterFlowTheme.of(context)
+                                          .titleSmall,
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                        0, 4, 0, 0),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.max,
+                                      children: [
+                                        Text(
+                                          widget.nameToRecord == '' ||
+                                                  widget.nameToRecord == null ||
+                                                  widget.nameToRecord == 'null'
+                                              ? widget.device!.name
+                                              : widget.nameToRecord!,
+                                          style: FlutterFlowTheme.of(context)
+                                              .labelLarge
+                                              .override(
+                                                fontFamily: 'DM Sans',
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .tertiary,
+                                              ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
                                 ],
                               ),
                             ),
@@ -294,6 +341,7 @@ class _ConfirmLocalizationWidgetState extends State<ConfirmLocalizationWidget> {
                                     ),
                                     widget.localization,
                                     widget.fullLocalization == true,
+                                    widget.nameToRecord,
                                   );
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(

@@ -31,9 +31,9 @@ Future<String> getFullLocalizationFromService(
   // returns the first characteristic of the service, which is the latitude
   BluetoothCharacteristic characteristicLat = service.characteristics.first;
   // returns the second characteristic of the service, which is the longitude
-  BluetoothCharacteristic characteristicLng = service.characteristics.last;
+  BluetoothCharacteristic characteristicLng = service.characteristics[1];
 
-  // reads the value from the latitude characteristic
+  // reads the value from the latitude characteristicr
   List<int> valueLat = await characteristicLat.read();
   // reads the value from the longitude characteristic
   List<int> valueLng = await characteristicLng.read();
@@ -54,6 +54,9 @@ Future<String> getFullLocalizationFromService(
   // reduce the number of decimals of the latitude and longitude to 6
   stringValueLat = double.parse(stringValueLat).toStringAsFixed(6);
   stringValueLng = double.parse(stringValueLng).toStringAsFixed(6);
+
+  print("Lat: " + stringValueLat);
+  print("Lng: " + stringValueLng);
 
   // returns the latitude and longitude as a string separated by a comma
   return stringValueLat + ", " + stringValueLng;

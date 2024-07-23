@@ -108,6 +108,8 @@ class _GravarLocalizationWidgetState extends State<GravarLocalizationWidget> {
     _model.textFieldFocusNode1 ??= FocusNode();
     _model.textController2 ??= TextEditingController();
     _model.textFieldFocusNode2 ??= FocusNode();
+    _model.textController3 ??= TextEditingController();
+    _model.textFieldFocusNode3 ??= FocusNode();
   }
 
   @override
@@ -398,20 +400,14 @@ class _GravarLocalizationWidgetState extends State<GravarLocalizationWidget> {
 
                               setState(() {});
                             },
-                            text: _model.deviceLocation != LatLng(0.0, 0.0)
-                                ? valueOrDefault<String>(
-                                    _model.currentLocalization,
-                                    FFAppState().languageCode == "POR"
-                                        ? 'solicitando...'
-                                        : FFAppState().languageCode == "ENG"
-                                            ? 'requesting...'
-                                            : 'solicitando...',
-                                  )
-                                : FFAppState().languageCode == "POR"
-                                    ? 'erro de solicitação'
-                                    : FFAppState().languageCode == "ENG"
-                                        ? 'request error'
-                                        : 'error de solicitud',
+                            text: valueOrDefault<String>(
+                              _model.currentLocalization,
+                              FFAppState().languageCode == "POR"
+                                  ? 'solicitando...'
+                                  : FFAppState().languageCode == "ENG"
+                                      ? 'requesting...'
+                                      : 'solicitando...',
+                            ),
                             options: FFButtonOptions(
                               width: MediaQuery.sizeOf(context).width * 1.0,
                               height: MediaQuery.sizeOf(context).height * 1.0,
@@ -1068,6 +1064,144 @@ class _GravarLocalizationWidgetState extends State<GravarLocalizationWidget> {
                       thickness: 1.0,
                       color: FlutterFlowTheme.of(context).alternate,
                     ),
+                    Padding(
+                      padding:
+                          EdgeInsetsDirectional.fromSTEB(0.0, 6.0, 0.0, 6.0),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.max,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Align(
+                            alignment: AlignmentDirectional(0.00, 0.00),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.max,
+                              children: [
+                                Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      0.0, 0.0, 6.0, 0.0),
+                                ),
+                                Text(
+                                  FFAppState().languageCode == 'POR'
+                                      ? 'Insira o novo nome da placa'
+                                      : FFAppState().languageCode == 'ENG'
+                                          ? 'Enter the new board name'
+                                          : 'Ingrese el nuevo nombre de la placa',
+                                  textAlign: TextAlign.start,
+                                  style: FlutterFlowTheme.of(context)
+                                      .bodyMedium
+                                      .override(
+                                        fontFamily: 'DM Sans',
+                                        lineHeight: 1.4,
+                                      ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Row(
+                            mainAxisSize: MainAxisSize.max,
+                            children: [
+                              Flexible(
+                                child: Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      0.0, 0.0, 0.0, 6.0),
+                                  child: Container(
+                                    width: double.infinity,
+                                    child: TextFormField(
+                                      controller: _model.textController3,
+                                      focusNode: _model.textFieldFocusNode3,
+                                      onChanged: (_) => EasyDebounce.debounce(
+                                        '_model.textController3',
+                                        Duration(milliseconds: 2000),
+                                        () => setState(() {}),
+                                      ),
+                                      obscureText: false,
+                                      decoration: InputDecoration(
+                                        isDense: true,
+                                        hintText:
+                                            widget.nomeDispositivo ?? 'Name',
+                                        hintStyle: FlutterFlowTheme.of(context)
+                                            .labelLarge
+                                            .override(
+                                              fontFamily: 'DM Sans',
+                                              fontSize: 14.0,
+                                            ),
+                                        enabledBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: FlutterFlowTheme.of(context)
+                                                .primary,
+                                            width: 1.0,
+                                          ),
+                                          borderRadius:
+                                              BorderRadius.circular(6.0),
+                                        ),
+                                        focusedBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: FlutterFlowTheme.of(context)
+                                                .primary,
+                                            width: 1.0,
+                                          ),
+                                          borderRadius:
+                                              BorderRadius.circular(6.0),
+                                        ),
+                                        errorBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: FlutterFlowTheme.of(context)
+                                                .error,
+                                            width: 1.0,
+                                          ),
+                                          borderRadius:
+                                              BorderRadius.circular(6.0),
+                                        ),
+                                        focusedErrorBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: FlutterFlowTheme.of(context)
+                                                .error,
+                                            width: 1.0,
+                                          ),
+                                          borderRadius:
+                                              BorderRadius.circular(6.0),
+                                        ),
+                                        filled: true,
+                                        fillColor: FlutterFlowTheme.of(context)
+                                            .accent1,
+                                        suffixIcon: _model.textController3!.text
+                                                .isNotEmpty
+                                            ? InkWell(
+                                                onTap: () async {
+                                                  _model.textController3
+                                                      ?.clear();
+                                                  setState(() {});
+                                                },
+                                                child: Icon(
+                                                  Icons.clear,
+                                                  size: 18.0,
+                                                ),
+                                              )
+                                            : null,
+                                      ),
+                                      style: FlutterFlowTheme.of(context)
+                                          .bodyLarge
+                                          .override(
+                                            fontFamily: 'DM Sans',
+                                            fontSize: 14.0,
+                                          ),
+                                      keyboardType:
+                                          // text
+                                          TextInputType.text,
+                                      validator: _model.textController3Validator
+                                          .asValidator(context),
+                                      maxLength: 16,
+                                      maxLengthEnforcement:
+                                          MaxLengthEnforcement.enforced,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
                   ],
                 ),
                 Align(
@@ -1137,6 +1271,10 @@ class _GravarLocalizationWidgetState extends State<GravarLocalizationWidget> {
                                       connectable: true,
                                     ),
                                     serviceUUID: widget.serviceUUID!,
+                                    nameToRecord:
+                                        _model.textController3.text != ''
+                                            ? _model.textController3.text
+                                            : widget.nomeDispositivo!,
                                   ),
                                 ),
                               ),
